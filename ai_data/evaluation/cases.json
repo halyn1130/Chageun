@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "CG-01",
+      "question": "우회전할 때 언제 일시정지해야 해?",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "신호·보행자 등 조건을 구분하고 근거 조항을 제시",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-02",
+      "question": "적색 신호에서 우회전할 수 있어?",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "조건을 확인하며 무조건 가능하다고 답하지 않음",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-03",
+      "question": "횡단보도 앞에서는 언제 멈춰야 해?",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "적용 상황과 문서 근거 확인",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-04",
+      "question": "어린이보호구역에서 주의할 점은?",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "검색된 조항 범위만 설명",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-05",
+      "question": "정차와 주차는 어떻게 달라?",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "정의와 근거 제시",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-06",
+      "question": "소화전 주변 주차 규정 알려줘",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "확인한 법령에서 거리·조건 검증",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-07",
+      "question": "버스정류장 주변에는 주차해도 돼?",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "일반 규정과 실시간 허용 판단을 구분",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-08",
+      "question": "긴급자동차가 뒤에서 오면 어떻게 해야 해?",
+      "category": "rag",
+      "filters": {
+        "kind": "law"
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "상황별 근거 안내",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-09",
+      "question": "K5 엔진오일 점검 방법 알려줘",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "연식·동력계통 일치 설명서 검색",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-10",
+      "question": "K5 엔진오일 교환 주기는?",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "일반·가혹조건 및 기간·거리 기준 구분",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-11",
+      "question": "K5 타이어 공기압은 어디서 확인해?",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "차량별 설명서 근거 제시",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-12",
+      "question": "K5 냉각수 경고등이 켜지면?",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "문서의 경고와 조치 범위만 안내",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-13",
+      "question": "K5 와이퍼는 어떻게 교체해?",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "적용 모델과 작업 순서 근거",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-14",
+      "question": "아반떼 엔진오일 점검 방법 알려줘",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "현대",
+        "model": "디 올 뉴 아반떼",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "K5 문서가 섞이지 않음",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-15",
+      "question": "아반떼 엔진오일 교환 주기는?",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "현대",
+        "model": "디 올 뉴 아반떼",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "선택 연식·파워트레인·사용조건 일치",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-16",
+      "question": "아반떼 타이어 공기압 경고등이 켜졌어",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "현대",
+        "model": "디 올 뉴 아반떼",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "정확한 경고 종류 확인 후 매뉴얼 근거",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-17",
+      "question": "아반떼 배터리 방전 시 어떻게 해?",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "현대",
+        "model": "디 올 뉴 아반떼",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "파워트레인 차이를 확인하고 매뉴얼 근거",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-18",
+      "question": "아반떼 정기 점검 항목 알려줘",
+      "category": "rag",
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "현대",
+        "model": "디 올 뉴 아반떼",
+        "model_year": null,
+        "powertrain": null
+      },
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "점검표의 기간·거리 단위 보존",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-19",
+      "question": "내 차 엔진오일 언제 갈아?",
+      "category": "vehicle_record",
+      "filters": {},
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "차량 정보와 마지막 정비 기록 요청; 개인 기록을 문서에서 추측 금지",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-20",
+      "question": "가까운 주차장 찾아줘",
+      "category": "map_tool",
+      "filters": {},
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "위치 기반 도구로 전달; RAG가 장소·거리 생성 금지",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-21",
+      "question": "가는 길에 주유소 들러줘",
+      "category": "map_tool",
+      "filters": {},
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "경로·위치 정보 및 변경 확인은 백엔드 계약에 연결",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-22",
+      "question": "그럼 가혹조건은 뭐야?",
+      "category": "conversation",
+      "filters": {},
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "직전 차량·설명서 맥락 유지; 현재 CLI는 단일 질문만 지원",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-23",
+      "question": "지금 여기 주차해도 돼?",
+      "category": "clarification",
+      "filters": {},
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "현장 상황을 모른 채 허용 단정 금지",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-24",
+      "question": "옆 차선으로 지금 바꿔도 돼?",
+      "category": "out_of_scope",
+      "filters": {},
+      "status": "draft",
+      "expected_chunk_ids": [],
+      "expected_behavior": "실시간 주행 판단을 하지 않음",
+      "reference_answer": null,
+      "reviewer": null,
+      "top_k": 5
+    }
+  ]
+}

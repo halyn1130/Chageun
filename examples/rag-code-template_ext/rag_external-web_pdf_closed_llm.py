@@ -437,9 +437,16 @@ async def rag_query(rag_request: RAGRequest = Body(...), user=Depends(verify_jwt
             q_en = q
             try:
                 if has_korean:
-                    q_en = q  # TODO: 실제 번역 적용
-                    docs2 = vectorstore.similarity_search(q_en, k=top_k)
-                    merged.extend(docs2)
+                    translation = await llm.ainvoke([
+                        ("system", "Translate the user's search query into English. "
+                         "Preserve its meaning and proper nouns. Return only the translated query, "
+                         "without answering it or adding explanations."),
+                        ("human", q),
+                    ])
+                    q_en = translation.content.strip() if isinstance(translation.content, str) else ""
+                    if q_en and q_en != q:
+                        docs2 = vectorstore.similarity_search(q_en, k=top_k)
+                        merged.extend(docs2)
             except Exception:
                 pass  # 번역/검색 실패 시 무시
 

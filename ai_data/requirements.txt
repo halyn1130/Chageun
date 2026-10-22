@@ -1,0 +1,5 @@
+# Matches the existing example environment. Install into its virtual environment.
+pypdf==6.21.2
+faiss-cpu==1.15.1
+langchain-openai==1.1.7
+python-dotenv>=1.0,<2

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "doc_id": "kia-k5-REPLACE_YEAR-REPLACE_POWERTRAIN",
+      "title": "실제 공식 PDF 제목 입력",
+      "kind": "manual",
+      "source_url": "https://REPLACE_WITH_OFFICIAL_SOURCE",
+      "retrieved_at": "YYYY-MM-DD",
+      "revision": "실제 설명서 개정판 식별자",
+      "file": "raw/k5.pdf",
+      "usage_note": "이용조건 확인 결과 및 원본 재배포 여부 기록",
+      "manufacturer": "기아",
+      "model": "K5",
+      "model_year": "연식 확정 필요",
+      "powertrain": "설명서 적용 동력계통 확정 필요"
+    },
+    {
+      "doc_id": "road-traffic-act",
+      "title": "도로교통법",
+      "kind": "law",
+      "source_url": "https://www.law.go.kr/법령/도로교통법",
+      "retrieved_at": "YYYY-MM-DD",
+      "revision": "실제 법령 공포번호 또는 버전",
+      "effective_date": "YYYY-MM-DD",
+      "file": "raw/road-traffic-act.pdf",
+      "usage_note": "출처 및 이용조건 확인 결과 기록"
+    }
+  ]
+}
