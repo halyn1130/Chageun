@@ -1,0 +1,41 @@
+# 차근 로컬 실행 구성 — 루트에서 `docker compose up -d --build`
+# 값은 루트 .env에서 읽는다 (DB_PASSWORD, JWT_SECRET)
+
+services:
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: chageun
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    ports:
+      - "3307:3306"     # 로컬 DB 툴 접속용 (localhost:3307)
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  auth-server:
+    build: ../backend/auth-server
+    env_file: ../.env
+    environment:
+      DB_URL: jdbc:mariadb://db:3306/chageun   # 컨테이너끼리는 서비스 이름으로 접속
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api-server:
+    build: ../backend/api-server
+    ports:
+      - "8002:8002"
+
+volumes:
+  db-data:

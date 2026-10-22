@@ -1,0 +1,5 @@
+# 루트에서 `docker compose up -d --build` 한 번으로 실행. 실제 구성은 infra/docker-compose.yml
+name: chageun
+include:
+  - path: infra/docker-compose.yml
+    env_file: .env
