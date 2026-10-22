@@ -1,13 +1,50 @@
-.venv/
+# ===== Secrets =====
 .env
 .env.*
 !.env.example
-__pycache__/
-*.pyc
+
+# ===== OS =====
 .DS_Store
+Thumbs.db
+
+# ===== IDE / Tools =====
+.idea/
+*.iml
+**/.vscode/*
+!**/.vscode/extensions.json
+*.swp
+.claude/settings.local.json
+
+# ===== Python =====
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# ===== Java / Gradle =====
 .gradle/
 **/build/
 **/bin/
-voice-ai_code/app/routers/uploads/
-rag-code-template_ext/faiss_db/
-.env.example
+out/
+*.class
+
+# ===== Node / Vue (Vite) =====
+node_modules/
+dist/
+.vite/
+coverage/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===== Docker (로컬 볼륨 데이터) =====
+infra/data/
+
+# ===== Logs =====
+*.log
+logs/
