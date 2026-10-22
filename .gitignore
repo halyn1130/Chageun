@@ -1,0 +1,13 @@
+.venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.DS_Store
+.gradle/
+**/build/
+**/bin/
+voice-ai_code/app/routers/uploads/
+rag-code-template_ext/faiss_db/
+.env.example
