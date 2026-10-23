@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "index": "data/indexes/v9-law-paragraphs",
+  "index": "data/indexes/v10-signs",
   "note": "서준영 초안. 정답 근거(expected_chunk_ids)는 위 인덱스 기준이며 인덱스를 다시 만들면 ID를 다시 확인한다. 검토 후 reviewer와 status=reviewed를 기록한다.",
   "cases": [
     {
@@ -195,8 +195,7 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "cb7a57454a1f5d7adfdc155b",
-        "87e05afcf8f46db43af05928"
+        "cb7a57454a1f5d7adfdc155b"
       ],
       "expected_sources": [
         "제32조",

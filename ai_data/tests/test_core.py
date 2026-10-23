@@ -153,6 +153,10 @@ class PipelineTests(unittest.TestCase):
         refused = lambda make: answer_from_hits('질문', hits, make)['status'] == 'insufficient_evidence'
         self.assertTrue(refused(reply([{'chunk_id': 'invented', 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}])))
         self.assertTrue(refused(reply([{'chunk_id': cid, 'quote': '가상 설명서의 냉각수 교환 주기는 매년이다.'}])))
+        # One made-up quote beside a real one: the made-up quote is dropped and never cited.
+        mixed = answer_from_hits('질문', hits, reply([{'chunk_id': 'invented', 'quote': '없는 문장을 지어낸 인용이다.'},
+                                                    {'chunk_id': cid, 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}]))
+        self.assertEqual([s['chunk_id'] for s in mixed['sources']], [cid])
         self.assertTrue(refused(reply([{'chunk_id': cid, 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}],
                                       missing_terms=['냉각수'])))
         self.assertTrue(refused(reply([])))
