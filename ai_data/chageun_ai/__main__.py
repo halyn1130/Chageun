@@ -29,7 +29,7 @@ def main():
             q.add_argument('question')
             q.add_argument('--vehicle', help='vehicle object as the api-server sends it, e.g. {"id":3,"manufacturer":"기아",...}')
             q.add_argument('--conversation-id')
-            q.add_argument('--top-k', type=int, default=5)
+            q.add_argument('--top-k', type=int, default=8)
         else:
             q.add_argument('question')
             q.add_argument('--filters', required=True, help='JSON object, e.g. {"kind":"law"}')

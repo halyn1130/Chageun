@@ -1,7 +1,7 @@
 import json
 import unittest
 from chageun_ai.agent import rag_query, TOOLS
-from chageun_ai.core import chunk_law_pages
+from chageun_ai.core import chunk_law_pages, VERIFY_SYSTEM
 
 LAW = {'doc_id': 'law', 'title': '가상법', 'kind': 'law', 'source_url': 'https://example.invalid/law',
        'retrieved_at': '2026-10-22', 'revision': 'fixture-v1', 'effective_date': '2026-10-01',
@@ -64,7 +64,7 @@ class AgentTests(unittest.TestCase):
         chunks, _ = chunk_law_pages(LAW, ['제5조(가상 규칙) ① 모든 운전자는 가상 교차로에서 일시정지하여야 한다.'], 'h')
         seen = []
         retrieve = lambda query, filters: seen.append((query, filters)) or [{'chunk': chunks[0], 'score': 1}]
-        good = lambda s, u: json.dumps({'status': 'answered', 'answer_text': '일시정지해야 해요.', 'speech_text': '멈춰요.',
+        good = lambda s, u: json.dumps({'supported': True}) if s == VERIFY_SYSTEM else json.dumps({'status': 'answered', 'answer_text': '일시정지해야 해요.', 'speech_text': '멈춰요.',
                                         'missing_terms': [], 'quotes': [{'chunk_id': chunks[0]['chunk_id'],
                                                                          'quote': '모든 운전자는 가상 교차로에서 일시정지하여야 한다.'}]})
         r = self.ask(picks('search_law', query='교차로 일시정지'), good, retrieve)

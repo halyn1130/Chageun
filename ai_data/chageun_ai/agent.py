@@ -11,7 +11,16 @@ from .core import answer_from_hits, load_warning_lights
 
 MAINTENANCE_ITEMS = ['engine_oil', 'air_filter', 'tire', 'brake_pad', 'coolant', 'battery', 'wiper', 'other']
 # Everyday words drivers say that the documents spell differently; added to the retrieval query only.
-TERMS = {'오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸'}
+TERMS = {'오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸', '버스정류장': '버스여객자동차의 정류지', '교환': '교체',
+         '소화전': '소방용수시설 비상소화장치', '멈춰': '일시정지', '멈추': '일시정지'}
+# Signal colours as drivers say them; law only (a "빨간 불" on the dashboard is a warning light).
+LAW_TERMS = {'빨간불': '적색의 등화', '적색신호': '적색의 등화', '빨간신호': '적색의 등화',
+             '노란불': '황색의 등화', '황색신호': '황색의 등화', '노란신호': '황색의 등화',
+             '초록불': '녹색의 등화', '녹색신호': '녹색의 등화', '파란불': '녹색의 등화'}
+# Retrieval-only hints: a "what is the difference" question needs the definitions article.
+QUERY_HINTS = {'차이': '정의 용어의 뜻', '달라': '정의 용어의 뜻',
+               # Turning right is mostly about pedestrians (제27조), which the question rarely says.
+               '우회전': '보행자의 보호 횡단보도 앞 일시정지'}
 # Manual icons are images, so the text only has each light's name. Drivers describe the icon instead.
 # Shapes were read off the K5 icon table; 아반떼 uses the same icons (icons compared side by side).
 # The list lives in data/warning_lights.json together with every manual's spelling of each light.
@@ -116,7 +125,9 @@ def rag_query(request, choose, retrieve, generate):
     reply = lambda status, *args, **kw: respond(request.get('request_id'), cid, status,
                                                 *(args or MESSAGES[status]), **kw)
 
-    picked = choose(SYSTEM, question, TOOLS)
+    # Voice questions rarely name the car ("엔진오일 언제 갈아?"); telling the router one is selected keeps them in scope.
+    car_note = ' '.join(str(vehicle.get(k, '')) for k in ('manufacturer', 'model')) if vehicle else ''
+    picked = choose(SYSTEM, f'{question} [선택한 차량: {car_note}]' if car_note else question, TOOLS)
     name, args = picked if picked else (None, {})
     if name == 'decline' and WARNING_QUESTION.search(question):
         name, args = 'search_manual', {}  # a lit warning light is a manual question, not a road judgement
@@ -143,10 +154,12 @@ def rag_query(request, choose, retrieve, generate):
     # could drop; the answer is checked against the original question.
     query = args.get('query', '').strip()
     query = f'{question} {query}' if query and query != question else question
-    known = {word: term for word, term in TERMS.items() if word in question.replace(' ', '')}
+    glossary = {**TERMS, **(LAW_TERMS if name == 'search_law' else {})}
+    known = {word: term for word, term in glossary.items() if word in question.replace(' ', '')}
     known.update({shape: light for light in lights_in(question) for shape in WARNING_LIGHTS[light]
                   if shape.upper() in question.replace(' ', '').upper()})
     query += ''.join(f' {term}' for term in known.values())
+    query += ''.join(f' {hint}' for word, hint in QUERY_HINTS.items() if name == 'search_law' and word in question)
     hits = retrieve(query, filters)
     if not hits and name == 'search_manual':  # retrieval filters first, so no hits means no manual for this car
         return reply('not_found', f'{car} 설명서는 아직 등록되지 않았어요. 정비소나 고객센터에 문의해 주세요.',

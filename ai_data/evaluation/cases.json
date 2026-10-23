@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "index": "data/indexes/v7-fixed-powertrain",
+  "index": "data/indexes/v11-merged",
   "note": "서준영 초안. 정답 근거(expected_chunk_ids)는 위 인덱스 기준이며 인덱스를 다시 만들면 ID를 다시 확인한다. 검토 후 reviewer와 status=reviewed를 기록한다.",
   "cases": [
     {
@@ -23,9 +23,9 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "837257340f2a40d28290e438",
+        "c57ea6baa8f7a937e42da68e",
         "4ce5eae87dbc46ff15a0824d",
-        "4b53de69191f9e74cd0a5b3a"
+        "0d771c3caa639573efa8596b"
       ],
       "expected_sources": [
         "제27조",
@@ -93,7 +93,7 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "837257340f2a40d28290e438"
+        "c57ea6baa8f7a937e42da68e"
       ],
       "expected_sources": [
         "제27조"
@@ -126,7 +126,10 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "4f83762a027c2f937f8246d4"
+        "0be414f7e272af57ec103f3d",
+        "db9724e92f290dd6d595cbf7",
+        "7f9527d96d2a62c3e9efc0b0",
+        "52cdc47dc56182ac93df2106"
       ],
       "expected_sources": [
         "제12조"
@@ -159,7 +162,7 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "5bcc3b9c18fe930f53fae3c5"
+        "79c7c34741439204a592dc02"
       ],
       "expected_sources": [
         "제2조"
@@ -192,8 +195,7 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "47e28c58e940319725433104",
-        "3c5e2efa5d32ce15e8385898"
+        "cb7a57454a1f5d7adfdc155b"
       ],
       "expected_sources": [
         "제32조",
@@ -227,7 +229,7 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "47e28c58e940319725433104"
+        "cb7a57454a1f5d7adfdc155b"
       ],
       "expected_sources": [
         "제32조"
@@ -260,7 +262,7 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "b883e4ee9417e8e34828e118"
+        "704765a65587002ced43f202"
       ],
       "expected_sources": [
         "제29조"
@@ -275,7 +277,7 @@
     },
     {
       "id": "CG-09",
-      "question": "K5 엔진오일 점검 방법 알려줘",
+      "question": "엔진오일 점검은 어떻게 해?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -319,7 +321,7 @@
     },
     {
       "id": "CG-10",
-      "question": "K5 엔진오일 교환 주기는?",
+      "question": "엔진오일 교환 주기가 어떻게 돼?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -365,7 +367,7 @@
     },
     {
       "id": "CG-11",
-      "question": "K5 타이어 공기압은 어디서 확인해?",
+      "question": "타이어 공기압은 어디서 확인해?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -409,7 +411,7 @@
     },
     {
       "id": "CG-12",
-      "question": "K5 냉각수 경고등이 켜지면?",
+      "question": "냉각수 경고등이 켜지면 어떻게 해?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -452,7 +454,7 @@
     },
     {
       "id": "CG-13",
-      "question": "K5 와이퍼는 어떻게 교체해?",
+      "question": "와이퍼는 어떻게 갈아?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -491,12 +493,12 @@
       ],
       "reference_answer": "시동을 끈 뒤 20초 이내에 와이퍼 스위치를 2초 이상 MIST로 내려 와이퍼를 최상단으로 올린다. 와이퍼 암을 세우고 잠금쇠를 세워 블레이드를 아래로 내려 분리한 뒤 새 블레이드를 장착한다. 이후 시동을 걸어 1회 작동을 확인한다.",
       "expected_behavior": "적용 모델과 작업 순서 근거",
-      "note": null,
+      "note": "\"갈아\"는 교체 방법 질문. 정비 기록(open_maintenance)으로 가면 실패",
       "top_k": 5
     },
     {
       "id": "CG-14",
-      "question": "아반떼 엔진오일 점검 방법 알려줘",
+      "question": "엔진오일 양은 어떻게 확인해?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -542,7 +544,7 @@
     },
     {
       "id": "CG-15",
-      "question": "아반떼 엔진오일 교환 주기는?",
+      "question": "엔진오일 교환 주기는?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -589,7 +591,7 @@
     },
     {
       "id": "CG-16",
-      "question": "아반떼 타이어 공기압 경고등이 켜졌어",
+      "question": "타이어 공기압 경고등이 켜졌어",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -633,7 +635,7 @@
     },
     {
       "id": "CG-17",
-      "question": "아반떼 배터리 방전 시 어떻게 해?",
+      "question": "배터리가 방전되면 어떻게 해?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -677,7 +679,7 @@
     },
     {
       "id": "CG-18",
-      "question": "아반떼 정기 점검 항목 알려줘",
+      "question": "정기 점검은 뭘 해야 돼?",
       "category": "rag",
       "status": "draft",
       "reviewer": null,
@@ -707,16 +709,26 @@
       "expected_action": null,
       "expected_chunk_ids": [
         "fdae734ee3d4eeae03db9c7c",
-        "df70ecd460c6edb2a591bd6e"
+        "df70ecd460c6edb2a591bd6e",
+        "b6da42e16ddb7f6858af86e2",
+        "ee5eb8bced234f5892262d36",
+        "43eb86a7d1b8cd071a0078bb",
+        "c6f2ca278c11727e53acb72c",
+        "1ef683fb4f171bef7f75d60a"
       ],
       "expected_sources": [
         "p.9-7",
-        "p.9-8"
+        "p.9-8",
+        "p.9-9",
+        "p.9-10",
+        "p.9-11",
+        "p.9-12",
+        "p.9-13"
       ],
       "required_facts": [],
       "reference_answer": "통상 조건과 가혹 조건의 점검 주기가 다르며, 주행거리와 기간 중 먼저 도래하는 시점에 점검·교체한다. 예: 엔진 오일 및 필터 매 15,000km 또는 12개월(통상). 표의 단위(km, 개월)를 그대로 유지한다.",
       "expected_behavior": "점검표의 기간·거리 단위 보존",
-      "note": "질문 범위가 넓어 일부 항목만 답해도 통과로 볼지 검토",
+      "note": "범위가 넓어 정기 점검표(p.9-7~9-13) 어느 쪽을 인용해도 통과. G1.6 차량에 LPI 항목을 섞으면 실패",
       "top_k": 5
     },
     {
@@ -785,34 +797,38 @@
     },
     {
       "id": "CG-21",
-      "question": "가는 길에 주유소 들러줘",
-      "category": "out_of_scope",
+      "question": "타이어 마지막으로 언제 바꿨지?",
+      "category": "vehicle_record",
       "status": "draft",
       "reviewer": null,
       "request": {
-        "vehicle": null,
-        "location": {
-          "lat": 35.5384,
-          "lng": 129.3114
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
         },
+        "location": null,
         "history": [],
-        "destination": {
-          "name": "울산대공원",
-          "lat": 35.5287,
-          "lng": 129.2923
-        }
+        "destination": null
       },
       "filters": {},
       "expected_status": [
-        "out_of_scope"
+        "tool_result"
       ],
-      "expected_action": null,
+      "expected_action": {
+        "type": "open_my_car",
+        "vehicle_id": 3,
+        "item": "tire"
+      },
       "expected_chunk_ids": [],
       "expected_sources": [],
       "required_facts": [],
       "reference_answer": null,
-      "expected_behavior": "길 안내·주변 장소 찾기는 서비스 범위에서 제외(2026-10-23 팀 결정). 내비게이션 앱 안내",
-      "note": "지도 기능 제외 결정으로 기대 결과를 tool_result에서 out_of_scope로 변경",
+      "expected_behavior": "내 차의 실제 교체 기록 질문은 정비 이력 패널을 연다",
+      "note": "지도 기능 제외로 기존 경유지 문항을 정비 기록 문항으로 교체",
       "top_k": 5
     },
     {
@@ -977,7 +993,7 @@
     },
     {
       "id": "CG-27",
-      "question": "K5에 자율주행 레벨3 기능 있어?",
+      "question": "이 차에 자율주행 레벨3 기능 있어?",
       "category": "no_evidence",
       "status": "draft",
       "reviewer": null,
@@ -1265,6 +1281,199 @@
       "reference_answer": "배터리 모양은 충전 경고등이다. 드라이브 벨트가 끊어졌거나 충전 장치에 이상이 있을 때 켜진다. 배터리 충전 상태와 드라이브 벨트·충전 계통을 점검하고, 꺼지지 않으면 하이테크센터나 블루핸즈에서 점검받는다(p.4-11).",
       "expected_behavior": null,
       "note": "아반떼 변환본에는 아이콘이 없어 모양 → 이름 대응은 K5 아이콘표 기준(팀 확인: 두 차종 모양 동일)",
+      "top_k": 5
+    },
+    {
+      "id": "CG-35",
+      "question": "에어필터 교체 기록 보여줘",
+      "category": "vehicle_record",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "디 올 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "tool_result"
+      ],
+      "expected_action": {
+        "type": "open_my_car",
+        "vehicle_id": 4,
+        "item": "air_filter"
+      },
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-36",
+      "question": "엔진오일 마지막으로 언제 갈았지?",
+      "category": "vehicle_record",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "need_vehicle"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "차량이 없으면 정비 이력을 열 수 없으므로 차량 선택 요청 (missing_fields: [\"vehicle\"])",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-37",
+      "question": "고속도로 최저속도는 얼마야?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "33f2a892a9e753209c245fe9"
+      ],
+      "expected_sources": [
+        "제19조"
+      ],
+      "required_facts": [
+        "50"
+      ],
+      "reference_answer": "편도 1차로 고속도로와 편도 2차로 이상 고속도로 모두 최저속도는 매시 50킬로미터다. 최고속도는 각각 80, 100킬로미터로 다르다(시행규칙 제19조).",
+      "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-38",
+      "question": "앞차와 거리는 얼마나 둬야 돼?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "6f62f44ae30ac00e7e67bdaa"
+      ],
+      "expected_sources": [
+        "제19조"
+      ],
+      "required_facts": [
+        "충돌"
+      ],
+      "reference_answer": "같은 방향으로 가는 앞차를 따를 때는 앞차가 갑자기 정지해도 충돌을 피할 수 있는 필요한 거리를 확보해야 한다(제19조①). 법에는 몇 미터라는 수치가 없으므로 숫자를 만들어 답하지 않는다.",
+      "expected_behavior": null,
+      "note": "\"몇 미터\"를 지어내지 않는지 확인",
+      "top_k": 5
+    },
+    {
+      "id": "CG-39",
+      "question": "유턴하면 안 되는 경우가 있어?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "d692341279037dcbc163fca2"
+      ],
+      "expected_sources": [
+        "제18조"
+      ],
+      "required_facts": [
+        "방해"
+      ],
+      "reference_answer": "보행자나 다른 차마의 정상적인 통행을 방해할 우려가 있으면 유턴해서는 안 된다(제18조①). 시·도경찰청장이 유턴을 금지한 구간에서도 할 수 없다(제18조②).",
+      "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-40",
+      "question": "회전교차로 들어갈 때 누가 먼저야?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "e22e4f2e0e8daef0064c34ef"
+      ],
+      "expected_sources": [
+        "제25조의2"
+      ],
+      "required_facts": [
+        "양보"
+      ],
+      "reference_answer": "회전교차로에 진입하려면 서행하거나 일시정지해야 하고, 이미 진행하고 있는 다른 차가 있으면 그 차에 진로를 양보해야 한다(제25조의2②). 회전교차로 안에서는 반시계방향으로 통행한다(①).",
+      "expected_behavior": null,
+      "note": null,
       "top_k": 5
     }
   ]

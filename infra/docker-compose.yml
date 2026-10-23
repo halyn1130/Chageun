@@ -70,7 +70,7 @@ services:
       dockerfile: ../infra/rag/Dockerfile
     env_file: ../.env           # JWT_SECRET · OPENAI_API_KEY
     environment:
-      RAG_INDEX: data/indexes/v9-law-paragraphs   # 사용할 인덱스 버전 (AI팀이 정한 것)
+      RAG_INDEX: data/indexes/v11-merged   # 사용할 인덱스 버전 (AI팀이 정한 것)
     volumes:
       - ../ai_data/data/indexes:/app/data/indexes:ro
     # 외부 포트 없음 — api-server만 compose 내부에서 http://rag:8001 로 호출한다
