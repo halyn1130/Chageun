@@ -46,6 +46,7 @@ services:
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
       FRONTEND_ORIGINS: *frontend-origins
+      RAG_URL: http://rag:8001  # 대화 질문을 넘길 rag 서버 (compose 내부)
     ports:
       - "8002:8002"
     depends_on:
