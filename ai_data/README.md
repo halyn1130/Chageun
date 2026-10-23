@@ -38,6 +38,8 @@
 - `source_url`: PDF를 확인한 공식 출처. HTTPS 형식 검사는 공식성/사용권 확인을 대신하지 않습니다. 수집 담당자가 출처와 이용조건을 확인해 `usage_note`에 기록합니다.
 - 청크: `schema_version`, `chunk_id`, `text`, `metadata`.
 - 추가 메타데이터: `pdf_page`는 1부터 시작하는 **PDF 파일 순서**, `printed_page`는 책에 인쇄된 페이지입니다. 현재는 `printed_page`, `article`, `section`이 null이며 추측하지 않습니다.
+- 설명서 청크 메타데이터(검색 힌트, 청크 ID·본문에는 영향 없음): `topic`(`warning_light`·`lcd_message`·`maintenance`·`emergency`·`feature`, 섹션 경로로 분류), `lights`(본문에 나오는 경고등 ID 목록), `maintenance_items`(정비 항목 코드, maintenance·emergency 청크만), `content_role`(K5 요약본이면 `summary`, 그 외 `detail`).
+- 경고등·표시등 사전: `data/warning_lights.json`. 경고등마다 `id`, 대표 이름 `name`, 두 설명서의 다른 표기 `aliases`, 운전자가 아이콘을 묘사하는 말 `shapes`. 청크의 `lights` 태깅과 `agent.WARNING_LIGHTS`(모양으로 경고등 찾기)가 이 파일을 함께 읽습니다. 이름은 공백을 빼고 비교하며 중복되면 로드 시 오류가 납니다.
 - 청크 ID는 문서 ID·버전·PDF 해시·페이지·텍스트 위치·내용으로 결정됩니다. PDF/청킹 변경 시 평가용 정답 ID도 재검토합니다.
 
 현재 청킹은 페이지 경계를 지키는 최대 900자/120자 중첩 방식입니다. 페이지 안 줄바꿈을 우선하지만 **조항·표·정비 항목 단위 의미 청킹이 완성된 것은 아닙니다**. 빈 페이지는 보고서에 남깁니다. 텍스트가 전혀 없는 PDF는 오류 처리합니다. 짧은 텍스트/표 추출 누락/그림 속 경고는 사람이 확인해야 합니다.
