@@ -43,16 +43,18 @@ def main():
             result = {'status': 'built', 'index': args.index, 'embedding_model': model}
         elif args.command == 'evaluate':
             result = evaluate(read_json(args.cases)['cases'], lambda case: search(
-                args.index, embedding.embed_query(case['question']), case['filters'], case.get('top_k', 5)))
+                args.index, embedding.embed_query(case['question']), case['filters'], case.get('top_k', 5),
+                query=case['question']))
             write_json(args.out, result)
         else:
             if not args.question.strip():
                 p.error('question cannot be empty')
-            hits = search(args.index, embedding.embed_query(args.question), json.loads(args.filters), args.top_k)
+            hits = search(args.index, embedding.embed_query(args.question), json.loads(args.filters), args.top_k,
+                          query=args.question)
             result = hits
             if args.command == 'answer':
                 from langchain_openai import ChatOpenAI
-                llm = ChatOpenAI(model=args.llm_model, temperature=0)
+                llm = ChatOpenAI(model=args.llm_model, temperature=0, model_kwargs={'response_format': {'type': 'json_object'}})
                 result = answer_from_hits(args.question, hits, lambda system, user: llm.invoke(
                     [('system', system), ('human', user)]).content)
     print(json.dumps(result, ensure_ascii=False, indent=2))
