@@ -77,6 +77,84 @@ def chunk_pages(doc, pages, file_hash, size=900, overlap=120):
     return chunks, empty_pages
 
 
+# Statute PDFs from law.go.kr: one article per chunk so citations can name 제N조.
+ARTICLE = re.compile(r'제(\d+)조(?:의(\d+))?(?:\(((?:[^()]|\([^()]*\))*)\)| ?삭제)')
+CHAPTER = re.compile(r'제\d+(?:장|절)(?:의\d+)?\s.+')
+ITEM_START = re.compile(r'[①-⑳]|\d+(?:의\d+)?\.\s|\[')
+LETTERS = '가나다라마바사아자차카타파하'
+NOISE_LINE = re.compile(r'법제처\s+\d+\s+국가법령정보센터|\[시행 \d{4}\..*\]|.*\d{2,3}-\d{3,4}-\d{4}')
+# Amendment history adds dates, not meaning. Effectiveness notes such as [법률 제…호 … 유효함] stay.
+HISTORY = re.compile(r'\s*<(?:개\s*정|신\s*설)[^>]*>|\s*\[(?:전문개정|본조신설|제목개정|종전)[^\]]*\]')
+
+
+def law_lines(doc, pages):
+    """Yield (pdf_page, line) for statute body lines, dropping page furniture and the trailing 부칙."""
+    for page_number, raw in enumerate(pages, 1):
+        for line in (raw or '').splitlines():
+            line = line.strip()
+            if re.match(r'부칙\s*<', line):
+                return
+            if not line or line == doc['title'] or NOISE_LINE.fullmatch(line):
+                continue
+            yield page_number, line
+
+
+def join_wrapped(lines):
+    # law.go.kr wraps at a fixed width, usually mid-word, so continuation lines join without a space.
+    # 목 markers (가. 나. …) only count in sequence; otherwise a wrapped "…한\n다." would split a sentence.
+    text, letter = '', -1
+    for line in lines:
+        starts = bool(ITEM_START.match(line))
+        if re.match(r'[가-하]\.\s', line) and line[0] in LETTERS:
+            index = LETTERS.index(line[0])
+            if index in (0, letter + 1):
+                starts, letter = True, index
+        elif starts:
+            letter = -1
+        text += ('\n' if text and starts else '') + line
+    return text
+
+
+def law_articles(doc, pages):
+    articles, chapter = [], None
+    for page_number, line in law_lines(doc, pages):
+        head = ARTICLE.match(line)
+        if CHAPTER.fullmatch(line):
+            chapter = HISTORY.sub('', line).strip()
+        elif head:
+            articles.append({'article': f"제{head[1]}조" + (f"의{head[2]}" if head[2] else ''),
+                             'title': head[3], 'section': chapter, 'pdf_page': page_number, 'lines': [line]})
+        elif articles:
+            articles[-1]['lines'].append(line)
+    for a in articles:
+        a['text'] = HISTORY.sub('', join_wrapped(a.pop('lines'))).strip()
+    # Repealed articles (제N조 삭제) carry no rule to cite.
+    return [a for a in articles if a['title'] is not None]
+
+
+def chunk_law_pages(doc, pages, file_hash, size=1200):
+    validate_document(doc)
+    chunks = []
+    for a in law_articles(doc, pages):
+        head = f"{a['article']}({a['title']})"
+        parts, current = [], ''
+        for line in a['text'].split('\n'):
+            if current and len(current) + len(line) > size:
+                parts.append(current)
+                current = head + ' (계속)\n'
+            current += ('\n' if current and not current.endswith('\n') else '') + line
+        parts.append(current)
+        for n, body in enumerate(parts):
+            identity = f"{doc['doc_id']}|{doc['revision']}|{file_hash}|{a['article']}|{n}|{body}"
+            metadata = {k: v for k, v in doc.items() if k != 'file'}
+            metadata.update(pdf_page=a['pdf_page'], printed_page=None, section=a['section'],
+                            article=a['article'], article_title=a['title'], file_sha256=file_hash, start_offset=n)
+            chunks.append({'schema_version': SCHEMA_VERSION,
+                           'chunk_id': digest(identity.encode())[:24],
+                           'text': f"[{doc['title']}] {body}", 'metadata': metadata})
+    return chunks, [n for n, raw in enumerate(pages, 1) if not (raw or '').strip()]
+
+
 def ingest(registry_path, output):
     from pypdf import PdfReader
     registry_path = Path(registry_path).resolve()
@@ -100,7 +178,8 @@ def ingest(registry_path, output):
         content = path.read_bytes()
         reader = PdfReader(path)
         pages = [p.extract_text() or '' for p in reader.pages]
-        rows, empty = chunk_pages(doc, pages, digest(content))
+        chunker = chunk_law_pages if doc['kind'] == 'law' else chunk_pages
+        rows, empty = chunker(doc, pages, digest(content))
         if not rows:
             raise ValueError(f"{doc['doc_id']}: no extracted text; OCR/manual review needed")
         chunks.extend(rows)

@@ -1,4 +1,38 @@
 {
   "schema_version": 1,
-  "documents": []
+  "documents": [
+    {
+      "doc_id": "road-traffic-act",
+      "title": "도로교통법",
+      "kind": "law",
+      "source_url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+      "retrieved_at": "2026-10-23",
+      "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+      "effective_date": "2026-10-13",
+      "file": "raw/도로교통법(법률)(제22067호)(20261013).pdf",
+      "usage_note": "국가법령정보센터 원문. 본문만 저장(부칙·별표·서식·시행예정조문 제외). 저작권법 제7조에 따라 보호 대상 아님"
+    },
+    {
+      "doc_id": "road-traffic-act-decree",
+      "title": "도로교통법 시행령",
+      "kind": "law",
+      "source_url": "https://www.law.go.kr/법령/도로교통법시행령/(36728,20260929)",
+      "retrieved_at": "2026-10-23",
+      "revision": "대통령령 제36728호 (2026-09-29 공포, 타법개정)",
+      "effective_date": "2026-10-02",
+      "file": "raw/도로교통법 시행령(대통령령)(제36728호)(20261002).pdf",
+      "usage_note": "국가법령정보센터 원문. 본문만 저장(부칙·별표·서식·시행예정조문 제외). 저작권법 제7조에 따라 보호 대상 아님"
+    },
+    {
+      "doc_id": "road-traffic-act-rule",
+      "title": "도로교통법 시행규칙",
+      "kind": "law",
+      "source_url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+      "retrieved_at": "2026-10-23",
+      "revision": "행정안전부령 제636호 (2026-08-24 공포, 일부개정)",
+      "effective_date": "2026-08-24",
+      "file": "raw/도로교통법 시행규칙(행정안전부령)(제00636호)(20260824).pdf",
+      "usage_note": "국가법령정보센터 원문. 본문만 저장(부칙·별표·서식·시행예정조문 제외). 저작권법 제7조에 따라 보호 대상 아님"
+    }
+  ]
 }
