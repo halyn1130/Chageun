@@ -34,9 +34,18 @@ services:
 
   api-server:
     build: ../backend/api-server
-    env_file: ../.env 
+    env_file: ../.env
+    environment:
+      DB_HOST: db               # 컨테이너끼리는 서비스 이름으로 접속
+      DB_PORT: 3306
+      DB_NAME: chageun
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
     ports:
       - "8002:8002"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   db-data:
