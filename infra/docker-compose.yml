@@ -2,7 +2,7 @@
 # 비밀값은 루트 .env에서 읽는다 (DB_PASSWORD, JWT_SECRET 등). 팀 공통 설정값은 여기에 둔다
 
 # CORS 허용 출처 (쉼표 구분) — Vue 개발 서버 5173 · 프론트 컨테이너 5174. auth-server · api-server 공통
-x-frontend-origins: &frontend-origins http://localhost:5173,http://localhost:5174
+x-frontend-origins: &frontend-origins http://localhost:5173,http://localhost:5174,http://localhost:5500   # 5500: 팀 확인용 테스트 페이지
 
 services:
   db:
@@ -74,6 +74,13 @@ services:
     volumes:
       - ../ai_data/data/indexes:/app/data/indexes:ro
     # 외부 포트 없음 — api-server만 compose 내부에서 http://rag:8001 로 호출한다
+
+  test-page:                    # 팀 확인용 테스트 페이지 (tools/test-page) — 로그인 · 내 차 · 대화 · 음성
+    image: nginx:1.27-alpine
+    volumes:
+      - ../tools/test-page:/usr/share/nginx/html:ro
+    ports:
+      - "5500:80"
 
 volumes:
   db-data:
