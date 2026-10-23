@@ -1,10 +1,12 @@
 """[목업 · 임시] 대화 API. RAG 서버 구성이 정해지면 이동하거나 삭제한다.
 질문에 들어간 단어에 따라 status별 응답 예시를 돌려준다.
 """
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-router = APIRouter(tags=["대화 (목업 · 임시)"])
+from app.auth import get_current_user
+
+router = APIRouter(tags=["대화 (목업 · 임시)"], dependencies=[Depends(get_current_user)])
 
 
 class LatLng(BaseModel):

@@ -1,8 +1,10 @@
 """[목업] 지도 API — 고정 데이터를 돌려준다. 카카오·오피넷 연동 시 교체."""
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-router = APIRouter(tags=["지도 (목업)"])
+from app.auth import get_current_user
+
+router = APIRouter(tags=["지도 (목업)"], dependencies=[Depends(get_current_user)])
 
 MOCK_PLACES = {
     "parking": [

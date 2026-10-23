@@ -1,8 +1,10 @@
 """[목업] 내 차 API — 고정 데이터를 돌려준다. DB 연동 시 교체."""
 from datetime import date
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Depends, Response
 from pydantic import BaseModel
+
+from app.auth import CurrentUser, get_current_user
 
 router = APIRouter(prefix="/vehicles", tags=["내 차 (목업)"])
 
@@ -48,25 +50,27 @@ def catalog():
 
 
 @router.get("", summary="내 차량 목록")
-def list_vehicles():
+def list_vehicles(user: CurrentUser = Depends(get_current_user)):
     return [MOCK_VEHICLE]
 
 
 @router.post("", status_code=201, summary="차량 등록")
-def create_vehicle(body: VehicleCreate):
+def create_vehicle(body: VehicleCreate, user: CurrentUser = Depends(get_current_user)):
     return {"id": 4, **body.model_dump(), "is_primary": False}
 
 
 @router.delete("/{vehicle_id}", status_code=204, summary="차량 삭제")
-def delete_vehicle(vehicle_id: int):
+def delete_vehicle(vehicle_id: int, user: CurrentUser = Depends(get_current_user)):
     return Response(status_code=204)
 
 
 @router.get("/{vehicle_id}/maintenance", summary="정비 이력 (최신순)")
-def list_maintenance(vehicle_id: int, item: str | None = None):
+def list_maintenance(vehicle_id: int, item: str | None = None,
+                     user: CurrentUser = Depends(get_current_user)):
     return [r for r in MOCK_MAINTENANCE if item is None or r["item"] == item]
 
 
 @router.post("/{vehicle_id}/maintenance", status_code=201, summary="정비 기록 추가")
-def create_maintenance(vehicle_id: int, body: MaintenanceCreate):
+def create_maintenance(vehicle_id: int, body: MaintenanceCreate,
+                       user: CurrentUser = Depends(get_current_user)):
     return {"id": 12, **body.model_dump(), "item_label": ITEM_LABELS.get(body.item, "기타")}
