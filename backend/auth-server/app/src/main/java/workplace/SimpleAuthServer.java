@@ -123,10 +123,16 @@ public class SimpleAuthServer {
     private static final String APP_AUTH_COOKIE_NAME = "APP_AUTH";
 
     // ==== CORS ==== //
-    // 프론트(Vue)가 다른 포트에서 호출하므로 허용할 출처 목록. FRONTEND_ORIGINS(쉼표 구분)로 바꿀 수 있다
-    private static final List<String> FRONTEND_ORIGINS = List.of(
-            System.getenv().getOrDefault("FRONTEND_ORIGINS", "http://localhost:5173,http://localhost:5174")
-                    .split("\\s*,\\s*"));
+    // 프론트(Vue)가 다른 포트에서 호출하므로 허용할 출처 목록. .env의 FRONTEND_ORIGINS(쉼표 구분)
+    private static final List<String> FRONTEND_ORIGINS = loadFrontendOrigins();
+
+    private static List<String> loadFrontendOrigins() {
+        String raw = System.getenv("FRONTEND_ORIGINS");
+        if (isBlank(raw)) {
+            throw new IllegalStateException("FRONTEND_ORIGINS 환경변수가 없습니다 (.env 확인)");
+        }
+        return List.of(raw.trim().split("\\s*,\\s*"));
+    }
 
     // ==== DEBUG ==== //
     private static final boolean DEBUG = true;
