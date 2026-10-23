@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>차근 대화 테스트</title>
+<style>
+  :root { --ink:#1f2328; --muted:#656d76; --line:#d0d7de; --accent:#2563eb; --bg:#f6f8fa; --ok:#1a7f37; --err:#cf222e; --warn:#9a6700; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.55 -apple-system, "Apple SD Gothic Neo", sans-serif; color:var(--ink); background:var(--bg); }
+  main { max-width:760px; margin:24px auto; padding:0 16px; }
+  h1 { font-size:20px; margin:0 0 4px; } .sub { color:var(--muted); font-size:13px; margin:0 0 16px; }
+  section { background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:12px; }
+  h2 { font-size:14px; margin:0 0 10px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  input, select { font:inherit; padding:7px 10px; border:1px solid var(--line); border-radius:6px; }
+  button { font:inherit; padding:7px 14px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+  button.ghost { background:#fff; color:var(--accent); } button.rec { background:var(--err); border-color:var(--err); }
+  button:disabled { opacity:.5; cursor:default; }
+  .muted { color:var(--muted); } .ok { color:var(--ok); } .err { color:var(--err); }
+  .status { font-size:13px; margin-top:6px; }
+  #chat { display:flex; flex-direction:column; gap:10px; max-height:520px; overflow:auto; padding:2px; }
+  .q { align-self:flex-end; background:var(--accent); color:#fff; padding:8px 12px; border-radius:12px 12px 2px 12px; max-width:80%; }
+  .a { align-self:flex-start; background:var(--bg); border:1px solid var(--line); padding:10px 12px; border-radius:12px 12px 12px 2px; max-width:92%; }
+  .a .meta { font-size:12px; color:var(--muted); margin-bottom:4px; display:flex; gap:6px; flex-wrap:wrap; }
+  .tag { border:1px solid var(--line); border-radius:999px; padding:0 8px; background:#fff; }
+  .tag.answered { color:var(--ok); border-color:var(--ok); } .tag.err { color:var(--err); border-color:var(--err); }
+  .tag.warn { color:var(--warn); border-color:var(--warn); }
+  .a .speech { font-size:13px; color:var(--muted); margin-top:6px; }
+  .a ul { margin:6px 0 0; padding-left:18px; font-size:13px; }
+  .a .notice { font-size:13px; margin-top:6px; padding:4px 8px; border-radius:6px; background:#fff8c5; }
+  .a .action { font:12px ui-monospace, Menlo, monospace; margin-top:6px; color:var(--muted); }
+  .a button.play { padding:2px 10px; font-size:12px; margin-top:6px; }
+  #q { flex:1; min-width:200px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>차근 대화 테스트</h1>
+  <p class="sub">팀 확인용 페이지 (프론트 화면 아님) · 로그인(:8080) → 내 차(:8002) → 질문 /rag-query(:8002 → rag) · 음성 /stt · /tts(:8008)</p>
+
+  <section>
+    <h2>1. 로그인</h2>
+    <div class="row">
+      <input id="user" value="demo" size="10"> <input id="pw" type="password" value="demo1234" size="10">
+      <button id="login">로그인</button>
+      <button id="signup" class="ghost">회원가입</button>
+    </div>
+    <div id="loginStatus" class="status muted">로그인 전</div>
+  </section>
+
+  <section>
+    <h2>2. 내 차</h2>
+    <div class="row">
+      <select id="vehicle" disabled><option value="">로그인 후 불러와요</option></select>
+      <select id="catalog" disabled></select>
+      <button id="addCar" class="ghost" disabled>차량 등록</button>
+    </div>
+    <div class="status muted">"기본 차량"을 고르면 vehicle_id를 보내지 않아요 (서버가 기본 차량을 씀)</div>
+  </section>
+
+  <section>
+    <h2>3. 대화</h2>
+    <div id="chat"><div class="muted" id="empty">질문 예: 회전교차로에서는 누가 먼저야? · 엔진 오일 교체 주기 알려줘 · 주전자 모양 경고등이 켜졌어 · 빨간 불 들어왔어 · 내 차 엔진오일 언제 갈았지? · 가까운 주차장 찾아줘</div></div>
+    <div class="row" style="margin-top:12px">
+      <input id="q" placeholder="질문을 입력하세요" disabled>
+      <button id="send" disabled>보내기</button>
+      <button id="rec" disabled>● 음성</button>
+    </div>
+    <div class="row status">
+      <label><input type="checkbox" id="autoplay" checked> 답변 자동 재생(TTS)</label>
+      <span class="muted">대화 id: <span id="cid">없음 (새 대화)</span></span>
+      <button id="newChat" class="ghost" style="padding:2px 10px;font-size:12px">새 대화</button>
+    </div>
+  </section>
+</main>
+
+<script>
+const AUTH = "http://localhost:8080", API = "http://localhost:8002", VOICE = "http://localhost:8008";
+const $ = id => document.getElementById(id);
+let token = null, conversationId = null, recorder = null;
+
+const auth = (extra = {}) => ({ Authorization: `Bearer ${token}`, ...extra });
+async function detail(res) { const b = await res.json().catch(() => null); const d = b && (b.detail ?? b.error); return typeof d === "string" ? d : JSON.stringify(d ?? b); }
+function setStatus(id, msg, cls) { $(id).className = "status " + cls; $(id).textContent = msg; }
+function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+async function login(path) {
+  const body = new URLSearchParams({ username: $("user").value, password: $("pw").value });
+  const res = await fetch(`${AUTH}${path}`, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body }).catch(() => null);
+  if (!res) return setStatus("loginStatus", "auth-server(:8080) 연결 실패", "err");
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) return setStatus("loginStatus", `${path} 실패 (${res.status}) ${data.error ?? ""}`, "err");
+  if (path === "/api/signup") return login("/api/login");
+  token = data.access_token;
+  setStatus("loginStatus", `로그인됨 · ${$("user").value}`, "ok");
+  ["vehicle", "catalog", "addCar", "q", "send", "rec"].forEach(id => $(id).disabled = false);
+  loadVehicles(); loadCatalog();
+}
+$("login").onclick = () => login("/api/login");
+$("signup").onclick = () => login("/api/signup");
+
+async function loadVehicles(selectId) {
+  const res = await fetch(`${API}/vehicles`, { headers: auth() });
+  const cars = res.ok ? await res.json() : [];
+  $("vehicle").innerHTML = `<option value="">기본 차량 (vehicle_id 생략)</option>` + cars.map(c =>
+    `<option value="${c.id}">${c.is_primary ? "★ " : ""}${escapeHtml(c.nickname ?? c.model)} · ${c.model_year} ${c.powertrain} (id ${c.id})</option>`).join("")
+    + `<option value="none" disabled>${cars.length ? "" : "등록된 차량 없음 → 설명서 질문은 need_vehicle"}</option>`;
+  if (selectId) $("vehicle").value = selectId;
+}
+async function loadCatalog() {
+  const cars = await (await fetch(`${API}/vehicles/catalog`)).json();
+  $("catalog").innerHTML = cars.map((c, i) => `<option value="${i}">${c.manufacturer} ${c.model} ${c.model_year} ${c.powertrain}</option>`).join("");
+  $("catalog").dataset.cars = JSON.stringify(cars);
+}
+$("addCar").onclick = async () => {
+  const car = JSON.parse($("catalog").dataset.cars)[$("catalog").value];
+  const res = await fetch(`${API}/vehicles`, { method: "POST", headers: auth({ "Content-Type": "application/json" }), body: JSON.stringify(car) });
+  if (res.ok) loadVehicles((await res.json()).id); else alert(await detail(res));
+};
+
+function bubble(cls, html) { $("empty")?.remove(); const d = document.createElement("div"); d.className = cls; d.innerHTML = html; $("chat").append(d); $("chat").scrollTop = 1e9; return d; }
+
+async function ask(question) {
+  question = question.trim(); if (!question) return;
+  bubble("q", escapeHtml(question));
+  const pending = bubble("a", `<span class="muted">답변을 만드는 중…</span>`);
+  $("send").disabled = true;
+  const body = { question };
+  if ($("vehicle").value && $("vehicle").value !== "none") body.vehicle_id = Number($("vehicle").value);
+  if (conversationId) body.conversation_id = conversationId;
+  const t0 = performance.now();
+  const res = await fetch(`${API}/rag-query`, { method: "POST", headers: auth({ "Content-Type": "application/json" }), body: JSON.stringify(body) }).catch(() => null);
+  const ms = Math.round(performance.now() - t0);
+  $("send").disabled = false;
+  if (!res) return pending.innerHTML = `<span class="err">api-server(:8002) 연결 실패</span>`;
+  if (!res.ok) return pending.innerHTML = `<div class="meta"><span class="tag err">HTTP ${res.status}</span><span>${ms}ms</span></div>${escapeHtml(await detail(res))}`;
+  const d = await res.json();
+  conversationId = d.conversation_id; $("cid").textContent = conversationId;
+  const tagCls = d.status === "answered" ? "answered" : d.status === "out_of_scope" || d.status === "not_found" ? "err" : "warn";
+  pending.innerHTML = `
+    <div class="meta"><span class="tag ${tagCls}">${d.status}</span><span>${ms}ms</span>
+      ${d.missing_fields?.length ? `<span class="tag warn">missing: ${d.missing_fields.join(", ")}</span>` : ""}</div>
+    <div>${escapeHtml(d.answer)}</div>
+    ${d.sources?.length ? `<ul>${d.sources.map(s => `<li>${s.url ? `<a href="${escapeHtml(s.url)}" target="_blank">${escapeHtml(s.title)}</a>` : escapeHtml(s.title)} · ${escapeHtml(s.page ?? "")}</li>`).join("")}</ul>` : ""}
+    ${d.needs_review ? `<div class="notice">공식 자료로 한 번 더 확인하세요 (needs_review)</div>` : ""}
+    ${d.handoff ? `<div class="notice">정비소·고객센터에 문의하세요 (handoff)</div>` : ""}
+    ${d.action ? `<div class="action">action: ${escapeHtml(JSON.stringify(d.action))}</div>` : ""}
+    <div class="speech">🔈 ${escapeHtml(d.speech_text)}</div>
+    <button class="play ghost">다시 듣기</button>`;
+  pending.querySelector(".play").onclick = () => speak(d.speech_text, pending);
+  if ($("autoplay").checked) speak(d.speech_text, pending);
+}
+$("send").onclick = () => { ask($("q").value); $("q").value = ""; };
+$("q").onkeydown = e => { if (e.key === "Enter" && !e.isComposing) $("send").click(); };
+$("newChat").onclick = () => { conversationId = null; $("cid").textContent = "없음 (새 대화)"; };
+
+async function speak(text, where) {
+  const res = await fetch(`${VOICE}/tts`, { method: "POST", headers: auth({ "Content-Type": "application/json" }), body: JSON.stringify({ text }) }).catch(() => null);
+  if (!res || !res.ok) { where.insertAdjacentHTML("beforeend", `<div class="err" style="font-size:12px">TTS 실패 ${res ? res.status : ""}</div>`); return; }
+  new Audio(URL.createObjectURL(await res.blob())).play();
+}
+
+$("rec").onclick = async () => {
+  if (recorder?.state === "recording") return recorder.stop();
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { return alert("마이크 권한이 필요해요"); }
+  const chunks = [];
+  recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+  recorder.ondataavailable = e => chunks.push(e.data);
+  recorder.onstop = async () => {
+    stream.getTracks().forEach(t => t.stop());
+    $("rec").textContent = "● 음성"; $("rec").classList.remove("rec");
+    const form = new FormData(); form.append("file", new Blob(chunks, { type: "audio/webm" }), "q.webm");
+    $("q").value = "인식 중…";
+    const res = await fetch(`${VOICE}/stt`, { method: "POST", headers: auth(), body: form }).catch(() => null);
+    if (!res || !res.ok) { $("q").value = ""; return alert("STT 실패: " + (res ? await detail(res) : "voice-ai 연결 실패")); }
+    const { text } = await res.json();
+    $("q").value = text;   // 인식 결과를 확인·수정한 뒤 보내기 (명세: 프론트가 고른 질문)
+    $("q").focus();
+  };
+  recorder.start();
+  $("rec").textContent = "■ 멈춤"; $("rec").classList.add("rec");
+};
+</script>
+</body>
+</html>

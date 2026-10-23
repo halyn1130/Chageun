@@ -20,9 +20,10 @@ docker compose up -d --build  # 처음엔 빌드 때문에 몇 분 걸림
 | http://localhost:8002/health | `{"status":"ok","db":"ok"}` 나오면 정상 |
 | http://localhost:8008/docs | 음성 API (voice-ai, Swagger) |
 | http://localhost:8008/health | `{"status":"ok","whisper":"small"}` 나오면 정상. 처음 실행 때는 Whisper 모델(약 460MB)을 받느라 몇 분 걸림 |
+| http://localhost:5500 | **팀 확인용 테스트 페이지** — 로그인 · 내 차 등록 · 텍스트/음성 질문 · 답변 출처 · 음성 재생을 한 화면에서 (`tools/test-page`, 프론트 화면 아님) |
 | `localhost:3307` | DB (DB 툴 접속용, 사용자 `root`, 비밀번호는 `.env`의 `DB_PASSWORD`) |
 
-> 내 차 · 지도 API는 실제 동작, 대화(`/rag-query`)는 아직 **목업**(고정 응답)입니다. API 형식은 노션 API 명세서 참고.
+> 대화(`/rag-query`)는 rag 서버의 문서 인덱스가 있어야 답한다. `ai_data/data/indexes/v9-law-paragraphs` 폴더를 받아 넣지 않으면 503. API 형식은 노션 API 명세서 참고.
 
 ## 끄기 · 초기화
 
