@@ -22,10 +22,11 @@ VEHICLE_COLUMNS = "id, nickname, manufacturer, model, model_year, powertrain, mi
 
 # 정비 항목. 화면용 이름(item_label)은 DB에 저장하지 않고 응답할 때 붙인다
 ITEM_LABELS = {
-    "engine_oil": "엔진오일", "air_filter": "에어필터", "tire": "타이어", "brake_pad": "브레이크패드",
+    "engine_oil": "엔진오일", "oil_filter": "엔진오일 필터", "air_filter": "엔진 에어필터",
+    "cabin_filter": "에어컨 필터", "brake_fluid": "브레이크액", "tire": "타이어", "brake_pad": "브레이크패드",
     "coolant": "냉각수", "battery": "배터리", "wiper": "와이퍼", "other": "기타",
 }
-MaintenanceItem = Literal["engine_oil", "air_filter", "tire", "brake_pad", "coolant", "battery", "wiper", "other"]
+MaintenanceItem = Literal["engine_oil", "oil_filter", "air_filter", "cabin_filter", "brake_fluid", "tire", "brake_pad", "coolant", "battery", "wiper", "other"]
 
 MAINTENANCE_COLUMNS = "id, item, performed_at, mileage_km, memo"
 KST = ZoneInfo("Asia/Seoul")
