@@ -122,9 +122,11 @@ public class SimpleAuthServer {
     // ==== (Optional) Cookie name for login status check in Vue ==== //
     private static final String APP_AUTH_COOKIE_NAME = "APP_AUTH";
 
-    // ==== CORS (dev) ==== //
-    // In case frontend (8008) calls Java API (8080)
-    private static final String DEV_FRONTEND_ORIGIN = "http://localhost:8008";
+    // ==== CORS ==== //
+    // 프론트(Vue)가 다른 포트에서 호출하므로 허용할 출처 목록. FRONTEND_ORIGINS(쉼표 구분)로 바꿀 수 있다
+    private static final List<String> FRONTEND_ORIGINS = List.of(
+            System.getenv().getOrDefault("FRONTEND_ORIGINS", "http://localhost:5173,http://localhost:5174")
+                    .split("\\s*,\\s*"));
 
     // ==== DEBUG ==== //
     private static final boolean DEBUG = true;
@@ -198,10 +200,12 @@ public class SimpleAuthServer {
 
         // POST /api/signup -> Sign up
         server.createContext("/api/signup", exchange -> {
+            if (handlePreflight(exchange)) return;
             if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 methodNotAllowed(exchange);
                 return;
             }
+            addCorsHeaders(exchange);
             Map<String, String> params = parseFormBody(exchange);
 
             String username = trimToNull(params.get("username"));
@@ -215,28 +219,32 @@ public class SimpleAuthServer {
             }
 
             if (isBlank(username) || isBlank(password)) {
-                writeText(exchange, 400, "username and password are required");
+                writeJson(exchange, 400, "{\"ok\":false,\"error\":\"username and password are required\"}");
                 return;
             }
 
+            // fetch는 다른 출처로의 302를 따라가며 CORS 오류가 나므로 리다이렉트 대신 JSON으로 응답한다
             try {
                 //  회원가입 요청을 어떤 계층으로 위임해야 하는가?
-                authService.signUp(username, password);redirect(exchange, "/login");
+                authService.signUp(username, password);
+                writeJson(exchange, 201, "{\"ok\":true}");
             } catch (SQLIntegrityConstraintViolationException dup) {
-                writeText(exchange, 400, "username already exists");
+                writeJson(exchange, 400, "{\"ok\":false,\"error\":\"username already exists\"}");
             } catch (Exception e) {
                 e.printStackTrace();
-                writeText(exchange, 500, "signup error");
+                writeJson(exchange, 500, "{\"ok\":false,\"error\":\"signup error\"}");
             }
         });
 
         // POST /api/login
         // Login + Session + JWT issuance + (Important) No 302 redirect → Return 200 JSON
         server.createContext("/api/login", exchange -> {
+            if (handlePreflight(exchange)) return;
             if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
                 methodNotAllowed(exchange);
                 return;
             }
+            addCorsHeaders(exchange);
 
             try {
                 Map<String, String> params = parseFormBody(exchange);
@@ -284,7 +292,9 @@ public class SimpleAuthServer {
                 // 4) (Most important) Do not redirect here — end with 200 JSON response
                 //    → In fetch/XHR environments, 302 redirects easily cause HTTP 0/cancellation
                 //  fetch 호출에서는 서버 302 대신 성공 JSON으로 이동 경로를 알립니다.
-                writeJson(exchange, 200, "{\"ok\":true,\"redirect\":\"http://localhost:8008/index.html\"}");System.out.println("[LOGIN] SUCCESS -> 200 JSON (no redirect)");
+                // 프론트는 access_token을 저장해 두고 api-server 요청에 Authorization: Bearer로 붙인다
+                writeJson(exchange, 200, "{\"ok\":true,\"access_token\":\"" + jwt + "\"}");
+                System.out.println("[LOGIN] SUCCESS -> 200 JSON (access_token)");
                 return;
 
             } catch (Exception e) {
@@ -422,11 +432,23 @@ public class SimpleAuthServer {
     // ========= CORS =========
 
     private static void addCorsHeaders(HttpExchange exchange) {
-        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", DEV_FRONTEND_ORIGIN);
-        exchange.getResponseHeaders().set("Access-Control-Allow-Credentials", "true");
+        String origin = exchange.getRequestHeaders().getFirst("Origin");
+        if (origin != null && FRONTEND_ORIGINS.contains(origin)) {
+            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", origin);
+            exchange.getResponseHeaders().set("Access-Control-Allow-Credentials", "true");
+        }
         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
         exchange.getResponseHeaders().set("Vary", "Origin");
+    }
+
+    // CORS 사전 요청(OPTIONS)이면 204로 끝내고 true를 돌려준다
+    private static boolean handlePreflight(HttpExchange exchange) throws IOException {
+        if (!"OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) return false;
+        addCorsHeaders(exchange);
+        exchange.sendResponseHeaders(204, -1);
+        exchange.close();
+        return true;
     }
 
     // ========= Resource/Reponse Helper =========

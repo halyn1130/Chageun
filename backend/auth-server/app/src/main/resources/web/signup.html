@@ -8,7 +8,7 @@
 <body>
 <div class="container">
     <h1>Sign Up</h1>
-    <form method="POST" action="/api/signup">
+    <form id="signupForm" method="POST" action="/api/signup">
         <label>Username
             <input type="text" name="username" required>
         </label>
@@ -17,8 +17,26 @@
         </label>
         <button type="submit">Sign Up</button>
     </form>
+    <p id="msg"></p>
     <p><a href="/login">Back to Login</a></p>
 </div>
-<script src="/static/app.js"></script>
+<script>
+// /api/signup은 JSON으로 응답하므로 fetch로 보내고 성공하면 로그인 화면으로 이동한다
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById("msg");
+  const res = await fetch("/api/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(new FormData(e.target)),
+  });
+  const data = await res.json().catch(() => null);
+  if (res.ok) {
+    window.location.href = "/login";
+  } else {
+    msg.textContent = (data && data.error) ? data.error : ("Sign up error (HTTP " + res.status + ")");
+  }
+});
+</script>
 </body>
 </html>
