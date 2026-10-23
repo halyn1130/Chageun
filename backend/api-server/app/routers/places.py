@@ -46,6 +46,13 @@ class RouteRequest(BaseModel):
     destination: LatLng
     waypoints: list[LatLng] = Field(default=[], max_length=5)
 
+    # Swagger "Try it out"에 미리 채워지는 예시: 울산시청 → 울산대공원, 경유지 없음
+    model_config = {"json_schema_extra": {"examples": [{
+        "origin": {"lat": 35.5384, "lng": 129.3114},
+        "destination": {"lat": 35.5287, "lng": 129.2923},
+        "waypoints": [],
+    }]}}
+
 
 async def get_json(url: str, params: dict, headers: dict | None = None) -> dict:
     """외부 API 호출. 실패·시간 초과는 모두 502로 바꿔 사용자에게 보여 줄 문장만 남긴다."""
@@ -77,8 +84,9 @@ def kakao_place(doc: dict) -> dict:
 
 
 @router.get("/places/search", summary="장소 검색")
-async def search_places(query: str = Query(min_length=1, max_length=100),
-                        lat: float | None = None, lng: float | None = None):
+async def search_places(query: str = Query(min_length=1, max_length=100, openapi_examples={"울산대공원": {"value": "울산대공원"}}),
+                        lat: float | None = Query(None, openapi_examples={"울산시청": {"value": 35.5384}}),
+                        lng: float | None = Query(None, openapi_examples={"울산시청": {"value": 129.3114}})):
     params = {"query": query, "size": 15}
     if lat is not None and lng is not None:
         params.update(x=lng, y=lat)   # 기준 좌표가 있으면 거리도 받는다
@@ -87,7 +95,9 @@ async def search_places(query: str = Query(min_length=1, max_length=100),
 
 
 @router.get("/places/nearby", summary="주변 장소 찾기")
-async def nearby_places(category: Literal["parking", "gas_station", "cafe"], lat: float, lng: float,
+async def nearby_places(category: Literal["parking", "gas_station", "cafe"] = Query(openapi_examples={"주차장": {"value": "parking"}}),
+                        lat: float = Query(openapi_examples={"울산시청": {"value": 35.5384}}),
+                        lng: float = Query(openapi_examples={"울산시청": {"value": 129.3114}}),
                         radius_m: int = Query(1000, ge=1, le=20000),
                         sort: Literal["distance", "price"] = "distance"):
     if category == "gas_station":

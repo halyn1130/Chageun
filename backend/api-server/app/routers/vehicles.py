@@ -1,7 +1,7 @@
 """내 차 API — 차량은 DB(vehicles 테이블), 정비 이력은 아직 목업."""
 from datetime import date
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from pydantic import BaseModel, Field
 
 from app.auth import CurrentUser, get_current_user
@@ -37,6 +37,12 @@ class VehicleCreate(BaseModel):
     nickname: str | None = Field(None, max_length=50)
     mileage_km: int | None = Field(None, ge=0)
 
+    # Swagger "Try it out"에 미리 채워지는 예시
+    model_config = {"json_schema_extra": {"examples": [{
+        "manufacturer": "기아", "model": "K5", "model_year": "2024", "powertrain": "가솔린 1.6T",
+        "nickname": "내 K5", "mileage_km": 36200,
+    }]}}
+
 
 class Vehicle(BaseModel):
     id: int
@@ -65,6 +71,10 @@ class MaintenanceCreate(BaseModel):
     performed_at: date
     mileage_km: int
     memo: str | None = None
+
+    model_config = {"json_schema_extra": {"examples": [{
+        "item": "engine_oil", "performed_at": "2024-01-10", "mileage_km": 35000, "memo": "합성유",
+    }]}}
 
 
 @router.get("/catalog", summary="등록 가능한 차종")
@@ -116,7 +126,7 @@ def delete_vehicle(vehicle_id: int, user: CurrentUser = Depends(get_current_user
 # ---- 정비 이력: 아직 목업 (DB 연동 예정) ----
 
 @router.get("/{vehicle_id}/maintenance", summary="정비 이력 (최신순) · 목업")
-def list_maintenance(vehicle_id: int, item: str | None = None,
+def list_maintenance(vehicle_id: int, item: str | None = Query(None, openapi_examples={"엔진오일": {"value": "engine_oil"}}),
                      user: CurrentUser = Depends(get_current_user)):
     return [r for r in MOCK_MAINTENANCE if item is None or r["item"] == item]
 

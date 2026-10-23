@@ -14,6 +14,8 @@ router = APIRouter(tags=["음성 (목업)"])
 class TTSRequest(BaseModel):
     text: str
 
+    model_config = {"json_schema_extra": {"examples": [{"text": "울산대공원까지 13분, 12시 41분 도착 예정이에요."}]}}
+
 
 @router.post("/voice/stt", summary="녹음 → 텍스트", dependencies=[Depends(get_current_user)])
 async def stt(file: UploadFile = File(...)):
