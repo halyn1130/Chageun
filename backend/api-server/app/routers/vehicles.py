@@ -11,10 +11,11 @@ from app.db import get_db
 
 router = APIRouter(prefix="/vehicles", tags=["내 차"])
 
-# 등록 가능한 차종. RAG 문서의 차종 메타데이터와 같은 값이어야 차량별 검색이 된다
+# 등록 가능한 차종 = 설명서가 등록된 차종. ai_data/data/registry.json의 설명서 값과 글자까지 같아야
+# RAG가 이 값으로 설명서를 걸러 검색한다 (다르면 "설명서가 아직 등록되지 않았어요")
 CATALOG = [
-    {"manufacturer": "기아", "model": "K5", "model_year": "2024", "powertrain": "가솔린 1.6T"},
-    {"manufacturer": "현대", "model": "디 올 뉴 아반떼", "model_year": "2024", "powertrain": "가솔린 1.6"},
+    {"manufacturer": "기아", "model": "K5", "model_year": "2026", "powertrain": "G2.0"},
+    {"manufacturer": "현대", "model": "디 올 뉴 아반떼", "model_year": "2026", "powertrain": "G1.6"},
 ]
 
 VEHICLE_COLUMNS = "id, nickname, manufacturer, model, model_year, powertrain, mileage_km, is_primary"
@@ -40,7 +41,7 @@ class VehicleCreate(BaseModel):
 
     # Swagger "Try it out"에 미리 채워지는 예시
     model_config = {"json_schema_extra": {"examples": [{
-        "manufacturer": "기아", "model": "K5", "model_year": "2024", "powertrain": "가솔린 1.6T",
+        "manufacturer": "기아", "model": "K5", "model_year": "2026", "powertrain": "G2.0",
         "nickname": "내 K5", "mileage_km": 36200,
     }]}}
 

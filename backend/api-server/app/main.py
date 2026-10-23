@@ -6,11 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app import db
-from app.routers import places, rag, vehicles, voice
+from app.routers import places, rag, vehicles
 
 app = FastAPI(title="차근 api-server")
 
-# 프론트(Vue)가 다른 포트에서 호출할 수 있도록 허용. 출처 목록은 .env의 FRONTEND_ORIGINS(쉼표 구분)
+# 프론트(Vue)가 다른 포트에서 호출할 수 있도록 허용. 출처 목록은 compose가 넣어 주는 FRONTEND_ORIGINS(쉼표 구분)
 FRONTEND_ORIGINS = [o.strip() for o in os.environ["FRONTEND_ORIGINS"].split(",")]
 
 app.add_middleware(
@@ -22,7 +22,6 @@ app.add_middleware(
 
 app.include_router(vehicles.router)
 app.include_router(places.router)
-app.include_router(voice.router)
 app.include_router(rag.router)
 
 
