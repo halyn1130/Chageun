@@ -83,7 +83,7 @@ class Engine:
         return (calls[0]['name'], calls[0]['args']) if calls else None
 
     def retrieve(self, query, filters):
-        return search(self.index, self.embedding.embed_query(query), filters, 5, query=query)
+        return search(self.index, self.embedding.embed_query(query), filters, 8, query=query)
 
     def generate(self, system, user):
         return self.json_llm.invoke([('system', system), ('human', user)]).content

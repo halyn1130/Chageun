@@ -68,7 +68,16 @@
       "manufacturer": "기아",
       "model": "K5",
       "model_year": "2026",
-      "powertrain": "G2.0"
+      "powertrain": "G2.0",
+      "other_powertrain_terms": [
+        "L2.0",
+        "LPI",
+        "LPG",
+        "LPi",
+        "G1.6 T-GDi",
+        "T-GDI",
+        "T-GDi"
+      ]
     },
     {
       "doc_id": "hyundai-avante-cn7-2026",
@@ -82,7 +91,12 @@
       "manufacturer": "현대",
       "model": "디 올 뉴 아반떼",
       "model_year": "2026",
-      "powertrain": "G1.6"
+      "powertrain": "G1.6",
+      "other_powertrain_terms": [
+        "LPI",
+        "LPG",
+        "LPi"
+      ]
     }
   ]
 }

@@ -132,18 +132,55 @@ def law_articles(doc, pages):
     return [a for a in articles if a['title'] is not None]
 
 
-def chunk_law_pages(doc, pages, file_hash, size=1200):
+def article_parts(text, head, size):
+    """Split one article into chunks of whole 항 (①②…), packing short ones together.
+
+    A whole article buries the sentence a question needs (제27조 is 1,200 characters), so parts stay
+    small. A 항 longer than size is split between its 호, and each piece repeats the 항's lead
+    sentence so "4. … 10미터 이내인 곳" still says what is forbidden there.
+    """
+    units = []
+    for line in text.split('\n'):
+        if not units or re.match(r'[①-⑳]', line):
+            units.append([])
+        units[-1].append(line)
+    parts, current = [], ''
+    for unit in units:
+        body = '\n'.join(unit)
+        if current and len(current) + len(body) > size:
+            parts.append(current)
+            current = ''
+        if len(body) <= size:
+            current += ('\n' if current else '') + body
+            continue
+        first = next((i for i, l in enumerate(unit) if re.match(r'\d+(?:의\d+)?\.\s', l)), None)
+        if first is None:  # one long sentence block: cut between lines
+            for line in unit:
+                if current and len(current) + len(line) > size:
+                    parts.append(current)
+                    current = ''
+                current += ('\n' if current else '') + line
+            continue
+        lead, group = '\n'.join(unit[:first])[:300], []
+        for line in unit[first:]:
+            if group and re.match(r'\d+(?:의\d+)?\.\s', line) and len('\n'.join(group)) + len(line) > size:
+                parts.append(lead + '\n' + '\n'.join(group))
+                group = []
+            group.append(line)
+        current = lead + '\n' + '\n'.join(group)
+    if current:
+        parts.append(current)
+    # Every part after the first names its article so it can be cited and read on its own.
+    return [part if n == 0 else f'{head} (계속)\n{part.removeprefix(head).lstrip()}' for n, part in enumerate(parts)]
+
+
+def chunk_law_pages(doc, pages, file_hash, size=400):
     validate_document(doc)
     chunks = []
     for a in law_articles(doc, pages):
         head = f"{a['article']}({a['title']})"
-        parts, current = [], ''
-        for line in a['text'].split('\n'):
-            if current and len(current) + len(line) > size:
-                parts.append(current)
-                current = head + ' (계속)\n'
-            current += ('\n' if current and not current.endswith('\n') else '') + line
-        parts.append(current)
+        # A definitions article lists dozens of terms; one term per chunk keeps "“정차”란" findable.
+        parts = article_parts(a['text'], head, 150 if a['title'] == '정의' else size)
         for n, body in enumerate(parts):
             identity = f"{doc['doc_id']}|{doc['revision']}|{file_hash}|{a['article']}|{n}|{body}"
             metadata = {k: v for k, v in doc.items() if k != 'file'}
@@ -388,7 +425,7 @@ def bm25_scores(query, texts, k1=1.5, b=0.75):
                 for t in terms if t in d) for d in docs]
 
 
-def search(index_dir, vector, filters, top_k=5, query=None, rrf_k=60):
+def search(index_dir, vector, filters, top_k=5, query=None, rrf_k=60, keep_each=2):
     import faiss
     import numpy as np
     if not 1 <= top_k <= 20:
@@ -433,7 +470,12 @@ def search(index_dir, vector, filters, top_k=5, query=None, rrf_k=60):
     for rank, pos in enumerate(sorted(range(len(candidates)), key=lambda p: -keyword[p])):
         if keyword[pos] > 0:
             fused[pos] += 1 / (rrf_k + rank + 1)
-    best = sorted(range(len(candidates)), key=lambda p: -fused[p])[:top_k]
+    # Fusion favours chunks both rankings like, so one ranking's clear winner can sink: a 별표 row
+    # written without spaces is BM25's first pick but embeds poorly. Each ranking's top picks stay in.
+    keyword_order = [p for p in sorted(range(len(candidates)), key=lambda p: -keyword[p]) if keyword[p] > 0]
+    kept = list(dict.fromkeys([int(p) for p in dense[0][:keep_each]] + keyword_order[:keep_each]))[:top_k]
+    rest = [p for p in sorted(range(len(candidates)), key=lambda p: -fused[p]) if p not in kept]
+    best = sorted(kept + rest[:top_k - len(kept)], key=lambda p: -fused[p])
     return [{'chunk': chunks[candidates[p]], 'score': fused[p]} for p in best]
 
 
@@ -448,7 +490,29 @@ def quoted_in(quote, text, min_block=4, coverage=.9):
     if len(quote) < 8:
         return False
     blocks = SequenceMatcher(None, quote, text, autojunk=False).get_matching_blocks()
-    return sum(b.size for b in blocks if b.size >= min_block) >= coverage * len(quote)
+    if sum(b.size for b in blocks if b.size >= min_block) >= coverage * len(quote):
+        return True
+    # Models join a 호 to its article's lead sentence ("…10미터 이내인 곳에서는 … 주차하여서는 아니 된다"),
+    # reversing the source order. Accept pieces found anywhere, but only long ones.
+    covered, rest = 0, quote
+    while True:
+        match = SequenceMatcher(None, rest, text, autojunk=False).find_longest_match(0, len(rest), 0, len(text))
+        if match.size < 3 * min_block:
+            return covered >= coverage * len(quote)
+        covered += match.size
+        rest = rest[:match.a] + '\0' + rest[match.a + match.size:]
+
+
+VERIFY_SYSTEM = ('너는 차근 답변 검증기다. answer의 모든 문장이 evidence에 적힌 내용만으로 이루어졌는지 확인한다. '
+                 '표현을 바꾸거나 요약하거나 순서를 바꾼 것은 괜찮다. 그러나 evidence에 없는 정의, 수치, 조건, 절차, '
+                 '일반 상식이나 추론으로 보탠 내용이 하나라도 있으면 supported=false다. '
+                 '답변이 가져온 evidence의 항목(조문, 표의 행 이름, 표지 이름)이 question이 묻는 대상과 같은지도 확인한다. '
+                 '다른 대상의 내용을 옮겼으면(예: 점멸을 물었는데 켜진 등화의 뜻을 답함) supported=false다. '
+                 'JSON 객체만 반환: supported(true/false), unsupported(근거 없는 문장 배열).')
+
+
+def compact(text):
+    return re.sub(r'\s+', '', text or '').lower()
 
 
 def answer_from_hits(question, hits, generate, vehicle=None):
@@ -475,14 +539,24 @@ def answer_from_hits(question, hits, generate, vehicle=None):
     if vehicle:
         # One manual covers several engines; values such as oil intervals differ between them.
         system += (' vehicle은 사용자의 차량이다. 엔진이나 사양별로 값이 다르면 vehicle의 동력계통에 해당하는 값만 쓰고, '
+                   '다른 엔진 전용 항목(예: 가솔린 차량에서 LPI·LPG 항목)은 답변에 넣지 마라. '
                    '설명서의 엔진명은 표기가 다를 수 있으니(예: G2.0 = 스마트스트림 G2.0 CVVL) 연료와 배기량으로 맞춘다. '
                    '다른 엔진의 값은 답변에 넣지 마라. 근거에서 그 동력계통을 구분할 수 없으면 insufficient_evidence로 답하라. '
                    '차량 이름 자체는 missing_terms에 넣지 않는다.')
         request['vehicle'] = vehicle
+    other = {t for h in hits for t in h['chunk']['metadata'].get('other_powertrain_terms') or []}
     raw = generate(system, json.dumps(request, ensure_ascii=False))
     try:
         # Models often wrap JSON in a ```json fence; anything else still fails closed below.
         value = json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', raw.strip()))
+        mixed = [t for t in other if isinstance(value, dict) and compact(t) in compact(
+            f"{value.get('answer_text')}{value.get('speech_text')}")]
+        if mixed:
+            # One retry naming what to drop; a K5 G2.0 owner asking about oil should not hear the 1.6T interval.
+            request['exclude_terms'] = mixed
+            raw = generate(system + ' exclude_terms에 있는 다른 엔진 내용은 빼고 다시 답하라.',
+                           json.dumps(request, ensure_ascii=False))
+            value = json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', raw.strip()))
         if not isinstance(value, dict) or value.get('status') not in ('answered', 'insufficient_evidence'):
             return empty
         if value['status'] != 'answered' or value.get('missing_terms'):
@@ -498,6 +572,18 @@ def answer_from_hits(question, hits, generate, vehicle=None):
                 return empty
         ids = [q['chunk_id'] for q in quotes]
         if any(not isinstance(value.get(k), str) or not value[k].strip() for k in ('answer_text', 'speech_text')):
+            return empty
+        # A manual covers several engines; words naming another engine mean the answer mixed them.
+        spoken = compact(value['answer_text'] + value['speech_text'])
+        if any(compact(t) in spoken for t in other):
+            return empty
+        # Quotes prove the evidence exists, not that the answer says only what it says. A second pass
+        # rejects answers that wrap a real quote in general knowledge (e.g. defining 정차 from 제34조).
+        cited = [{'chunk_id': i, 'text': lookup[i]['text']} for i in dict.fromkeys(ids)]
+        check = generate(VERIFY_SYSTEM, json.dumps({'question': question, 'answer': value['answer_text'],
+                                                    'evidence': cited}, ensure_ascii=False))
+        verdict = json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', check.strip()))
+        if not isinstance(verdict, dict) or verdict.get('supported') is not True:
             return empty
         return {'status': 'answered', 'answer_text': value['answer_text'], 'speech_text': value['speech_text'],
                 'sources': [{'chunk_id': i, **lookup[i]['metadata']} for i in dict.fromkeys(ids)]}
