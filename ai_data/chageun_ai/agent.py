@@ -9,6 +9,8 @@ from .core import answer_from_hits
 
 MAINTENANCE_ITEMS = ['engine_oil', 'air_filter', 'tire', 'brake_pad', 'coolant', 'battery', 'wiper', 'other']
 PLACE_CATEGORIES = ['parking', 'gas_station', 'cafe']
+# Everyday words drivers say that the documents spell differently; added to the retrieval query only.
+TERMS = {'오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸'}
 
 
 def tool(name, description, **properties):
@@ -21,14 +23,16 @@ def tool(name, description, **properties):
 TOOLS = [
     tool('search_law', '도로교통법·시행령·시행규칙에서 교통 규칙, 통행 방법, 금지 행위, 범칙 기준을 찾는다.',
          query={'type': 'string', 'description': '질문을 법령 용어로 바꾼 검색어. 예: 주정차 → 정차 및 주차의 금지 장소'}),
-    tool('search_manual', '선택한 차량의 취급설명서에서 기능 사용법, 경고등 의미, 점검·교환 기준을 찾는다.',
-         query={'type': 'string', 'description': '설명서에서 찾을 검색어'}),
+    tool('search_manual', '선택한 차량의 취급설명서에서 기능 사용법, 경고등 의미, 점검·교환 주기와 방법을 찾는다.',
+         query={'type': 'string', 'description': '질문의 상황과 목적을 모두 담은 검색어. 기능 이름은 설명서 표기를 함께 쓴다. '
+                                  '예: 스마트키 배터리 방전 시 시동 거는 방법, 오토홀드 → 오토 홀드 AUTO HOLD'}),
     tool('find_places', '현재 위치나 경로 주변의 주차장·주유소·카페를 찾는다. "가는 길에 카페 들르면 얼마나 걸려?"처럼 '
          '들를 곳을 찾는 질문도 포함한다.',
          category={'type': 'string', 'enum': PLACE_CATEGORIES}),
     tool('show_route', '목적지까지 길 안내를 시작한다.',
          destination={'type': 'string', 'description': '목적지 이름 그대로'}),
-    tool('open_maintenance', '내 차의 정비 이력을 보고 마지막 교환·점검 시점을 확인한다.',
+    tool('open_maintenance', '내 차의 정비 기록에서 "마지막으로 언제 갈았지?"처럼 실제로 교환·점검한 시점을 확인한다. '
+         '일반적인 교환 주기나 방법은 search_manual이다.',
          item={'type': 'string', 'enum': MAINTENANCE_ITEMS}),
     tool('decline', '답할 수 없는 질문. realtime: 지금 차선 변경·주차 가능 여부처럼 현재 도로 상황을 봐야 하는 판단. '
          'unrelated: 운전·차량·길 찾기와 무관한 질문.',
@@ -59,8 +63,11 @@ def respond(conversation_id, status, answer, speech, sources=(), action=None, ne
 
 
 def cite(source):
-    # Statutes cite the article; manuals only have the PDF page until printed pages are mapped.
-    page = source.get('article') or f"PDF p.{source['pdf_page']}"
+    # Statutes cite the article; manuals cite the printed page when known, else the section path.
+    printed = source.get('printed_page')
+    page = source.get('article') or (printed and f'p.{printed}') or source.get('section') or f"PDF p.{source['pdf_page']}"
+    if page.startswith('별표') and source.get('article_title'):
+        page += f" ({source['article_title']})"
     return {'title': source['title'], 'page': page, 'url': source['source_url']}
 
 
@@ -96,15 +103,23 @@ def rag_query(request, choose, retrieve, generate, get_vehicle=lambda vehicle_id
     if name not in ('search_law', 'search_manual'):
         return reply('not_found', '질문을 이해하지 못했어요. 조금 다르게 물어봐 주세요.', '다시 한 번 말씀해 주세요.')
 
-    filters = {'kind': 'law'}
+    filters, car = {'kind': 'law'}, None
     if name == 'search_manual':
         vehicle = get_vehicle(vehicle_id) if vehicle_id is not None else None
         if not vehicle:
             return reply('need_vehicle')
         filters = {'kind': 'manual', **{k: vehicle[k] for k in ('manufacturer', 'model', 'model_year', 'powertrain')}}
-    # The rewritten query only steers retrieval; the answer is checked against the user's own words.
-    hits = retrieve(args.get('query') or question, filters)
-    result = answer_from_hits(question, hits, generate)
+        car = ' '.join(vehicle[k] for k in ('manufacturer', 'model', 'model_year', 'powertrain'))
+    # The rewritten query only steers retrieval and never replaces the user's words, which a bad rewrite
+    # could drop; the answer is checked against the original question.
+    query = args.get('query', '').strip()
+    query = f'{question} {query}' if query and query != question else question
+    known = {word: term for word, term in TERMS.items() if word in question.replace(' ', '')}
+    query += ''.join(f' {term}' for term in known.values())
+    hits = retrieve(query, filters)
+    # Only our own curated glossary is added to the question, never the model's rewrite.
+    asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
+    result = answer_from_hits(asked, hits, generate, car)
     if result['status'] != 'answered':
         if name == 'search_manual':
             return reply('not_found', '설명서에서 근거를 찾지 못했어요. 정비소나 고객센터에 문의해 주세요.',
