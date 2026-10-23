@@ -325,6 +325,7 @@ def answer_from_hits(question, hits, generate):
               '답하기 전에 질문의 핵심 용어와 상황을 모두 뽑고, 각각이 근거에 직접 나오는지 확인하라. '
               '근거에 나오지 않는 용어가 하나라도 있으면 missing_terms에 적고 insufficient_evidence로 답하라. '
               '비슷한 일반 규정을 질문의 특정 상황에 끼워 맞춰 추정하지 마라. '
+              '거리·속도·금액 같은 수치와 조건은 근거 문장에 붙은 대상 그대로 쓰고, 서로 다른 기준을 하나로 묶지 마라. '
               'JSON 객체만 반환: status(answered 또는 insufficient_evidence), answer_text, speech_text, '
               'missing_terms(문자열 배열), quotes([{chunk_id, quote}]). '
               'speech_text는 짧은 음성용 답변이다. answered는 답변의 근거가 되는 문장을 해당 chunk의 text에서 '
