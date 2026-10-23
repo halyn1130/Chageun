@@ -54,9 +54,9 @@
         return;
       }
 
-      // ✅ On success, navigate (use redirect provided by server)
-      const target = (data && data.redirect) ? data.redirect : "http://localhost:8008/index.html";
-      window.location.href = target;
+      // 테스트용 페이지: 토큰을 저장하고 결과만 보여 준다 (실제 화면은 Vue 프론트)
+      localStorage.setItem("access_token", data.access_token);
+      msg.textContent = "로그인 성공 · access_token 저장됨";
     } catch (err) {
       console.error(err);
       msg.textContent = "Login failed due to a network error.";

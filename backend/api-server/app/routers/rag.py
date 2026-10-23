@@ -1,10 +1,12 @@
 """[목업 · 임시] 대화 API. RAG 서버 구성이 정해지면 이동하거나 삭제한다.
 질문에 들어간 단어에 따라 status별 응답 예시를 돌려준다.
 """
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-router = APIRouter(tags=["대화 (목업 · 임시)"])
+from app.auth import get_current_user
+
+router = APIRouter(tags=["대화 (목업 · 임시)"], dependencies=[Depends(get_current_user)])
 
 
 class LatLng(BaseModel):
@@ -17,6 +19,12 @@ class RagRequest(BaseModel):
     vehicle_id: int | None = None
     conversation_id: str | None = None
     location: LatLng | None = None
+
+    # Swagger "Try it out"에 미리 채워지는 예시 (첫 질문이라 conversation_id 없음)
+    model_config = {"json_schema_extra": {"examples": [{
+        "question": "주변에 주차장 찾아줘",
+        "location": {"lat": 35.5384, "lng": 129.3114},
+    }]}}
 
 
 def reply(req: RagRequest, status: str, answer: str, speech: str, sources=None,

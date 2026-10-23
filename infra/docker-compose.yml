@@ -1,5 +1,8 @@
 # 차근 로컬 실행 구성 — 루트에서 `docker compose up -d --build`
-# 값은 루트 .env에서 읽는다 (DB_PASSWORD, JWT_SECRET)
+# 비밀값은 루트 .env에서 읽는다 (DB_PASSWORD, JWT_SECRET 등). 팀 공통 설정값은 여기에 둔다
+
+# CORS 허용 출처 (쉼표 구분) — Vue 개발 서버 5173 · 프론트 컨테이너 5174. auth-server · api-server 공통
+x-frontend-origins: &frontend-origins http://localhost:5173,http://localhost:5174
 
 services:
   db:
@@ -26,6 +29,7 @@ services:
       DB_URL: jdbc:mariadb://db:3306/chageun   # 컨테이너끼리는 서비스 이름으로 접속
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
+      FRONTEND_ORIGINS: *frontend-origins
     ports:
       - "8080:8080"
     depends_on:
@@ -34,8 +38,19 @@ services:
 
   api-server:
     build: ../backend/api-server
+    env_file: ../.env
+    environment:
+      DB_HOST: db               # 컨테이너끼리는 서비스 이름으로 접속
+      DB_PORT: 3306
+      DB_NAME: chageun
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      FRONTEND_ORIGINS: *frontend-origins
     ports:
       - "8002:8002"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   db-data:
