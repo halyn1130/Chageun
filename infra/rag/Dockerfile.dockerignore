@@ -1,0 +1,5 @@
+# 빌드 컨텍스트(ai_data/)에서 코드와 requirements만 보낸다 — PDF·인덱스(수백 MB)는 제외
+*
+!requirements.txt
+!chageun_ai/
+**/__pycache__
