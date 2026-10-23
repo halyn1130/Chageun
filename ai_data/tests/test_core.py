@@ -152,6 +152,11 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(hits[0]['chunk']['text'], texts[0])
             self.assertEqual(len(hits), 3)
 
+    def test_keyword_score_ignores_spacing(self):
+        from chageun_ai.core import bm25_scores
+        texts = ['엔진 오일 및 필터 교체 주기', '냉각수 점검']
+        self.assertEqual(bm25_scores('엔진오일 교체', texts), bm25_scores('엔진 오일 교체', texts))
+
     def test_tampered_corpus_is_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             index, _ = self.make_index(Path(d))
@@ -200,6 +205,15 @@ class PipelineTests(unittest.TestCase):
         quote = [{'chunk_id': cid, 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}]
         self.assertTrue(refused(reply(quote, json.dumps({'supported': False, 'unsupported': ['답']}))))
         self.assertTrue(refused(reply(quote, 'not JSON')))
+        # A rejected answer gets one retry that names the unsupported sentences.
+        verdicts, seen = iter([json.dumps({'supported': False, 'unsupported': ['답']}), SUPPORTED]), []
+        def fixed(system, user):
+            if system == VERIFY_SYSTEM:
+                return next(verdicts)
+            seen.append(json.loads(user).get('remove_claims'))
+            return reply(quote)(system, user)
+        self.assertEqual(answer_from_hits('질문', hits, fixed)['status'], 'answered')
+        self.assertEqual(seen, [None, ['답']])
 
     def test_quote_may_join_an_item_to_its_lead_sentence(self):
         from chageun_ai.core import quoted_in

@@ -475,8 +475,10 @@ def build_index(chunks_path, index_dir, embed, model):
 
 
 def bigrams(text):
-    # Character bigrams need no Korean tokenizer and still match words glued together by PDF line wraps.
-    return [w[i:i + 2] for w in re.findall(r'[가-힣A-Za-z0-9]+', text.lower()) for i in range(max(len(w) - 1, 1))]
+    # Character bigrams over the text with spaces removed: no Korean tokenizer is needed, and "엔진오일",
+    # "엔진 오일" and words glued by PDF line wraps all give the same keys.
+    flat = ''.join(re.findall(r'[가-힣A-Za-z0-9]+', text.lower()))
+    return [flat[i:i + 2] for i in range(max(len(flat) - 1, 1))] if flat else []
 
 
 def bm25_scores(query, texts, k1=1.5, b=0.75):
@@ -599,6 +601,7 @@ def answer_from_hits(question, hits, generate, vehicle=None):
               '근거에 나오지 않는 용어가 하나라도 있으면 missing_terms에 적고 insufficient_evidence로 답하라. '
               '비슷한 일반 규정을 질문의 특정 상황에 끼워 맞춰 추정하지 마라. '
               '거리·속도·금액 같은 수치와 조건은 근거 문장에 붙은 대상 그대로 쓰고, 서로 다른 기준을 하나로 묶지 마라. '
+              '"언제", "어떤 경우"처럼 경우를 묻는 질문에는 근거에 있는 해당 경우를 하나만 고르지 말고 빠짐없이 나열하라. '
               'JSON 객체만 반환: status(answered 또는 insufficient_evidence), answer_text, speech_text, '
               'missing_terms(문자열 배열), quotes([{chunk_id, quote}]). '
               'speech_text는 짧은 음성용 답변이다. answered는 답변의 근거가 되는 문장을 해당 chunk의 text에서 '
@@ -613,52 +616,51 @@ def answer_from_hits(question, hits, generate, vehicle=None):
                    '차량 이름 자체는 missing_terms에 넣지 않는다.')
         request['vehicle'] = vehicle
     other = {t for h in hits for t in h['chunk']['metadata'].get('other_powertrain_terms') or []}
-    raw = generate(system, json.dumps(request, ensure_ascii=False))
-    try:
-        # Models often wrap JSON in a ```json fence; anything else still fails closed below.
-        value = json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', raw.strip()))
-        mixed = [t for t in other if isinstance(value, dict) and compact(t) in compact(
-            f"{value.get('answer_text')}{value.get('speech_text')}")]
-        if mixed:
-            # One retry naming what to drop; a K5 G2.0 owner asking about oil should not hear the 1.6T interval.
-            request['exclude_terms'] = mixed
-            raw = generate(system + ' exclude_terms에 있는 다른 엔진 내용은 빼고 다시 답하라.',
-                           json.dumps(request, ensure_ascii=False))
-            value = json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', raw.strip()))
-        if not isinstance(value, dict) or value.get('status') not in ('answered', 'insufficient_evidence'):
+    lookup = {h['chunk']['chunk_id']: h['chunk'] for h in hits}
+    # Models often wrap JSON in a ```json fence; anything else still fails closed below.
+    parse = lambda raw: json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', raw.strip()))
+    # One retry, told exactly what to fix: words naming another engine (a K5 G2.0 owner should not hear
+    # the 1.6T interval), or sentences the verifier found unsupported (often a garbled spoken summary).
+    feedback = None
+    for _ in range(2):
+        prompt, body = (system, request) if feedback is None else (system + ' ' + feedback[0], {**request, **feedback[1]})
+        try:
+            value = parse(generate(prompt, json.dumps(body, ensure_ascii=False)))
+            if not isinstance(value, dict) or value.get('status') != 'answered' or value.get('missing_terms'):
+                return empty
+            if any(not isinstance(value.get(k), str) or not value[k].strip() for k in ('answer_text', 'speech_text')):
+                return empty
+            spoken = compact(value['answer_text'] + value['speech_text'])
+            mixed = [t for t in other if compact(t) in spoken]
+            if mixed:
+                feedback = ('exclude_terms에 있는 다른 엔진 내용은 빼고 다시 답하라.', {'exclude_terms': mixed})
+                continue
+            quotes = value.get('quotes')
+            if not isinstance(quotes, list):
+                return empty
+            # Each quote must really come from its chunk. A made-up quote is dropped rather than sinking the
+            # answer; the verification pass below then judges the answer against the real quotes alone.
+            quotes = [q for q in quotes if isinstance(q, dict) and q.get('chunk_id') in lookup
+                      and isinstance(q.get('quote'), str) and quoted_in(q['quote'], lookup[q['chunk_id']]['text'])]
+            if not quotes:
+                return empty
+            ids = list(dict.fromkeys(q['chunk_id'] for q in quotes))
+            # Quotes prove the evidence exists, not that the answer says only what it says. A second pass
+            # rejects answers that wrap a real quote in general knowledge (e.g. defining 정차 from 제34조).
+            # The spoken answer is checked too: it is what a driver actually hears.
+            verdict = parse(generate(VERIFY_SYSTEM, json.dumps(
+                {'question': question, 'answer': value['answer_text'], 'speech': value['speech_text'],
+                 'evidence': [{'chunk_id': i, 'text': lookup[i]['text']} for i in ids]}, ensure_ascii=False)))
+            if not isinstance(verdict, dict) or verdict.get('supported') is not True:
+                unsupported = verdict.get('unsupported') if isinstance(verdict, dict) else None
+                feedback = ('remove_claims의 문장은 근거가 없으니 빼거나 근거 문장대로 고쳐서 다시 답하라.',
+                            {'remove_claims': unsupported if isinstance(unsupported, list) else []})
+                continue
+            return {'status': 'answered', 'answer_text': value['answer_text'], 'speech_text': value['speech_text'],
+                    'sources': [{'chunk_id': i, **lookup[i]['metadata']} for i in ids]}
+        except (ValueError, TypeError):
             return empty
-        if value['status'] != 'answered' or value.get('missing_terms'):
-            return empty
-        quotes = value.get('quotes')
-        lookup = {h['chunk']['chunk_id']: h['chunk'] for h in hits}
-        if not isinstance(quotes, list) or not quotes:
-            return empty
-        # Each quote must really come from its chunk. A made-up quote is dropped rather than sinking the
-        # answer; the verification pass below then judges the answer against the real quotes alone.
-        quotes = [q for q in quotes if isinstance(q, dict) and q.get('chunk_id') in lookup
-                  and isinstance(q.get('quote'), str) and quoted_in(q['quote'], lookup[q['chunk_id']]['text'])]
-        if not quotes:
-            return empty
-        ids = [q['chunk_id'] for q in quotes]
-        if any(not isinstance(value.get(k), str) or not value[k].strip() for k in ('answer_text', 'speech_text')):
-            return empty
-        # A manual covers several engines; words naming another engine mean the answer mixed them.
-        spoken = compact(value['answer_text'] + value['speech_text'])
-        if any(compact(t) in spoken for t in other):
-            return empty
-        # Quotes prove the evidence exists, not that the answer says only what it says. A second pass
-        # rejects answers that wrap a real quote in general knowledge (e.g. defining 정차 from 제34조).
-        cited = [{'chunk_id': i, 'text': lookup[i]['text']} for i in dict.fromkeys(ids)]
-        # The spoken answer is checked too: it is what a driver actually hears.
-        check = generate(VERIFY_SYSTEM, json.dumps({'question': question, 'answer': value['answer_text'],
-                                                    'speech': value['speech_text'], 'evidence': cited}, ensure_ascii=False))
-        verdict = json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', check.strip()))
-        if not isinstance(verdict, dict) or verdict.get('supported') is not True:
-            return empty
-        return {'status': 'answered', 'answer_text': value['answer_text'], 'speech_text': value['speech_text'],
-                'sources': [{'chunk_id': i, **lookup[i]['metadata']} for i in dict.fromkeys(ids)]}
-    except (ValueError, TypeError):
-        return empty
+    return empty
 
 
 def evaluate(cases, retrieve):

@@ -12,7 +12,7 @@ from .core import answer_from_hits, load_warning_lights
 MAINTENANCE_ITEMS = ['engine_oil', 'air_filter', 'tire', 'brake_pad', 'coolant', 'battery', 'wiper', 'other']
 # Everyday words drivers say that the documents spell differently; added to the retrieval query only.
 TERMS = {'오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸', '버스정류장': '버스여객자동차의 정류지', '교환': '교체',
-         '소화전': '소방용수시설 비상소화장치'}
+         '소화전': '소방용수시설 비상소화장치', '멈춰': '일시정지', '멈추': '일시정지'}
 # Signal colours as drivers say them; law only (a "빨간 불" on the dashboard is a warning light).
 LAW_TERMS = {'빨간불': '적색의 등화', '적색신호': '적색의 등화', '빨간신호': '적색의 등화',
              '노란불': '황색의 등화', '황색신호': '황색의 등화', '노란신호': '황색의 등화',
