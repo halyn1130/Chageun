@@ -32,6 +32,38 @@ class LatLng(BaseModel):
     lng: float
 
 
+class VehicleContext(BaseModel):
+    manufacturer: str
+    model: str
+    model_year: str
+    powertrain: str
+    mileage_km: int | None = Field(default=None, ge=0)
+
+
+class MaintenanceContext(BaseModel):
+    item: str
+    performed_at: str
+    mileage_km: int = Field(ge=0)
+
+
+class FollowupContext(BaseModel):
+    question: str
+    answer: str = Field(max_length=500)
+
+
+class GuidanceContext(BaseModel):
+    """UI context; persisted vehicle ownership and records remain server-owned."""
+    entry_point: str = "conversation"
+    topic: str | None = None
+    maintenance_item: str | None = None
+    original_question: str = Field(max_length=500)
+    vehicle: VehicleContext | None = None
+    maintenance_status: str = "unavailable"
+    maintenance_records: list[MaintenanceContext] = Field(default_factory=list)
+    collected_answers: dict[str, str] = Field(default_factory=dict)
+    followups: list[FollowupContext] = Field(default_factory=list)
+
+
 class Destination(LatLng):
     name: str
 
@@ -41,6 +73,7 @@ class RagRequest(BaseModel):
     vehicle_id: int | None = None          # 생략하면 기본 차량
     conversation_id: str | None = Field(None, max_length=40)   # 이어지는 질문이면 이전 응답의 값
     location: LatLng | None = None
+    context: GuidanceContext | None = None
     destination: Destination | None = None
 
     model_config = {"json_schema_extra": {"examples": [{"question": "엔진오일 교환 주기는?"}]}}
@@ -59,7 +92,9 @@ def pick_vehicle(db, user: CurrentUser, vehicle_id: int | None) -> dict | None:
 @router.post("/rag-query", summary="질문 → 답변 + 출처")
 def rag_query(req: RagRequest, user: CurrentUser = Depends(get_current_user),
               cred: HTTPAuthorizationCredentials = Depends(bearer), db=Depends(get_db)):
-    vehicle = pick_vehicle(db, user, req.vehicle_id)
+    # Explicitly choosing no car in the UI must not fall back to a stored primary.
+    no_vehicle = req.context is not None and req.context.vehicle is None and req.vehicle_id is None
+    vehicle = None if no_vehicle else pick_vehicle(db, user, req.vehicle_id)
     conversation_id = req.conversation_id or new_conversation_id()
     request_id = str(uuid.uuid4())
     body = {

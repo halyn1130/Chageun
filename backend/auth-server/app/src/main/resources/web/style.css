@@ -19,6 +19,10 @@ h1 {
     margin-bottom: 24px;
 }
 
+.brand { display: flex; justify-content: center; align-items: center; gap: 12px; color: #07366d; }
+.brand img { width: 80px; height: 45px; object-fit: contain; }
+.brand strong { font-size: 25px; letter-spacing: -1px; }
+
 form {
     display: flex;
     flex-direction: column;

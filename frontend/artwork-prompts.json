@@ -1,0 +1,308 @@
+{
+  "tool": "built-in image_gen",
+  "created": "2026-10-23",
+  "variants": [
+    {
+      "part": "battery",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-battery.png",
+      "file": "public/images/states/battery-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: Only the small 12V battery casing and terminals already highlighted in coral red in the front engine bay, above the near headlight.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "battery",
+      "tone": "soon",
+      "source": "public/images/vehicle-battery.png",
+      "file": "public/images/states/battery-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to warm AMBER #f1b356. Subject: Only the small 12V battery casing and terminals already highlighted in coral red in the front engine bay, above the near headlight.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "battery",
+      "tone": "urgent",
+      "source": "public/images/vehicle-battery.png",
+      "file": "public/images/states/battery-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous coral RED #f06668. Subject: Only the small 12V battery casing and terminals already highlighted in coral red in the front engine bay, above the near headlight.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "brakes",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-brakes.png",
+      "file": "public/images/states/brakes-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: Only the two brake discs and calipers already highlighted in coral red inside the visible wheels; absolutely no color on tire rubber or metal spokes.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "brakes",
+      "tone": "soon",
+      "source": "public/images/vehicle-brakes.png",
+      "file": "public/images/states/brakes-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to warm AMBER #f1b356. Subject: Only the two brake discs and calipers already highlighted in coral red inside the visible wheels.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "brakes",
+      "tone": "urgent",
+      "source": "public/images/vehicle-brakes.png",
+      "file": "public/images/states/brakes-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous coral RED #f06668. Subject: Only the two brake discs and calipers already highlighted in coral red inside the visible wheels; absolutely no color on tire rubber or metal spokes.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "cabin",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-cabin.png",
+      "file": "public/images/states/cabin-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: Only the small undeployed airbag modules and seatbelt components already highlighted in coral in the input; seats, glass and cabin remain neutral; no inflated airbag.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "cabin",
+      "tone": "soon",
+      "source": "public/images/vehicle-cabin.png",
+      "file": "public/images/states/cabin-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to warm AMBER #f1b356. Subject: Only the small undeployed airbag modules and seatbelt components already highlighted in coral in the input; seats, glass and cabin remain neutral; no inflated airbag.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.\nALPHA EDGE REQUIREMENT: preserve the source alpha channel's exact car silhouette. Every background pixel outside the source car silhouette must be fully transparent (alpha 0), not gray, blue haze, dither or glow. The car must have a crisp clean cutout edge. Do not add any surrounding shadow or atmosphere.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "cabin",
+      "tone": "urgent",
+      "source": "public/images/vehicle-cabin.png",
+      "file": "public/images/states/cabin-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous coral RED #f06668. Subject: Only the small undeployed airbag modules and seatbelt components already highlighted in coral in the input; seats, glass and cabin remain neutral; no inflated airbag.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "coolant",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-coolant.png",
+      "file": "public/images/states/coolant-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing cyan highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: Only the frontmost radiator, detailed metal cooling fins and its connected hoses already highlighted in cyan in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "coolant",
+      "tone": "soon",
+      "source": "public/images/vehicle-coolant.png",
+      "file": "public/images/states/coolant-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing cyan highlight to warm AMBER #f1b356. Subject: Only the frontmost radiator, detailed metal cooling fins and its connected hoses already highlighted in cyan in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "coolant",
+      "tone": "urgent",
+      "source": "public/images/vehicle-coolant.png",
+      "file": "public/images/states/coolant-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing cyan highlight to luminous coral RED #f06668. Subject: Only the frontmost radiator, detailed metal cooling fins and its connected hoses already highlighted in cyan in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "engine",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-engine.png",
+      "file": "public/images/states/engine-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: The engine assembly already highlighted in amber in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "engine",
+      "tone": "soon",
+      "source": "public/images/vehicle-engine.png",
+      "file": "public/images/states/engine-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to warm AMBER #f1b356. Subject: The engine assembly already highlighted in amber in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "engine",
+      "tone": "urgent",
+      "source": "public/images/vehicle-engine.png",
+      "file": "public/images/states/engine-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to luminous coral RED #f06668. Subject: The engine assembly already highlighted in amber in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "fuel",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-fuel.png",
+      "file": "public/images/states/fuel-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: Only the small fuel reservoir ahead of the rear wheel that is already highlighted in gold in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "fuel",
+      "tone": "soon",
+      "source": "public/images/vehicle-fuel.png",
+      "file": "public/images/states/fuel-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to warm AMBER #f1b356. Subject: Only the small fuel reservoir ahead of the rear wheel that is already highlighted in gold in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "fuel",
+      "tone": "urgent",
+      "source": "public/images/vehicle-fuel.png",
+      "file": "public/images/states/fuel-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to luminous coral RED #f06668. Subject: Only the small fuel reservoir ahead of the rear wheel that is already highlighted in gold in the input.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1773,
+        887
+      ]
+    },
+    {
+      "part": "oil",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-oil.png",
+      "file": "public/images/states/oil-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: Only the engine block, lower oil sump and internal lubrication hardware already highlighted in coral red in the input; battery, air-filter housing and radiator remain neutral.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "oil",
+      "tone": "soon",
+      "source": "public/images/vehicle-oil.png",
+      "file": "public/images/states/oil-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to warm AMBER #f1b356. Subject: Only the engine block, lower oil sump and internal lubrication hardware already highlighted in coral red in the input; battery, air-filter housing and radiator remain neutral.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "oil",
+      "tone": "urgent",
+      "source": "public/images/vehicle-oil.png",
+      "file": "public/images/states/oil-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing coral red highlight to luminous coral RED #f06668. Subject: Only the engine block, lower oil sump and internal lubrication hardware already highlighted in coral red in the input; battery, air-filter housing and radiator remain neutral.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "tires",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-tires.png",
+      "file": "public/images/states/tires-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to luminous seafoam TEAL GREEN #69cbb4. Subject: Only the two rubber tire sidewalls and tread already highlighted in gold, retaining all detailed grooves; rims and brake hardware stay neutral.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "tires",
+      "tone": "soon",
+      "source": "public/images/vehicle-tires.png",
+      "file": "public/images/states/tires-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to warm AMBER #f1b356. Subject: Only the two rubber tire sidewalls and tread already highlighted in gold, retaining all detailed grooves; rims and brake hardware stay neutral.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "tires",
+      "tone": "urgent",
+      "source": "public/images/vehicle-tires.png",
+      "file": "public/images/states/tires-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nPrimary request: change ONLY the existing amber / gold highlight to luminous coral RED #f06668. Subject: Only the two rubber tire sidewalls and tread already highlighted in gold, retaining all detailed grooves; rims and brake hardware stay neutral.\nPreserve the source's precise mechanical shapes, tiny bolts, grooves, metal reflections, shadows, translucency, surface texture and modeled depth. Re-render the colored material and its very subtle local edge illumination naturally, with bright specular details and dark recesses. It must look like the original beautifully rendered physical part in a new material color, never a flat painted silhouette or a global color filter.\nKeep every non-highlighted part neutral and completely unchanged, especially the tire rubber unless it is the target, wheel rims, suspension, headlights, radiator/battery if unrelated, body glass and cabin. Do not color any originally neutral pixels just because they are near the target.\nEXACT invariants: same full-car camera, same car silhouette, same 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no floor, no rectangle, no shadow outside the existing silhouette. No text, no annotations, no logos, no dots or arrows. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "wiper",
+      "tone": "comfortable",
+      "source": "public/images/vehicle-wiper.png",
+      "file": "public/images/states/wiper-comfortable.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nChange ONLY the existing coral red highlight on the two windshield wiper blades and arms to luminous seafoam TEAL GREEN #69cbb4. Preserve the source's precise wiper shapes, molded ridges, joints, reflections, shadows, and all detailed 3D depth. This must be a new physical material rendering, not flat lines or a global color filter. Do not move or change the wipers.\nKeep every non-highlighted part neutral and completely unchanged, especially glass, hood, all other car hardware and body.\nEXACT invariants: same full-car camera, same silhouette, same 1774 × 887 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no backdrop, floor, shadows outside silhouette. No text, labels or symbols. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "wiper",
+      "tone": "soon",
+      "source": "public/images/vehicle-wiper.png",
+      "file": "public/images/states/wiper-soon.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nInput image 1 is the EDIT TARGET, an already finished high-quality cutaway sedan rendering.\nChange ONLY the existing coral red highlight on the two windshield wiper blades and arms to warm AMBER #f1b356. Preserve the source's precise wiper shapes, molded ridges, joints, reflections, shadows, and all detailed 3D depth. This must be a new physical material rendering, not flat lines or a global color filter. Do not move or change the wipers.\nKeep every non-highlighted part neutral and completely unchanged, especially glass, hood, all other car hardware and body.\nEXACT invariants: same full-car camera, same silhouette, same 1774 × 887 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background with preserved alpha; no backdrop, floor, shadows outside silhouette. No text, labels or symbols. Return one full-car PNG for this single state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    },
+    {
+      "part": "wiper",
+      "tone": "urgent",
+      "source": "public/images/vehicle-cutaway.png",
+      "file": "public/images/states/wiper-urgent.png",
+      "prompt": "Use case: precise-object-edit. Asset type: production transparent PNG state variant for the existing vehicle UI.\nEDIT TARGET: supplied cutaway sedan. Keep the entire finished car exactly unchanged except the TWO FRONT WINDSHIELD WIPER BLADES AND ARMS.\nShow the two installed wipers parked along the BOTTOM edge of the front windshield, above the rear edge of the hood. They are slim, three-dimensional real rubber blades on articulated metal arms, following the windshield's perspective. The blade pair runs approximately from x=500,y=295 to x=840,y=357 on the 1774x887 canvas. Fit naturally on the glass at the original scale; no giant wiper and no detached parts.\nHighlight only these physical blades and arms in luminous coral RED #f06668, with tiny dimensional reflections, visible molded ridges and dark recesses. Color sits on actual 3D surfaces, never a flat line drawing, polygon, broad glow or painted stripe. Keep the windshield, hood, seats, body and every unrelated part in original neutral blue-gray.\nEXACT invariants: same full-car camera, silhouette, 1774 × 887 image dimensions and wide 2:1 canvas, same framing and component positions, no crop/zoom/reposition. The output will align pixel-for-pixel over the input. Genuinely transparent background, preserve alpha, no backdrop/floor. No text, annotations, icons or arrows. Return one full-car PNG for this red wiper state.",
+      "dimensions": [
+        1774,
+        887
+      ]
+    }
+  ],
+  "logo": {
+    "source": "../image.png",
+    "file": "public/images/chageun-logo.png",
+    "prompt": "Use case: background-extraction. EDIT TARGET: the supplied finished navy Chageun emblem on white.\nRemove the white backdrop AND every white negative-space opening inside the emblem, making all these pixels genuinely transparent. Retain ONLY the existing navy blue emblem. Preserve its EXACT recognizable silhouette, stroke widths, curved outer oval, proportions, internal letter geometry and navy #07366d coloring. This is meticulous logo extraction, not a redesign. Smooth clean anti-aliased edges, no white fringe, no blur, no white matte, no new border, no glow, no shadow. Keep the supplied wide logo centered with small even transparent margins, original landscape aspect ratio. No text or new symbols. Deliver one high-resolution transparent PNG of this exact logo."
+  }
+}

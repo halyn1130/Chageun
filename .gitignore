@@ -48,3 +48,6 @@ infra/data/
 # ===== Logs =====
 *.log
 logs/
+
+# Local RAG index archive (extracted indexes are ignored in ai_data/.gitignore)
+/indexes.zip

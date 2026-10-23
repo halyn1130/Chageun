@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Login</title>
+  <title>차근 · 로그인</title>
+  <link rel="icon" type="image/png" href="/static/chageun-logo.png" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
 <div class="container">
-  <h1>Login</h1>
+  <div class="brand"><img src="/static/chageun-logo.png" alt="차근 로고"><strong>차근</strong></div>
+  <h1>로그인</h1>
 
   <!-- ✅ Keep the form, but JS intercepts submit and processes via fetch -->
   <form id="loginForm" method="POST" action="/api/login">
-    <label>Username
+    <label>아이디
       <input type="text" name="username" required autocomplete="username">
     </label>
-    <label>Password
+    <label>비밀번호
       <input type="password" name="password" required autocomplete="current-password">
     </label>
 
-    <button type="submit">Login</button>
+    <button type="submit">로그인</button>
   </form>
 
   <p id="msg" style="color:#c00; margin-top:10px;"></p>
 
-  <p>Don't have an account yet? <a href="/signup">Sign Up</a></p>
+  <p>처음이신가요? <a href="/signup">계정 만들기</a></p>
 </div>
 
 <script>
