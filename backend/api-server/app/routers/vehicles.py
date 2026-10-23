@@ -1,21 +1,25 @@
-"""[목업] 내 차 API — 고정 데이터를 돌려준다. DB 연동 시 교체."""
+"""내 차 API — 차량은 DB(vehicles 테이블), 정비 이력은 아직 목업."""
 from datetime import date
 
-from fastapi import APIRouter, Depends, Response
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, HTTPException, Response
+from pydantic import BaseModel, Field
 
 from app.auth import CurrentUser, get_current_user
+from app.db import get_db
 
-router = APIRouter(prefix="/vehicles", tags=["내 차 (목업)"])
+router = APIRouter(prefix="/vehicles", tags=["내 차"])
+
+# 등록 가능한 차종. RAG 문서의 차종 메타데이터와 같은 값이어야 차량별 검색이 된다
+CATALOG = [
+    {"manufacturer": "기아", "model": "K5", "model_year": "2024", "powertrain": "가솔린 1.6T"},
+    {"manufacturer": "현대", "model": "디 올 뉴 아반떼", "model_year": "2024", "powertrain": "가솔린 1.6"},
+]
+
+VEHICLE_COLUMNS = "id, nickname, manufacturer, model, model_year, powertrain, mileage_km, is_primary"
 
 ITEM_LABELS = {
     "engine_oil": "엔진오일", "air_filter": "에어필터", "tire": "타이어", "brake_pad": "브레이크패드",
     "coolant": "냉각수", "battery": "배터리", "wiper": "와이퍼", "other": "기타",
-}
-
-MOCK_VEHICLE = {
-    "id": 3, "nickname": "내 K5", "manufacturer": "기아", "model": "K5",
-    "model_year": "2024", "powertrain": "가솔린 1.6T", "mileage_km": 36200, "is_primary": True,
 }
 
 MOCK_MAINTENANCE = [
@@ -30,8 +34,30 @@ class VehicleCreate(BaseModel):
     model: str
     model_year: str
     powertrain: str
-    nickname: str | None = None
-    mileage_km: int | None = None
+    nickname: str | None = Field(None, max_length=50)
+    mileage_km: int | None = Field(None, ge=0)
+
+
+class Vehicle(BaseModel):
+    id: int
+    nickname: str | None
+    manufacturer: str
+    model: str
+    model_year: str
+    powertrain: str
+    mileage_km: int | None
+    is_primary: bool   # DB에는 0/1로 저장돼 있어 응답할 때 true/false로 바꾼다
+
+
+def get_owned_vehicle(db, user: CurrentUser, vehicle_id: int) -> dict:
+    """내 차량이면 돌려주고, 없거나 남의 차량이면 404."""
+    with db.cursor() as cur:
+        cur.execute(f"SELECT {VEHICLE_COLUMNS} FROM vehicles WHERE id = %s AND user_id = %s",
+                    (vehicle_id, user.id))
+        row = cur.fetchone()
+    if row is None:
+        raise HTTPException(404, "차량을 찾을 수 없어요.")
+    return row
 
 
 class MaintenanceCreate(BaseModel):
@@ -43,34 +69,59 @@ class MaintenanceCreate(BaseModel):
 
 @router.get("/catalog", summary="등록 가능한 차종")
 def catalog():
-    return [
-        {"manufacturer": "기아", "model": "K5", "model_year": "2024", "powertrain": "가솔린 1.6T"},
-        {"manufacturer": "현대", "model": "디 올 뉴 아반떼", "model_year": "2024", "powertrain": "가솔린 1.6"},
-    ]
+    return CATALOG
 
 
-@router.get("", summary="내 차량 목록")
-def list_vehicles(user: CurrentUser = Depends(get_current_user)):
-    return [MOCK_VEHICLE]
+@router.get("", response_model=list[Vehicle], summary="내 차량 목록")
+def list_vehicles(user: CurrentUser = Depends(get_current_user), db=Depends(get_db)):
+    # 기본 차량을 맨 앞에, 나머지는 등록한 순서대로
+    with db.cursor() as cur:
+        cur.execute(f"SELECT {VEHICLE_COLUMNS} FROM vehicles WHERE user_id = %s ORDER BY is_primary DESC, id",
+                    (user.id,))
+        return cur.fetchall()
 
 
-@router.post("", status_code=201, summary="차량 등록")
-def create_vehicle(body: VehicleCreate, user: CurrentUser = Depends(get_current_user)):
-    return {"id": 4, **body.model_dump(), "is_primary": False}
+@router.post("", status_code=201, response_model=Vehicle, summary="차량 등록")
+def create_vehicle(body: VehicleCreate, user: CurrentUser = Depends(get_current_user), db=Depends(get_db)):
+    spec = {k: body.model_dump()[k] for k in ("manufacturer", "model", "model_year", "powertrain")}
+    if spec not in CATALOG:
+        raise HTTPException(422, "등록할 수 없는 차종이에요. 차종 목록에서 골라 주세요.")
+
+    with db.cursor() as cur:
+        # 처음 등록하는 차량이면 기본 차량으로 지정
+        cur.execute("SELECT COUNT(*) AS n FROM vehicles WHERE user_id = %s", (user.id,))
+        is_primary = cur.fetchone()["n"] == 0
+        cur.execute(
+            "INSERT INTO vehicles (user_id, nickname, manufacturer, model, model_year, powertrain, mileage_km, is_primary)"
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+            (user.id, body.nickname, body.manufacturer, body.model, body.model_year, body.powertrain,
+             body.mileage_km, is_primary),
+        )
+        vehicle_id = cur.lastrowid
+    return get_owned_vehicle(db, user, vehicle_id)
 
 
 @router.delete("/{vehicle_id}", status_code=204, summary="차량 삭제")
-def delete_vehicle(vehicle_id: int, user: CurrentUser = Depends(get_current_user)):
+def delete_vehicle(vehicle_id: int, user: CurrentUser = Depends(get_current_user), db=Depends(get_db)):
+    vehicle = get_owned_vehicle(db, user, vehicle_id)
+    with db.cursor() as cur:
+        # 정비 기록은 FK(ON DELETE CASCADE)로 함께 지워진다
+        cur.execute("DELETE FROM vehicles WHERE id = %s", (vehicle_id,))
+        # 기본 차량을 지웠으면 남은 차량 중 가장 먼저 등록한 것을 기본으로
+        if vehicle["is_primary"]:
+            cur.execute("UPDATE vehicles SET is_primary = TRUE WHERE user_id = %s ORDER BY id LIMIT 1", (user.id,))
     return Response(status_code=204)
 
 
-@router.get("/{vehicle_id}/maintenance", summary="정비 이력 (최신순)")
+# ---- 정비 이력: 아직 목업 (DB 연동 예정) ----
+
+@router.get("/{vehicle_id}/maintenance", summary="정비 이력 (최신순) · 목업")
 def list_maintenance(vehicle_id: int, item: str | None = None,
                      user: CurrentUser = Depends(get_current_user)):
     return [r for r in MOCK_MAINTENANCE if item is None or r["item"] == item]
 
 
-@router.post("/{vehicle_id}/maintenance", status_code=201, summary="정비 기록 추가")
+@router.post("/{vehicle_id}/maintenance", status_code=201, summary="정비 기록 추가 · 목업")
 def create_maintenance(vehicle_id: int, body: MaintenanceCreate,
                        user: CurrentUser = Depends(get_current_user)):
     return {"id": 12, **body.model_dump(), "item_label": ITEM_LABELS.get(body.item, "기타")}
