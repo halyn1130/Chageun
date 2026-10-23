@@ -1,5 +1,7 @@
-"""내 차 API — 차량은 DB(vehicles 테이블), 정비 이력은 아직 목업."""
-from datetime import date
+"""내 차 API — 차량(vehicles)과 정비 이력(maintenance_records)."""
+from datetime import date, datetime
+from typing import Literal
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from pydantic import BaseModel, Field
@@ -17,16 +19,15 @@ CATALOG = [
 
 VEHICLE_COLUMNS = "id, nickname, manufacturer, model, model_year, powertrain, mileage_km, is_primary"
 
+# 정비 항목. 화면용 이름(item_label)은 DB에 저장하지 않고 응답할 때 붙인다
 ITEM_LABELS = {
     "engine_oil": "엔진오일", "air_filter": "에어필터", "tire": "타이어", "brake_pad": "브레이크패드",
     "coolant": "냉각수", "battery": "배터리", "wiper": "와이퍼", "other": "기타",
 }
+MaintenanceItem = Literal["engine_oil", "air_filter", "tire", "brake_pad", "coolant", "battery", "wiper", "other"]
 
-MOCK_MAINTENANCE = [
-    {"id": 11, "item": "engine_oil", "item_label": "엔진오일", "performed_at": "2024-01-10", "mileage_km": 35000, "memo": None},
-    {"id": 10, "item": "air_filter", "item_label": "에어필터", "performed_at": "2023-07-12", "mileage_km": 28400, "memo": None},
-    {"id": 9, "item": "tire", "item_label": "타이어", "performed_at": "2023-01-05", "mileage_km": 22100, "memo": None},
-]
+MAINTENANCE_COLUMNS = "id, item, performed_at, mileage_km, memo"
+KST = ZoneInfo("Asia/Seoul")
 
 
 class VehicleCreate(BaseModel):
@@ -67,14 +68,41 @@ def get_owned_vehicle(db, user: CurrentUser, vehicle_id: int) -> dict:
 
 
 class MaintenanceCreate(BaseModel):
-    item: str
+    item: MaintenanceItem
     performed_at: date
-    mileage_km: int
-    memo: str | None = None
+    mileage_km: int = Field(ge=0)
+    memo: str | None = Field(None, max_length=255)
 
     model_config = {"json_schema_extra": {"examples": [{
         "item": "engine_oil", "performed_at": "2024-01-10", "mileage_km": 35000, "memo": "합성유",
     }]}}
+
+
+class Maintenance(BaseModel):
+    id: int
+    item: str
+    item_label: str
+    performed_at: date
+    mileage_km: int | None
+    memo: str | None
+
+
+def with_label(row: dict) -> dict:
+    return {**row, "item_label": ITEM_LABELS[row["item"]]}
+
+
+def latest_maintenance(db, vehicle_id: int | None) -> dict:
+    """RAG에 보낼 정비 기록: 항목별 가장 최근 기록 1건씩 (내부 API의 maintenance 형식)."""
+    if vehicle_id is None:
+        return {"lookup_status": "no_vehicle", "items": [], "records": []}
+    with db.cursor() as cur:
+        cur.execute("SELECT item, performed_at, mileage_km FROM maintenance_records"
+                    " WHERE vehicle_id = %s ORDER BY performed_at DESC, id DESC", (vehicle_id,))
+        rows = cur.fetchall()
+    latest = {}
+    for r in rows:   # 최신순이라 항목별로 처음 나온 것이 가장 최근 기록
+        latest.setdefault(r["item"], {**r, "performed_at": r["performed_at"].isoformat()})
+    return {"lookup_status": "ok" if latest else "empty", "items": list(latest), "records": list(latest.values())}
 
 
 @router.get("/catalog", summary="등록 가능한 차종")
@@ -123,15 +151,37 @@ def delete_vehicle(vehicle_id: int, user: CurrentUser = Depends(get_current_user
     return Response(status_code=204)
 
 
-# ---- 정비 이력: 아직 목업 (DB 연동 예정) ----
+# ---- 정비 이력 ----
 
-@router.get("/{vehicle_id}/maintenance", summary="정비 이력 (최신순) · 목업")
-def list_maintenance(vehicle_id: int, item: str | None = Query(None, openapi_examples={"엔진오일": {"value": "engine_oil"}}),
-                     user: CurrentUser = Depends(get_current_user)):
-    return [r for r in MOCK_MAINTENANCE if item is None or r["item"] == item]
+@router.get("/{vehicle_id}/maintenance", response_model=list[Maintenance], summary="정비 이력 (최신순)")
+def list_maintenance(vehicle_id: int,
+                     item: MaintenanceItem | None = Query(None, openapi_examples={"엔진오일": {"value": "engine_oil"}}),
+                     user: CurrentUser = Depends(get_current_user), db=Depends(get_db)):
+    get_owned_vehicle(db, user, vehicle_id)
+    sql = f"SELECT {MAINTENANCE_COLUMNS} FROM maintenance_records WHERE vehicle_id = %s"
+    args = [vehicle_id]
+    if item is not None:
+        sql += " AND item = %s"
+        args.append(item)
+    with db.cursor() as cur:
+        cur.execute(sql + " ORDER BY performed_at DESC, id DESC", args)
+        return [with_label(r) for r in cur.fetchall()]
 
 
-@router.post("/{vehicle_id}/maintenance", status_code=201, summary="정비 기록 추가 · 목업")
+@router.post("/{vehicle_id}/maintenance", status_code=201, response_model=Maintenance, summary="정비 기록 추가")
 def create_maintenance(vehicle_id: int, body: MaintenanceCreate,
-                       user: CurrentUser = Depends(get_current_user)):
-    return {"id": 12, **body.model_dump(), "item_label": ITEM_LABELS.get(body.item, "기타")}
+                       user: CurrentUser = Depends(get_current_user), db=Depends(get_db)):
+    get_owned_vehicle(db, user, vehicle_id)
+    if body.performed_at > datetime.now(KST).date():
+        raise HTTPException(422, "정비 날짜는 오늘 이후로 입력할 수 없어요.")
+
+    with db.cursor() as cur:
+        cur.execute("INSERT INTO maintenance_records (vehicle_id, item, performed_at, mileage_km, memo)"
+                    " VALUES (%s, %s, %s, %s, %s)",
+                    (vehicle_id, body.item, body.performed_at, body.mileage_km, body.memo))
+        record_id = cur.lastrowid
+        # 정비 당시 주행거리가 차량의 현재 주행거리보다 크면 차량 주행거리도 올린다
+        cur.execute("UPDATE vehicles SET mileage_km = %s WHERE id = %s AND (mileage_km IS NULL OR mileage_km < %s)",
+                    (body.mileage_km, vehicle_id, body.mileage_km))
+        cur.execute(f"SELECT {MAINTENANCE_COLUMNS} FROM maintenance_records WHERE id = %s", (record_id,))
+        return with_label(cur.fetchone())
