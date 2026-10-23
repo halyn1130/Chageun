@@ -198,6 +198,8 @@ public class SimpleAuthServer {
                 contentType = "text/css; charset=utf-8";
             } else if (filename.endsWith(".js")) {
                 contentType = "application/javascript; charset=utf-8";
+            } else if (filename.endsWith(".png")) {
+                contentType = "image/png";
             } else {
                 contentType = "application/octet-stream";
             }
