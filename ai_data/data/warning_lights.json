@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "description": "계기판 경고등·표시등 사전. name은 대표 이름, aliases는 K5(DL3 2026)·디 올 뉴 아반떼(CN7 2026) 설명서에 실린 다른 표기, shapes는 운전자가 아이콘을 묘사하는 말. 청크 메타데이터(lights)와 질문 분류(agent.WARNING_LIGHTS)가 함께 쓴다.",
+  "lights": [
+    {
+      "id": "engine_oil_pressure",
+      "name": "엔진 오일 압력 경고등",
+      "aliases": [],
+      "shapes": [
+        "주전자",
+        "오일캔",
+        "오일경고등",
+        "엔진오일경고등"
+      ]
+    },
+    {
+      "id": "charging",
+      "name": "충전 경고등",
+      "aliases": [],
+      "shapes": [
+        "배터리",
+        "충전경고등"
+      ]
+    },
+    {
+      "id": "engine",
+      "name": "엔진 경고등",
+      "aliases": [],
+      "shapes": [
+        "엔진모양",
+        "엔진경고등"
+      ]
+    },
+    {
+      "id": "brake",
+      "name": "브레이크 경고등",
+      "aliases": [],
+      "shapes": [
+        "원안에느낌표",
+        "동그라미안에느낌표",
+        "BRAKE",
+        "브레이크경고등"
+      ]
+    },
+    {
+      "id": "abs",
+      "name": "ABS 경고등",
+      "aliases": [],
+      "shapes": [
+        "ABS"
+      ]
+    },
+    {
+      "id": "airbag",
+      "name": "에어백 경고등",
+      "aliases": [],
+      "shapes": [
+        "에어백"
+      ]
+    },
+    {
+      "id": "seatbelt",
+      "name": "안전벨트 미착용 경고등",
+      "aliases": [
+        "안전벨트 미착용 경고등 및 경고음",
+        "안전벨트 경고등"
+      ],
+      "shapes": [
+        "안전벨트",
+        "벨트"
+      ]
+    },
+    {
+      "id": "power_steering",
+      "name": "전동식 파워스티어링 경고등",
+      "aliases": [
+        "전동 파워 스티어링 경고등"
+      ],
+      "shapes": [
+        "핸들",
+        "스티어링"
+      ]
+    },
+    {
+      "id": "low_tire_pressure",
+      "name": "저압 타이어 경고등",
+      "aliases": [
+        "저압 타이어 경고등/TPMS 경고등",
+        "TPMS 경고등"
+      ],
+      "shapes": [
+        "말굽",
+        "타이어",
+        "TPMS"
+      ]
+    },
+    {
+      "id": "master_warning",
+      "name": "통합 경고등",
+      "aliases": [],
+      "shapes": [
+        "삼각형"
+      ]
+    },
+    {
+      "id": "low_fuel",
+      "name": "연료 부족 경고등",
+      "aliases": [],
+      "shapes": [
+        "주유기",
+        "연료",
+        "기름"
+      ]
+    },
+    {
+      "id": "epb",
+      "name": "전자식 파킹 브레이크 (EPB) 경고등",
+      "aliases": [
+        "전자식 파킹 브레이크 경고등",
+        "EPB 경고등",
+        "(EPB) 경고등"
+      ],
+      "shapes": [
+        "EPB",
+        "파킹브레이크"
+      ]
+    },
+    {
+      "id": "forward_safety",
+      "name": "전방 안전 경고등",
+      "aliases": [],
+      "shapes": [
+        "차두대",
+        "충돌"
+      ]
+    },
+    {
+      "id": "door_open",
+      "name": "도어 열림 경고등",
+      "aliases": [],
+      "shapes": [
+        "도어",
+        "문열림",
+        "문이열"
+      ]
+    },
+    {
+      "id": "driver_attention",
+      "name": "부주의 운전 경고등",
+      "aliases": [],
+      "shapes": [
+        "커피",
+        "찻잔"
+      ]
+    },
+    {
+      "id": "led_headlamp_fault",
+      "name": "LED 전조등 고장 표시등",
+      "aliases": [],
+      "shapes": [
+        "전구"
+      ]
+    },
+    {
+      "id": "esc_active",
+      "name": "차체자세제어장치(ESC) 작동 표시등",
+      "aliases": [
+        "ESC 작동 표시등"
+      ],
+      "shapes": [
+        "ESC",
+        "미끄러지",
+        "구불구불"
+      ]
+    },
+    {
+      "id": "esc_off",
+      "name": "차체자세제어장치(ESC) 작동 정지 표시등",
+      "aliases": [
+        "ESC 작동 정지 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "ebd",
+      "name": "EBD 경고등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "lpg_overfill",
+      "name": "LPG 과충전 경고등",
+      "aliases": [
+        "과충전 경고등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "auto_hold",
+      "name": "자동 정차 기능(AUTO HOLD) 표시등",
+      "aliases": [
+        "AUTO HOLD 표시등",
+        "(AUTO HOLD) 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "immobilizer",
+      "name": "이모빌라이저 경고등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "isg",
+      "name": "공회전 제한 시스템(ISG) 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "key_check",
+      "name": "키 확인 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "hazard_turn",
+      "name": "비상 경고등/방향지시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "high_beam",
+      "name": "전조등 상향 표시등",
+      "aliases": [
+        "주행빔 전조등 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "low_beam",
+      "name": "전조등 하향 표시등",
+      "aliases": [
+        "변환빔 전조등 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "high_beam_assist",
+      "name": "하이빔 보조 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "position_lamp",
+      "name": "미등 표시등",
+      "aliases": [
+        "조명 켜짐 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "front_fog",
+      "name": "전방 안개등 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "lane_safety",
+      "name": "차로 안전 경고등",
+      "aliases": [
+        "차로 이탈방지 보조 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "lpi_ready",
+      "name": "시동 대기 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "road_icing",
+      "name": "도로 결빙 경고등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "exterior_lamp_fault",
+      "name": "외장램프 단선 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "eco_mode",
+      "name": "ECO(에코) 모드 표시등",
+      "aliases": [
+        "ECO 모드 표시등"
+      ],
+      "shapes": []
+    }
+  ]
+}

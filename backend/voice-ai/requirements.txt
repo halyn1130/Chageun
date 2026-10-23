@@ -1,0 +1,8 @@
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+PyJWT==2.10.1
+httpx==0.28.1
+faster-whisper==1.1.1
+requests==2.32.3   # faster-whisper가 쓰지만 의존성에 빠져 있음
+av==13.1.0         # faster-whisper 1.1.1은 PyAV 14+와 맞지 않음 (metadata_errors 인자 제거됨)

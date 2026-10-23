@@ -314,11 +314,64 @@ def manual_sections(pages):
     return sections
 
 
-def chunk_manual_pages(doc, pages, file_hash, size=1000):
+# Warning light names per manual live in data/warning_lights.json, shared with the question router.
+WARNING_LIGHTS_PATH = Path(__file__).resolve().parents[1] / 'data' / 'warning_lights.json'
+MAINTENANCE_TERMS = {'engine_oil': r'엔진\s?오일', 'air_filter': r'에어\s?클리너|에어\s?필터', 'tire': r'타이어',
+                     'brake_pad': r'브레이크\s?패드', 'coolant': r'냉각수', 'battery': r'배터리', 'wiper': r'와이퍼'}
+LCD_SECTION = re.compile(r'표시창 경고|경고 메시지|경고문')
+MAINTENANCE_SECTION = re.compile(r'정기 점검|점검|교체|교환')
+EMERGENCY_SECTION = re.compile(r'응급|비상시|고장|펑크|견인|과열|시동이 걸리지')
+
+
+def load_warning_lights(path=WARNING_LIGHTS_PATH):
+    lights = read_json(path)['lights']
+    names = [re.sub(r'\s+', '', n) for l in lights for n in [l['name'], *l['aliases']]]
+    if len({l['id'] for l in lights}) != len(lights) or len(set(names)) != len(names):
+        raise ValueError('warning_lights.json: ids and names must be unique')
+    return lights
+
+
+def lights_named(text, lights):
+    """Ids of warning lights the text names, in order of appearance. Spacing differs between manuals,
+    so names match without whitespace, longest first so 과충전 경고등 is not also read as 충전 경고등."""
+    flat = re.sub(r'\s+', '', text)
+    names = sorted(((re.sub(r'\s+', '', n), l['id']) for l in lights for n in [l['name'], *l['aliases']]),
+                   key=lambda item: -len(item[0]))
+    first = {}
+    for name, light in names:
+        start = flat.find(name)
+        while start != -1:
+            first.setdefault(light, start)
+            flat = flat[:start] + '\0' * len(name) + flat[start + len(name):]
+            start = flat.find(name, start + len(name))
+    return sorted(first, key=first.get)
+
+
+def tag_manual_chunk(section, body, lights):
+    """Retrieval hints for a manual chunk; they never change chunk ids or text."""
+    named = lights_named(body, lights)
+    if LCD_SECTION.search(section):
+        topic = 'lcd_message'
+    elif named and re.search(r'경고등|표시등|클러스터', section):
+        topic = 'warning_light'
+    elif MAINTENANCE_SECTION.search(section):
+        topic = 'maintenance'
+    elif EMERGENCY_SECTION.search(section):
+        topic = 'emergency'
+    else:
+        topic = 'feature'
+    items = ([code for code, pattern in MAINTENANCE_TERMS.items() if re.search(pattern, body)]
+             if topic in ('maintenance', 'emergency') else [])
+    return {'topic': topic, 'lights': named, 'maintenance_items': items,
+            'content_role': 'summary' if section.startswith('사용 설명서(요약본)') else 'detail'}
+
+
+def chunk_manual_pages(doc, pages, file_hash, size=1000, lights=None):
     validate_document(doc)
     sections = manual_sections(pages)
     if not sections:  # not a converted web manual: keep the plain page chunks
         return chunk_pages(doc, pages, file_hash)
+    lights = load_warning_lights() if lights is None else lights
     chunks = []
     for s in sections:
         head = f"[{doc['title']}] {s['section']}"
@@ -336,7 +389,8 @@ def chunk_manual_pages(doc, pages, file_hash, size=1000):
             identity = f"{doc['doc_id']}|{doc['revision']}|{file_hash}|{s['pdf_page']}|{n}|{body}"
             metadata = {k: v for k, v in doc.items() if k != 'file'}
             metadata.update(pdf_page=s['pdf_page'], printed_page=s['printed_page'], section=s['section'],
-                            article=None, file_sha256=file_hash, start_offset=n)
+                            article=None, file_sha256=file_hash, start_offset=n,
+                            **tag_manual_chunk(s['section'], body, lights))
             chunks.append({'schema_version': SCHEMA_VERSION,
                            'chunk_id': digest(identity.encode())[:24],
                            'text': f"{head}{' (계속)' if n else ''}\n{body}", 'metadata': metadata})
