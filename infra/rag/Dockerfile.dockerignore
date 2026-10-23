@@ -2,4 +2,5 @@
 *
 !requirements.txt
 !chageun_ai/
+!data/warning_lights.json
 **/__pycache__

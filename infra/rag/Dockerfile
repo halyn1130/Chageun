@@ -5,5 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY chageun_ai ./chageun_ai
+# 경고등 사전 — agent가 시작할 때 읽는다 (data/indexes는 볼륨이라 이 파일과 함께 /app/data 아래에 놓인다)
+COPY data/warning_lights.json ./data/warning_lights.json
 EXPOSE 8001
 CMD ["uvicorn", "chageun_ai.server:app", "--host", "0.0.0.0", "--port", "8001"]
