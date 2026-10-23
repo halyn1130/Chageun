@@ -7,7 +7,7 @@ document tools run here; the maintenance tool comes back as an `action` for the 
 from __future__ import annotations
 import re
 import uuid
-from .core import answer_from_hits, load_warning_lights
+from .core import answer_from_hits, load_warning_lights, read_json, WARNING_LIGHTS_PATH
 
 MAINTENANCE_ITEMS = ['engine_oil', 'air_filter', 'tire', 'brake_pad', 'coolant', 'battery', 'wiper', 'other']
 # Everyday words drivers say that the documents spell differently; added to the retrieval query only.
@@ -24,7 +24,15 @@ QUERY_HINTS = {'차이': '정의 용어의 뜻', '달라': '정의 용어의 뜻
 # Manual icons are images, so the text only has each light's name. Drivers describe the icon instead.
 # Shapes were read off the K5 icon table; 아반떼 uses the same icons (icons compared side by side).
 # The list lives in data/warning_lights.json together with every manual's spelling of each light.
-WARNING_LIGHTS = {light['name']: tuple(light['shapes']) for light in load_warning_lights() if light['shapes']}
+LIGHTS = load_warning_lights()
+WARNING_LIGHTS = {light['name']: tuple(light['shapes']) for light in LIGHTS if light['shapes']}
+# Legal colours come from 자동차규칙 [별표 2]. A car may differ (manuals say colours follow the cluster theme),
+# so a colour only narrows the candidates; the light itself is named only from its shape or name.
+LEGAL_SOURCE = read_json(WARNING_LIGHTS_PATH)['legal_source']
+COLORS = {'적색': re.compile(r'빨간|빨강|적색|붉은'), '황색': re.compile(r'노란|노랑|황색|주황|오렌지')}
+# A driver describing a problem wants what it means, why it matters and what to do now.
+PROBLEM = re.compile(r'경고등|표시등|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)|고장|이상해|소리가|냄새|연기|떨려|떨림|진동|'
+                     r'방전|펑크|과열|시동이\s?안|안\s?걸려')
 WARNING_QUESTION = re.compile(r'경고등|표시등|경고\s?불|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)')
 # Words that say nothing about which light it is: colour, place, or a question word.
 VAGUE = re.compile(r'(?:빨간|빨강|노란|노랑|주황|초록|녹색|파란|하얀|흰|적|황|청)색?|계기판|클러스터|무슨|어떤|이상한|웬|이|그|저|이런|저런')
@@ -61,8 +69,8 @@ SYSTEM = ('너는 초보 운전자를 돕는 차근의 질문 분류기다. 질�
 
 MESSAGES = {
     'need_vehicle': ('어떤 차량 기준으로 알려드릴까요? 차량을 선택하거나 등록해 주세요.', '차량을 먼저 선택해 주세요.'),
-    'need_clarification': ('어떤 경고등인지 모양을 알려 주세요. 예: 주전자 모양(엔진 오일 압력), 배터리 모양(충전), '
-                           '엔진 모양(엔진 경고등), 원 안에 느낌표(브레이크), 삼각형 안에 느낌표(통합 경고등), '
+    'need_clarification': ('어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요. 예: 주전자 모양(엔진 오일 압력), '
+                           '배터리 모양(충전), 엔진 모양(엔진 경고등), 원 안에 느낌표(브레이크), 삼각형 안에 느낌표(통합 경고등), '
                            '말굽 안에 느낌표(저압 타이어).', '어떤 모양의 경고등인지 알려 주세요.'),
     'out_of_scope': ('주행 중 실시간 판단은 도와드릴 수 없어요. 주변 상황을 직접 확인해 주세요.', '실시간 판단은 도와드릴 수 없어요.'),
     'navigation': ('차근은 길 안내와 주변 장소 찾기는 하지 않아요. 내비게이션 앱을 이용해 주세요.', '길 안내는 내비게이션 앱을 이용해 주세요.'),
@@ -86,6 +94,38 @@ def vague_warning(question):
         return False
     words = re.findall(r'([가-힣A-Za-z0-9]+)\s*(?:경고등|표시등|경고\s?불|불)', question)
     return all(VAGUE.fullmatch(w) for w in words)
+
+
+# Every clarification answer carries this phrase, so the next turn can be read as the reply to it.
+CLARIFY_MARK = '어떤 모양인지 알려 주세요'
+
+
+def color_in(text):
+    return next((color for color, pattern in COLORS.items() if pattern.search(text)), None)
+
+
+def clarification(question):
+    """(answer, speech, sources) asking for the icon shape; a colour narrows the list with its legal basis."""
+    color = color_in(question)
+    candidates = [l for l in LIGHTS if color and color in l.get('legal', {}).get('colors', [])]
+    if not candidates:
+        return (*MESSAGES['need_clarification'], [])
+    names = ', '.join(f"{l['name']}({l['shape_label']})" for l in candidates)
+    word = {'적색': '빨간색', '황색': '노란색'}[color]
+    answer = (f'법에서 정한 색 기준으로 {word}으로 켜지는 경고등은 {names} 중 하나일 수 있어요. '
+              f'차량에 따라 색이 다를 수 있으니 {CLARIFY_MARK}.')
+    speech = f"{', '.join(l['shape_label'] for l in candidates[:3])} 중 어떤 모양인지 알려 주세요."
+    return answer, speech, [{k: LEGAL_SOURCE[k] for k in ('title', 'page', 'url')}]
+
+
+def clarified_turns(history):
+    """The user's earlier words in a clarification exchange ("무슨 불이 켜졌어" → "노란불 같아"), oldest first."""
+    turns, i = [], len(history) - 1
+    while (i >= 1 and len(turns) < 3 and history[i].get('role') == 'assistant'
+           and CLARIFY_MARK in history[i].get('content', '') and history[i - 1].get('role') == 'user'):
+        turns.insert(0, history[i - 1]['content'])
+        i -= 2
+    return turns
 
 
 MISSING = {'need_vehicle': ['vehicle'], 'need_clarification': ['warning_light']}
@@ -119,6 +159,12 @@ def rag_query(request, choose, retrieve, generate):
     question = (request.get('question') or '').strip()
     if not 2 <= len(question) <= 500:
         raise ValueError('question must be 2..500 characters')
+    history = request.get('history') or []
+    # Replies to our own clarification ("주전자 모양이야") are read together with what they answer.
+    # Earlier answers are never evidence; other history only helps the router read a follow-up.
+    earlier = clarified_turns(history)
+    question = ' '.join([*earlier, question]) if earlier else question
+    previous = next((m['content'] for m in reversed(history) if m.get('role') == 'user'), None) if not earlier else None
     cid = request.get('conversation_id') or f'c_{uuid.uuid4().hex[:12]}'
     vehicle = request.get('vehicle')
     vehicle_id = (vehicle or {}).get('id')
@@ -127,7 +173,8 @@ def rag_query(request, choose, retrieve, generate):
 
     # Voice questions rarely name the car ("엔진오일 언제 갈아?"); telling the router one is selected keeps them in scope.
     car_note = ' '.join(str(vehicle.get(k, '')) for k in ('manufacturer', 'model')) if vehicle else ''
-    picked = choose(SYSTEM, f'{question} [선택한 차량: {car_note}]' if car_note else question, TOOLS)
+    routed = question + (f' [선택한 차량: {car_note}]' if car_note else '') + (f' [이전 질문: {previous}]' if previous else '')
+    picked = choose(SYSTEM, routed, TOOLS)
     name, args = picked if picked else (None, {})
     if name == 'decline' and WARNING_QUESTION.search(question):
         name, args = 'search_manual', {}  # a lit warning light is a manual question, not a road judgement
@@ -144,7 +191,8 @@ def rag_query(request, choose, retrieve, generate):
 
     filters, car = {'kind': 'law'}, None
     if name == 'search_manual' and vague_warning(question):
-        return reply('need_clarification')  # guessing one light would cite the wrong one
+        answer, speech, sources = clarification(question)  # guessing one light would cite the wrong one
+        return reply('need_clarification', answer, speech, sources=sources)
     if name == 'search_manual':
         if not vehicle or not all(vehicle.get(k) for k in VEHICLE_KEYS):
             return reply('need_vehicle')
@@ -160,13 +208,23 @@ def rag_query(request, choose, retrieve, generate):
                   if shape.upper() in question.replace(' ', '').upper()})
     query += ''.join(f' {term}' for term in known.values())
     query += ''.join(f' {hint}' for word, hint in QUERY_HINTS.items() if name == 'search_law' and word in question)
+    if previous and re.match(r'(?:그럼|그러면|그건|그거|그때|그리고|또)\b', question):
+        query += f' {previous}'  # "그럼 가혹조건은?" is about what was asked before
     hits = retrieve(query, filters)
     if not hits and name == 'search_manual':  # retrieval filters first, so no hits means no manual for this car
         return reply('not_found', f'{car} 설명서는 아직 등록되지 않았어요. 정비소나 고객센터에 문의해 주세요.',
                      '이 차량 설명서는 아직 없어요.', handoff=True)
     # Only our own curated glossary is added to the question, never the model's rewrite.
-    asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
-    result = answer_from_hits(asked, hits, generate, car)
+    named = lights_in(question)
+    if len(named) == 1 and named[0].replace(' ', '') not in question.replace(' ', ''):
+        # Identified from the icon or a clarification exchange: ask about the light itself, so the answer and its
+        # check are not thrown by "노란불 … 엔진 모양이야", which no manual sentence says.
+        asked = f'{named[0]}이 켜졌어요. 무슨 뜻이고 어떻게 해야 하나요? (사용자 표현: {question})'
+    else:
+        asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
+    asked += f' (이전 질문: {previous} — 지금 질문을 이해하는 데만 참고)' if previous else ''
+    style = 'solution' if name == 'search_manual' and PROBLEM.search(question) else None
+    result = answer_from_hits(asked, hits, generate, car, style)
     if result['status'] != 'answered':
         if name == 'search_manual':
             return reply('not_found', '설명서에서 근거를 찾지 못했어요. 정비소나 고객센터에 문의해 주세요.',

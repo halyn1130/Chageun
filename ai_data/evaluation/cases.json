@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "index": "data/indexes/v11-merged",
+  "index": "data/indexes/v12-telltale-colors",
   "note": "서준영 초안. 정답 근거(expected_chunk_ids)는 위 인덱스 기준이며 인덱스를 다시 만들면 ID를 다시 확인한다. 검토 후 reviewer와 status=reviewed를 기록한다.",
   "cases": [
     {
@@ -626,11 +626,12 @@
         "p.8-8"
       ],
       "required_facts": [
-        "속도"
+        "속도",
+        "지금 할 일"
       ],
       "reference_answer": "저압 타이어 경고등이 켜지면 즉시 속도를 낮추고 급커브를 자제한다. 하이테크센터나 블루핸즈에서 타이어를 점검해 추천 공기압으로 맞추고, 멀면 타이어 응급 처치 키트(TMK)로 조절한다(p.8-8).",
       "expected_behavior": "정확한 경고 종류 확인 후 매뉴얼 근거",
-      "note": null,
+      "note": "이상 상황 답변은 \"무슨 뜻 / 왜 중요한지 / 지금 할 일\" 형식",
       "top_k": 5
     },
     {
@@ -1232,11 +1233,12 @@
         "편의 장치 > 클러스터 > 경고등 및 표시등"
       ],
       "required_facts": [
-        "엔진 오일"
+        "엔진 오일",
+        "지금 할 일"
       ],
       "reference_answer": "주전자 모양은 엔진 오일 압력 경고등이다. 엔진 오일이 부족해 유압이 낮아지면 켜진다. 주행 중 켜지면 안전한 곳에 정차해 엔진 오일양을 점검하고 부족하면 보충한다. 보충 후에도 꺼지지 않으면 서비스센터에서 점검받는다.",
       "expected_behavior": null,
-      "note": null,
+      "note": "이상 상황 답변은 \"무슨 뜻 / 왜 중요한지 / 지금 할 일\" 형식",
       "top_k": 5
     },
     {
@@ -1276,11 +1278,12 @@
         "p.4-11"
       ],
       "required_facts": [
+        "지금 할 일",
         "충전"
       ],
       "reference_answer": "배터리 모양은 충전 경고등이다. 드라이브 벨트가 끊어졌거나 충전 장치에 이상이 있을 때 켜진다. 배터리 충전 상태와 드라이브 벨트·충전 계통을 점검하고, 꺼지지 않으면 하이테크센터나 블루핸즈에서 점검받는다(p.4-11).",
       "expected_behavior": null,
-      "note": "아반떼 변환본에는 아이콘이 없어 모양 → 이름 대응은 K5 아이콘표 기준(팀 확인: 두 차종 모양 동일)",
+      "note": "아반떼 변환본에는 아이콘이 없어 모양 → 이름 대응은 K5 아이콘표 기준(팀 확인: 두 차종 모양 동일) 이상 상황 답변은 \"무슨 뜻 / 왜 중요한지 / 지금 할 일\" 형식",
       "top_k": 5
     },
     {
@@ -1473,6 +1476,149 @@
       ],
       "reference_answer": "회전교차로에 진입하려면 서행하거나 일시정지해야 하고, 이미 진행하고 있는 다른 차가 있으면 그 차에 진로를 양보해야 한다(제25조의2②). 회전교차로 안에서는 반시계방향으로 통행한다(①).",
       "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-41",
+      "question": "빨간 불 들어왔어",
+      "category": "warning_light",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "법정 색(자동차규칙 [별표 2]) 기준 빨간색 후보를 모양과 함께 보여 주고 되묻는다. 하나로 단정하지 않음",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-42",
+      "question": "점등되어있어",
+      "category": "conversation",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [
+          {
+            "role": "user",
+            "content": "이상해 무슨불이켜졌어"
+          },
+          {
+            "role": "assistant",
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요. 예: 주전자 모양(엔진 오일 압력), 배터리 모양(충전), 엔진 모양(엔진 경고등), 원 안에 느낌표(브레이크), 삼각형 안에 느낌표(통합 경고등), 말굽 안에 느낌표(저압 타이어)."
+          },
+          {
+            "role": "user",
+            "content": "노란불인것같아"
+          },
+          {
+            "role": "assistant",
+            "content": "법에서 정한 색 기준으로 노란색으로 켜지는 경고등은 엔진 경고등(엔진 모양), 브레이크 경고등(원 안에 느낌표나 BRAKE 글자), ABS 경고등(원 안에 ABS 글자), 에어백 경고등(앉은 사람 앞 에어백 모양), 저압 타이어 경고등(말굽 안에 느낌표), 연료 부족 경고등(주유기 모양), 차체자세제어장치(ESC) 작동 표시등(미끄러지는 차 모양), 차체자세제어장치(ESC) 작동 정지 표시등(미끄러지는 차와 OFF 글자) 중 하나일 수 있어요. 차량에 따라 색이 다를 수 있으니 어떤 모양인지 알려 주세요."
+          }
+        ],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "색과 점등 여부만으로는 경고등을 특정할 수 없으므로 계속 모양을 묻는다 (\"노란불 + 점등 → 엔진오일 부족\" 같은 추측 금지)",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-43",
+      "question": "엔진 모양이야",
+      "category": "conversation",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [
+          {
+            "role": "user",
+            "content": "이상해 무슨불이켜졌어"
+          },
+          {
+            "role": "assistant",
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요. 예: 주전자 모양(엔진 오일 압력), 배터리 모양(충전), 엔진 모양(엔진 경고등), 원 안에 느낌표(브레이크), 삼각형 안에 느낌표(통합 경고등), 말굽 안에 느낌표(저압 타이어)."
+          },
+          {
+            "role": "user",
+            "content": "노란불인것같아"
+          },
+          {
+            "role": "assistant",
+            "content": "법에서 정한 색 기준으로 노란색으로 켜지는 경고등은 엔진 경고등(엔진 모양), 브레이크 경고등(원 안에 느낌표나 BRAKE 글자), ABS 경고등(원 안에 ABS 글자), 에어백 경고등(앉은 사람 앞 에어백 모양), 저압 타이어 경고등(말굽 안에 느낌표), 연료 부족 경고등(주유기 모양), 차체자세제어장치(ESC) 작동 표시등(미끄러지는 차 모양), 차체자세제어장치(ESC) 작동 정지 표시등(미끄러지는 차와 OFF 글자) 중 하나일 수 있어요. 차량에 따라 색이 다를 수 있으니 어떤 모양인지 알려 주세요."
+          }
+        ],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "ebf48e4f679a5c065765b24a"
+      ],
+      "expected_sources": [
+        "편의 장치 > 클러스터 > 경고등 및 표시등"
+      ],
+      "required_facts": [
+        "지금 할 일",
+        "정비"
+      ],
+      "reference_answer": "무슨 뜻: 엔진 전자제어 장치나 배기가스 제어 센서 이상, 연료 공급장치 누유 시 켜진다. 왜 중요한지: 켜진 채 계속 주행하면 배기 제어 계통이 손상될 수 있다. 지금 할 일: 가능한 빨리 서비스센터에 정비를 의뢰하고, 시동이 걸리지 않으면 견인한다.",
+      "expected_behavior": "앞의 되묻기 대화와 이어서 엔진 경고등으로 답하고, 무슨 뜻·왜 중요한지·지금 할 일을 모두 제시",
       "note": null,
       "top_k": 5
     }

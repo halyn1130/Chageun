@@ -397,6 +397,15 @@ def chunk_manual_pages(doc, pages, file_hash, size=1000, lights=None):
     return chunks, [n for n, raw in enumerate(pages, 1) if not (raw or '').strip()]
 
 
+def chunk_cited_pages(doc, pages, file_hash):
+    chunks, empty = chunk_pages(doc, pages, file_hash)
+    label = re.search(r'\[별표 (\d+(?:의\d+)?)\]', doc['title'])
+    for c in chunks:
+        c['metadata']['article'] = f'별표 {label.group(1)}' if label else None
+        c['text'] = f"[{doc['title']}] {c['text']}"
+    return chunks, empty
+
+
 def ingest(registry_path, output):
     from pypdf import PdfReader
     registry_path = Path(registry_path).resolve()
@@ -423,6 +432,8 @@ def ingest(registry_path, output):
         chunker = chunk_manual_pages
         if doc['kind'] == 'law':
             chunker = chunk_appendix_pages if '[별표' in doc['title'] else chunk_law_pages
+        if doc.get('chunking') == 'page':  # tables that extract as fragments: keep whole pages, cite the appendix
+            chunker = chunk_cited_pages
         rows, empty = chunker(doc, pages, digest(content))
         if not rows:
             raise ValueError(f"{doc['doc_id']}: no extracted text; OCR/manual review needed")
@@ -583,7 +594,7 @@ def compact(text):
     return re.sub(r'\s+', '', text or '').lower()
 
 
-def answer_from_hits(question, hits, generate, vehicle=None):
+def answer_from_hits(question, hits, generate, vehicle=None, style=None):
     empty = {'status': 'insufficient_evidence', 'answer_text': '확인할 문서 근거가 부족해요. 차량 정보나 질문 상황을 더 알려주세요.',
              'speech_text': '확인할 근거가 부족해요. 정보를 조금 더 알려주세요.', 'sources': []}
     if not hits:
@@ -615,6 +626,13 @@ def answer_from_hits(question, hits, generate, vehicle=None):
                    '다른 엔진의 값은 답변에 넣지 마라. 근거에서 그 동력계통을 구분할 수 없으면 insufficient_evidence로 답하라. '
                    '차량 이름 자체는 missing_terms에 넣지 않는다.')
         request['vehicle'] = vehicle
+    if style == 'solution':
+        # A problem report needs a solution, not the symptom repeated back.
+        system += (' 이 질문은 차량 이상 상황이다. answer_text는 줄바꿈(\\n)으로 나눈 세 부분으로 쓴다. '
+                   '"무슨 뜻: "(근거가 말하는 원인이나 의미 한 문장. 사용자가 말한 증상을 되풀이하는 문장이면 이 부분을 빼라. 조치는 쓰지 않음), '
+                   '"왜 중요한지: "(근거에 위험이나 이어질 문제가 적혀 있을 때만), '
+                   '"지금 할 일: "(1) 2) 번호를 붙여 순서대로). 각 부분은 근거에 있는 내용만 쓰고, 근거에 없는 부분은 빼라. '
+                   '증상을 되풀이하지 말고 조치를 구체적으로 써라. speech_text는 지금 할 일을 중심으로 한두 문장으로 쓴다.')
     other = {t for h in hits for t in h['chunk']['metadata'].get('other_powertrain_terms') or []}
     lookup = {h['chunk']['chunk_id']: h['chunk'] for h in hits}
     # Models often wrap JSON in a ```json fence; anything else still fails closed below.
@@ -630,11 +648,15 @@ def answer_from_hits(question, hits, generate, vehicle=None):
                 return empty
             if any(not isinstance(value.get(k), str) or not value[k].strip() for k in ('answer_text', 'speech_text')):
                 return empty
-            spoken = compact(value['answer_text'] + value['speech_text'])
-            mixed = [t for t in other if compact(t) in spoken]
+            mixed = [t for t in other if compact(t) in compact(value['answer_text'] + value['speech_text'])]
             if mixed:
-                feedback = ('exclude_terms에 있는 다른 엔진 내용은 빼고 다시 답하라.', {'exclude_terms': mixed})
-                continue
+                # Drop the sentences naming another engine; ask again only if nothing is left.
+                keep = lambda text: ' '.join(x for x in re.split(r'(?<=[.!?])\s+', text)
+                                             if not any(compact(t) in compact(x) for t in mixed)).strip()
+                value = {**value, 'answer_text': keep(value['answer_text']), 'speech_text': keep(value['speech_text'])}
+                if not value['answer_text'] or not value['speech_text']:
+                    feedback = ('exclude_terms에 있는 다른 엔진 내용은 빼고 다시 답하라.', {'exclude_terms': mixed})
+                    continue
             quotes = value.get('quotes')
             if not isinstance(quotes, list):
                 return empty
@@ -648,9 +670,12 @@ def answer_from_hits(question, hits, generate, vehicle=None):
             # Quotes prove the evidence exists, not that the answer says only what it says. A second pass
             # rejects answers that wrap a real quote in general knowledge (e.g. defining 정차 from 제34조).
             # The spoken answer is checked too: it is what a driver actually hears.
+            # The verifier sees every retrieved chunk, cited ones first: a light's description is often split
+            # over two chunks, and the model may quote only the first.
+            order = ids + [i for i in lookup if i not in ids]
             verdict = parse(generate(VERIFY_SYSTEM, json.dumps(
                 {'question': question, 'answer': value['answer_text'], 'speech': value['speech_text'],
-                 'evidence': [{'chunk_id': i, 'text': lookup[i]['text']} for i in ids]}, ensure_ascii=False)))
+                 'evidence': [{'chunk_id': i, 'text': lookup[i]['text']} for i in order]}, ensure_ascii=False)))
             if not isinstance(verdict, dict) or verdict.get('supported') is not True:
                 unsupported = verdict.get('unsupported') if isinstance(verdict, dict) else None
                 feedback = ('remove_claims의 문장은 근거가 없으니 빼거나 근거 문장대로 고쳐서 다시 답하라.',

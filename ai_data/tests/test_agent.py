@@ -54,11 +54,42 @@ class AgentTests(unittest.TestCase):
                  lambda q, f: seen.append(q) or [{'chunk': {'chunk_id': 'x', 'text': 't', 'metadata': {}}, 'score': 1}],
                  question='계기판에 주전자 모양 빨간 불이 켜졌어', vehicle=VEHICLE)
         self.assertIn('엔진 오일 압력 경고등', seen[0])
-        self.assertIn('주전자 = 엔진 오일 압력 경고등', asked[0])
+        self.assertTrue(json.loads(asked[0])['question'].startswith('엔진 오일 압력 경고등이 켜졌어요.'))
         # A light named outside the icon table is searched, not questioned.
         self.ask(picks('search_manual', query='냉각수'), lambda s, u: '{}', lambda q, f: seen.append(q) or [],
                  question='냉각수 경고등이 켜지면?', vehicle=VEHICLE)
         self.assertEqual(len(seen), 2)
+
+    def test_colour_narrows_candidates_and_the_reply_is_read_with_it(self):
+        manual = picks('search_manual', query='경고등')
+        r = self.ask(manual, question='빨간 불이 켜졌어', vehicle=VEHICLE)
+        self.assertEqual(r['status'], 'need_clarification')
+        self.assertIn('엔진 오일 압력 경고등(주전자 모양)', r['answer'])
+        self.assertNotIn('엔진 경고등(엔진 모양)', r['answer'])  # 별표 2: engine malfunction is 황색
+        self.assertEqual(r['sources'][0]['page'], '별표 2')
+        # Turn by turn: colour, then "steady", still no light named, so still no guess.
+        history = [{'role': 'user', 'content': '이상해 무슨 불이 켜졌어'}, {'role': 'assistant', 'content': self.ask(
+                       manual, question='이상해 무슨 불이 켜졌어', vehicle=VEHICLE)['answer']},
+                   {'role': 'user', 'content': '노란불인 것 같아'}]
+        history.append({'role': 'assistant', 'content': self.ask(manual, question='노란불인 것 같아', vehicle=VEHICLE,
+                                                                 history=history[:2])['answer']})
+        self.assertIn('엔진 경고등(엔진 모양)', history[-1]['content'])
+        steady = self.ask(manual, question='점등되어 있어', vehicle=VEHICLE, history=history)
+        self.assertEqual(steady['status'], 'need_clarification')
+        # Naming the shape answers the whole exchange: retrieval sees every turn plus the light's name.
+        seen, routed = [], []
+        choose = lambda system, question, tools: routed.append(question) or ('search_manual', {'query': '경고등'})
+        self.ask(choose, lambda s, u: '{}', lambda q, f: seen.append(q) or [], question='엔진 모양이야',
+                 vehicle=VEHICLE, history=history)
+        self.assertTrue(seen[0].startswith('이상해 무슨 불이 켜졌어 노란불인 것 같아 엔진 모양이야'))
+        self.assertIn('엔진 경고등', seen[0])
+
+    def test_follow_up_question_is_routed_with_the_previous_one(self):
+        routed = []
+        choose = lambda system, question, tools: routed.append(question) or ('decline', {'kind': 'unrelated'})
+        self.ask(choose, question='그럼 가혹조건은 뭐야?', history=[
+            {'role': 'user', 'content': '엔진오일 교환 기준 알려줘'}, {'role': 'assistant', 'content': '기준이 달라요.'}])
+        self.assertIn('[이전 질문: 엔진오일 교환 기준 알려줘]', routed[0])
 
     def test_law_search_cites_article_and_refusal_asks_review(self):
         chunks, _ = chunk_law_pages(LAW, ['제5조(가상 규칙) ① 모든 운전자는 가상 교차로에서 일시정지하여야 한다.'], 'h')

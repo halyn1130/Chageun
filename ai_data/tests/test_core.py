@@ -231,6 +231,9 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(answer_from_hits('질문', hits, make('엔진 오일을 점검해요.'), 'K5 G2.0')['status'], 'answered')
         self.assertEqual(answer_from_hits('질문', hits, make('엔진 오일과 LPI 연료 필터를 점검해요.'), 'K5 G2.0')['status'],
                          'insufficient_evidence')
+        # A sentence naming another engine is cut out when the rest still answers.
+        cut = answer_from_hits('질문', hits, make('엔진 오일을 점검해요. LPI 연료 필터도 점검해요.'), 'K5 G2.0')
+        self.assertEqual(cut['answer_text'], '엔진 오일을 점검해요.')
         # The model gets one retry told which engine words to drop.
         answers = iter(['엔진 오일과 LPI 연료 필터를 점검해요.', '엔진 오일을 점검해요.'])
         retried = lambda system, user: SUPPORTED if system == VERIFY_SYSTEM else make(next(answers))(system, user)
