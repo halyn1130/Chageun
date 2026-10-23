@@ -3,3 +3,8 @@ pypdf==6.21.2
 faiss-cpu==1.15.1
 langchain-openai==1.1.7
 python-dotenv>=1.0,<2
+# RAG server (:8001), same FastAPI version as the api-server
+fastapi==0.115.6
+uvicorn==0.32.1
+pyjwt==2.10.1
+httpx==0.28.1
