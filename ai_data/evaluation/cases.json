@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "index": "data/indexes/v12-telltale-colors",
+  "index": "data/indexes/v13-dialog-spacing",
   "note": "서준영 초안. 정답 근거(expected_chunk_ids)는 위 인덱스 기준이며 인덱스를 다시 만들면 ID를 다시 확인한다. 검토 후 reviewer와 status=reviewed를 기록한다.",
   "cases": [
     {
@@ -24,8 +24,8 @@
       "expected_action": null,
       "expected_chunk_ids": [
         "c57ea6baa8f7a937e42da68e",
-        "4ce5eae87dbc46ff15a0824d",
-        "0d771c3caa639573efa8596b"
+        "0d771c3caa639573efa8596b",
+        "b28af8ea9817a982b824167a"
       ],
       "expected_sources": [
         "제27조",
@@ -59,7 +59,7 @@
       ],
       "expected_action": null,
       "expected_chunk_ids": [
-        "4ce5eae87dbc46ff15a0824d"
+        "b28af8ea9817a982b824167a"
       ],
       "expected_sources": [
         "별표 2 (차량신호등 적색의등화)"
@@ -1243,7 +1243,7 @@
     },
     {
       "id": "CG-34",
-      "question": "배터리 모양 경고등이 켜졌어",
+      "question": "배터리 모양 빨간 불이 켜졌어",
       "category": "warning_light",
       "status": "draft",
       "reviewer": null,
@@ -1507,13 +1507,13 @@
       "expected_sources": [],
       "required_facts": [],
       "reference_answer": null,
-      "expected_behavior": "법정 색(자동차규칙 [별표 2]) 기준 빨간색 후보를 모양과 함께 보여 주고 되묻는다. 하나로 단정하지 않음",
+      "expected_behavior": "색만으로는 경고등을 알 수 없으므로 예시 없이 모양을 묻는다 (missing_fields: [\"warning_light\"])",
       "note": null,
       "top_k": 5
     },
     {
       "id": "CG-42",
-      "question": "점등되어있어",
+      "question": "노란불인것같아",
       "category": "conversation",
       "status": "draft",
       "reviewer": null,
@@ -1534,15 +1534,7 @@
           },
           {
             "role": "assistant",
-            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요. 예: 주전자 모양(엔진 오일 압력), 배터리 모양(충전), 엔진 모양(엔진 경고등), 원 안에 느낌표(브레이크), 삼각형 안에 느낌표(통합 경고등), 말굽 안에 느낌표(저압 타이어)."
-          },
-          {
-            "role": "user",
-            "content": "노란불인것같아"
-          },
-          {
-            "role": "assistant",
-            "content": "법에서 정한 색 기준으로 노란색으로 켜지는 경고등은 엔진 경고등(엔진 모양), 브레이크 경고등(원 안에 느낌표나 BRAKE 글자), ABS 경고등(원 안에 ABS 글자), 에어백 경고등(앉은 사람 앞 에어백 모양), 저압 타이어 경고등(말굽 안에 느낌표), 연료 부족 경고등(주유기 모양), 차체자세제어장치(ESC) 작동 표시등(미끄러지는 차 모양), 차체자세제어장치(ESC) 작동 정지 표시등(미끄러지는 차와 OFF 글자) 중 하나일 수 있어요. 차량에 따라 색이 다를 수 있으니 어떤 모양인지 알려 주세요."
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요."
           }
         ],
         "destination": null
@@ -1556,7 +1548,7 @@
       "expected_sources": [],
       "required_facts": [],
       "reference_answer": null,
-      "expected_behavior": "색과 점등 여부만으로는 경고등을 특정할 수 없으므로 계속 모양을 묻는다 (\"노란불 + 점등 → 엔진오일 부족\" 같은 추측 금지)",
+      "expected_behavior": "모양을 물었는데 색만 답하면 다시 모양을 묻는다. 색으로 단정하지 않음",
       "note": null,
       "top_k": 5
     },
@@ -1583,15 +1575,62 @@
           },
           {
             "role": "assistant",
-            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요. 예: 주전자 모양(엔진 오일 압력), 배터리 모양(충전), 엔진 모양(엔진 경고등), 원 안에 느낌표(브레이크), 삼각형 안에 느낌표(통합 경고등), 말굽 안에 느낌표(저압 타이어)."
-          },
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요."
+          }
+        ],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "모양을 알려 주면 다음으로 색을 묻는다 (missing_fields: [\"warning_light_color\"])",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-44",
+      "question": "노란색이야",
+      "category": "conversation",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [
           {
             "role": "user",
-            "content": "노란불인것같아"
+            "content": "이상해 무슨불이켜졌어"
           },
           {
             "role": "assistant",
-            "content": "법에서 정한 색 기준으로 노란색으로 켜지는 경고등은 엔진 경고등(엔진 모양), 브레이크 경고등(원 안에 느낌표나 BRAKE 글자), ABS 경고등(원 안에 ABS 글자), 에어백 경고등(앉은 사람 앞 에어백 모양), 저압 타이어 경고등(말굽 안에 느낌표), 연료 부족 경고등(주유기 모양), 차체자세제어장치(ESC) 작동 표시등(미끄러지는 차 모양), 차체자세제어장치(ESC) 작동 정지 표시등(미끄러지는 차와 OFF 글자) 중 하나일 수 있어요. 차량에 따라 색이 다를 수 있으니 어떤 모양인지 알려 주세요."
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요."
+          },
+          {
+            "role": "user",
+            "content": "엔진 모양이야"
+          },
+          {
+            "role": "assistant",
+            "content": "어떤 색으로 켜져 있나요? 잘 모르겠으면 모르겠다고 해 주세요."
           }
         ],
         "destination": null
@@ -1618,7 +1657,7 @@
         "정비"
       ],
       "reference_answer": "무슨 뜻: 엔진 전자제어 장치나 배기가스 제어 센서 이상, 연료 공급장치 누유 시 켜진다. 왜 중요한지: 켜진 채 계속 주행하면 배기 제어 계통이 손상될 수 있다. 지금 할 일: 가능한 빨리 서비스센터에 정비를 의뢰하고, 시동이 걸리지 않으면 견인한다.",
-      "expected_behavior": "앞의 되묻기 대화와 이어서 엔진 경고등으로 답하고, 무슨 뜻·왜 중요한지·지금 할 일을 모두 제시",
+      "expected_behavior": "모양(엔진)과 색(노란색)까지 들은 뒤 엔진 경고등의 뜻·중요성·지금 할 일을 답한다",
       "note": null,
       "top_k": 5
     }

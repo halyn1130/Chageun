@@ -232,6 +232,34 @@ def table_rows(lines):
     return rows
 
 
+SPACING_DIR = Path(__file__).resolve().parents[1] / 'data' / 'spacing'
+
+
+def load_spacing(doc_id, folder=SPACING_DIR):
+    """{line without whitespace: the same line with spaces restored}; lines that differ in any other way are ignored."""
+    path = Path(folder) / f'{doc_id}.json'
+    lines = read_json(path)['lines'] if path.exists() else []
+    return {re.sub(r'\s+', '', l['original']): l['spaced'] for l in lines
+            if re.sub(r'\s+', '', l['original']) == re.sub(r'\s+', '', l['spaced'])}
+
+
+def respace_lines(lines, generate, batch=20):
+    """Ask a model to restore spaces only, keeping each answer only if it changed nothing but whitespace."""
+    system = ('너는 한국어 띄어쓰기 교정기다. 각 줄의 띄어쓰기만 맞춤법에 맞게 고쳐라. 글자, 숫자, 문장부호는 하나도 '
+              '더하거나 빼거나 바꾸지 마라. JSON 객체만 반환: lines(입력과 같은 순서·같은 개수의 문자열 배열).')
+    out = []
+    for i in range(0, len(lines), batch):
+        chunk = lines[i:i + batch]
+        try:
+            fixed = json.loads(generate(system, json.dumps({'lines': chunk}, ensure_ascii=False)))['lines']
+        except (ValueError, TypeError, KeyError):
+            fixed = []
+        for original, spaced in zip(chunk, fixed if len(fixed) == len(chunk) else []):
+            if isinstance(spaced, str) and re.sub(r'\s+', '', spaced) == re.sub(r'\s+', '', original):
+                out.append({'original': original, 'spaced': spaced})
+    return out
+
+
 def chunk_appendix_pages(doc, pages, file_hash, size=1000):
     validate_document(doc)
     appendix = '별표 ' + re.search(r'\[별표 (\d+(?:의\d+)?)\]', doc['title']).group(1)
@@ -260,6 +288,11 @@ def chunk_appendix_pages(doc, pages, file_hash, size=1000):
                 entries[-1]['lines'].append(stripped)
     if len(entries) == 1:  # no numbered signs: a plain table such as 별표 2
         entries = [dict(row, section=None, pdf_page=1) for row in table_rows(entries[0]['lines'])]
+    # HWP exports drop the spaces ("차마는우회전하려는경우"), and models then misread a condition. Spacing restored
+    # offline (python -m chageun_ai respace) is used only where it differs from the line by whitespace alone.
+    spaced = load_spacing(doc['doc_id'])
+    for e in entries:
+        e['lines'] = [spaced.get(re.sub(r'\s+', '', line), line) for line in e['lines']]
     merged = []
     for e in entries:
         # A lone number with no Korean name ("150" / "100" / "60") is a size table inside the previous sign.
@@ -587,11 +620,39 @@ VERIFY_SYSTEM = ('너는 차근 답변 검증기다. answer와 speech(음성용 
                  '일반 상식이나 추론으로 보탠 내용이 하나라도 있으면 supported=false다. '
                  '답변이 가져온 evidence의 항목(조문, 표의 행 이름, 표지 이름)이 question이 묻는 대상과 같은지도 확인한다. '
                  '다른 대상의 내용을 옮겼으면(예: 점멸을 물었는데 켜진 등화의 뜻을 답함) supported=false다. '
+                 'evidence 문장에 붙은 조건("~인 경우", "다만", "~에도 불구하고")을 빼거나 바꿔 일반 규칙처럼 썼으면 '
+                 'supported=false다. 예: "우회전 삼색등이 적색인 경우 우회전할 수 없다"를 "적색 신호에서는 우회전할 수 없다"로 '
+                 '쓰면 근거와 정반대 뜻이 된다. 원칙과 예외가 함께 있는 근거에서 예외만 답한 것도 supported=false다. '
                  'JSON 객체만 반환: supported(true/false), unsupported(근거 없는 문장 배열).')
 
 
 def compact(text):
     return re.sub(r'\s+', '', text or '').lower()
+
+
+# Words that occur in almost every rule, so they tell nothing about which condition a rule has.
+COMMON_WORDS = {'차마', '모든', '운전', '운전자', '자동차', '경우', '때에', '때에는', '다른', '해당', '그러', '그러하',
+                '다음', '규정', '노면전'}
+
+
+def missing_conditions(quotes, question, answer):
+    """Condition words in the quoted rules ("우회전 삼색등이 적색의 등화인 경우") that the answer left out.
+
+    Dropping a rule's condition can flip its meaning: "적색 신호에서는 우회전할 수 없다" is the opposite of the
+    rule, which forbids it only under a red right-turn arrow light. Words already in the question, and words every
+    rule has, are not counted.
+    """
+    flat_answer, flat_question = compact(answer), compact(question)
+    missing = []
+    for q in quotes:
+        for clause in re.findall(r'(?:불구하고|다만)?([^.,。]*?)(?:인|한|는|할|된|하는)\s?경우', q['quote']):
+            words = [w for w in re.findall(r'[가-힣A-Za-z0-9]{2,}', clause)]
+            # Compare by stem: drop one trailing particle (삼색등이 → 삼색등).
+            stems = [w[:-1] if len(w) > 2 and w[-1] in '이가은는을를의에도' else w for w in words]
+            telling = [st for st in stems if st not in COMMON_WORDS and compact(st) not in flat_question]
+            if telling and not any(compact(st) in flat_answer for st in telling):
+                missing.append(clause.strip())
+    return missing
 
 
 def answer_from_hits(question, hits, generate, vehicle=None, style=None):
@@ -612,6 +673,8 @@ def answer_from_hits(question, hits, generate, vehicle=None, style=None):
               '근거에 나오지 않는 용어가 하나라도 있으면 missing_terms에 적고 insufficient_evidence로 답하라. '
               '비슷한 일반 규정을 질문의 특정 상황에 끼워 맞춰 추정하지 마라. '
               '거리·속도·금액 같은 수치와 조건은 근거 문장에 붙은 대상 그대로 쓰고, 서로 다른 기준을 하나로 묶지 마라. '
+              '근거에 원칙과 예외("다만", "~에도 불구하고", "~인 경우")가 함께 있으면 원칙을 먼저 쓰고 예외는 그 조건과 함께 쓴다. '
+              '예외의 조건을 빼서 일반 규칙처럼 쓰지 마라. '
               '"언제", "어떤 경우"처럼 경우를 묻는 질문에는 근거에 있는 해당 경우를 하나만 고르지 말고 빠짐없이 나열하라. '
               'JSON 객체만 반환: status(answered 또는 insufficient_evidence), answer_text, speech_text, '
               'missing_terms(문자열 배열), quotes([{chunk_id, quote}]). '
@@ -667,6 +730,11 @@ def answer_from_hits(question, hits, generate, vehicle=None, style=None):
             if not quotes:
                 return empty
             ids = list(dict.fromkeys(q['chunk_id'] for q in quotes))
+            dropped = missing_conditions(quotes, question, value['answer_text'])
+            if dropped:
+                feedback = ('keep_conditions의 조건이 답변에서 빠졌다. 그 조건을 그대로 넣어 원칙과 예외를 구분해 다시 답하라.',
+                            {'keep_conditions': dropped})
+                continue
             # Quotes prove the evidence exists, not that the answer says only what it says. A second pass
             # rejects answers that wrap a real quote in general knowledge (e.g. defining 정차 from 제34조).
             # The spoken answer is checked too: it is what a driver actually hears.

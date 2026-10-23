@@ -152,6 +152,16 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(hits[0]['chunk']['text'], texts[0])
             self.assertEqual(len(hits), 3)
 
+    def test_restored_spacing_is_kept_only_when_letters_are_unchanged(self):
+        from chageun_ai.core import respace_lines, load_spacing
+        lines = ['차마는우회전할수있다.', '차마는정지해야한다.']
+        fake = lambda system, user: json.dumps({'lines': ['차마는 우회전할 수 있다.', '차마는 정지하지 않아도 된다.']})
+        kept = respace_lines(lines, fake)
+        self.assertEqual(kept, [{'original': '차마는우회전할수있다.', 'spaced': '차마는 우회전할 수 있다.'}])
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / 'doc.json').write_text(json.dumps({'lines': kept + [{'original': '가나다', 'spaced': '가 나 라'}]}))
+            self.assertEqual(load_spacing('doc', d), {'차마는우회전할수있다.': '차마는 우회전할 수 있다.'})
+
     def test_keyword_score_ignores_spacing(self):
         from chageun_ai.core import bm25_scores
         texts = ['엔진 오일 및 필터 교체 주기', '냉각수 점검']
@@ -214,6 +224,13 @@ class PipelineTests(unittest.TestCase):
             return reply(quote)(system, user)
         self.assertEqual(answer_from_hits('질문', hits, fixed)['status'], 'answered')
         self.assertEqual(seen, [None, ['답']])
+
+    def test_answer_dropping_a_rule_condition_is_caught(self):
+        from chageun_ai.core import missing_conditions
+        quote = [{'chunk_id': 'x', 'quote': '제2호에도 불구하고 차마는 우회전 삼색등이 적색의 등화인 경우 우회전할 수 없다.'}]
+        question = '적색 신호에서 우회전할 수 있어?'
+        self.assertTrue(missing_conditions(quote, question, '적색 신호에서는 우회전할 수 없습니다.'))
+        self.assertFalse(missing_conditions(quote, question, '정지한 뒤 우회전할 수 있고, 우회전 삼색등이 적색이면 할 수 없습니다.'))
 
     def test_quote_may_join_an_item_to_its_lead_sentence(self):
         from chageun_ai.core import quoted_in
