@@ -2,7 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from chageun_ai.core import chunk_pages, chunk_law_pages, chunk_manual_pages, chunk_appendix_pages, build_index, search, answer_from_hits, evaluate, ingest
+from chageun_ai.core import chunk_pages, chunk_law_pages, chunk_manual_pages, load_warning_lights, lights_named, chunk_appendix_pages, build_index, search, answer_from_hits, evaluate, ingest
 
 
 def document(doc_id='k5', model='K5'):
@@ -57,6 +57,31 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual([(c['metadata']['section'], c['metadata']['printed_page'], c['metadata']['pdf_page']) for c in chunks],
                          [('정기 점검 > 엔진 오일', '9-14', 2), ('정기 점검 > 냉각수', None, 4)])
         self.assertEqual(chunks[0]['text'], '[테스트 전용 가상 설명서] 정기 점검 > 엔진 오일\n오일을 점검하십시오.\n다음 페이지에 이어진다.')
+
+    def test_manual_chunks_carry_warning_light_metadata(self):
+        doc = document()
+        pages = ['[chapter4_20_4.html]편의 장치 > 클러스터 > 경고등 및 표시등\n엔진 오일 압력 경고등\n'
+                 '전자식 파킹 브레이크 경고등 (사양 적용 시)\nLPG 과충전 경고등',
+                 '[p.4-11 · PDF 89]클러스터 > 클러스터\n저압 타이어 경고등/\nTPMS 경고등\n충전 경고등',
+                 '[p.9-8 · PDF 390]정기 점검 > 통상 조건\n엔진 오일 및 오일 필터 매 15,000km 교체\n냉각수 점검',
+                 '[chapter1_4_2.html]사용 설명서(요약본) > 시동 및 주행 보조 장치 > 클러스터\n에어백 경고등',
+                 '[chapter4_8.html]편의 장치 > 도어\n도어를 잠급니다.']
+        meta = [c['metadata'] for c in chunk_manual_pages(doc, pages, 'hash')[0]]
+        self.assertEqual([(m['topic'], m['lights'], m['maintenance_items'], m['content_role']) for m in meta], [
+            ('warning_light', ['engine_oil_pressure', 'epb', 'lpg_overfill'], [], 'detail'),
+            ('warning_light', ['low_tire_pressure', 'charging'], [], 'detail'),
+            ('maintenance', [], ['engine_oil', 'coolant'], 'detail'),
+            ('warning_light', ['airbag'], [], 'summary'),
+            ('feature', [], [], 'detail')])
+        # Metadata is a retrieval hint only: ids still follow the text, so reviewed evaluation answers stay valid.
+        bare = chunk_manual_pages(doc, pages, 'hash', lights=[])[0]
+        self.assertEqual([c['chunk_id'] for c in bare], [m['chunk_id'] for m in chunk_manual_pages(doc, pages, 'hash')[0]])
+
+    def test_warning_light_names_are_unique_and_longest_wins(self):
+        lights = load_warning_lights()
+        self.assertEqual(lights_named('브레이크 경고등과 전자식 파킹 브레이크 경고등', lights), ['brake', 'epb'])
+        self.assertEqual(lights_named('과충전 경고등', lights), ['lpg_overfill'])
+        self.assertEqual(lights_named('주행빔 전조등 표시등, 전조등 상향 표시등', lights), ['high_beam'])
 
     def test_appendix_signs_become_one_chunk_each(self):
         doc = {'doc_id': 'law-a6', 'title': '가상규칙 [별표 6] 가상 표지', 'kind': 'law',
