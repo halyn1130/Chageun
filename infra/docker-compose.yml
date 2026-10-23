@@ -52,5 +52,17 @@ services:
       db:
         condition: service_healthy
 
+  voice-ai:
+    build: ../backend/voice-ai
+    env_file: ../.env           # JWT_SECRET · OPENAI_API_KEY
+    environment:
+      WHISPER_MODEL: small      # 느리면 base로
+      FRONTEND_ORIGINS: *frontend-origins
+    ports:
+      - "8008:8008"             # 브라우저가 직접 호출
+    volumes:
+      - whisper-cache:/root/.cache/huggingface   # Whisper 모델을 한 번만 내려받는다
+
 volumes:
   db-data:
+  whisper-cache:
