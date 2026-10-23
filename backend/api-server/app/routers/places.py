@@ -24,6 +24,8 @@ KST = ZoneInfo("Asia/Seoul")
 
 # 카카오 카테고리 그룹 코드
 KAKAO_CATEGORY = {"parking": "PK6", "gas_station": "OL7", "cafe": "CE7"}
+# 카테고리 코드가 없는 곳은 키워드 검색으로 찾고, 카카오 분류(category_name)로 한 번 더 거른다
+KAKAO_KEYWORD = {"repair_shop": ("자동차정비", "자동차정비")}   # 검색어, 분류에 들어 있어야 할 말
 OPINET_MAX_RADIUS_M = 5000      # 오피넷 반경 검색 최대값
 OPINET_DETAIL_LIMIT = 10        # 주소를 얻으려고 상세 조회할 주유소 수 (호출 수 제한)
 
@@ -95,7 +97,7 @@ async def search_places(query: str = Query(min_length=1, max_length=100, openapi
 
 
 @router.get("/places/nearby", summary="주변 장소 찾기")
-async def nearby_places(category: Literal["parking", "gas_station", "cafe"] = Query(openapi_examples={"주차장": {"value": "parking"}}),
+async def nearby_places(category: Literal["parking", "gas_station", "cafe", "repair_shop"] = Query(openapi_examples={"주차장": {"value": "parking"}}),
                         lat: float = Query(openapi_examples={"울산시청": {"value": 35.5384}}),
                         lng: float = Query(openapi_examples={"울산시청": {"value": 129.3114}}),
                         radius_m: int = Query(1000, ge=1, le=20000),
@@ -104,6 +106,14 @@ async def nearby_places(category: Literal["parking", "gas_station", "cafe"] = Qu
         return {"places": await nearby_gas_stations(lat, lng, radius_m, sort)}
     if sort == "price":
         raise HTTPException(422, "가격순 정렬은 주유소에서만 할 수 있어요.")
+
+    if category in KAKAO_KEYWORD:
+        query, must_have = KAKAO_KEYWORD[category]
+        data = await get_json("https://dapi.kakao.com/v2/local/search/keyword.json", {
+            "query": query, "x": lng, "y": lat, "radius": radius_m, "sort": "distance", "size": 15,
+        }, KAKAO_HEADERS)
+        docs = [d for d in data["documents"] if must_have in d["category_name"]]
+        return {"places": [kakao_place(d) for d in docs]}
 
     data = await get_json("https://dapi.kakao.com/v2/local/search/category.json", {
         "category_group_code": KAKAO_CATEGORY[category], "x": lng, "y": lat,
