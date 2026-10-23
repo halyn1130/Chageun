@@ -7,32 +7,15 @@ document tools run here; the maintenance tool comes back as an `action` for the 
 from __future__ import annotations
 import re
 import uuid
-from .core import answer_from_hits
+from .core import answer_from_hits, load_warning_lights
 
 MAINTENANCE_ITEMS = ['engine_oil', 'air_filter', 'tire', 'brake_pad', 'coolant', 'battery', 'wiper', 'other']
 # Everyday words drivers say that the documents spell differently; added to the retrieval query only.
 TERMS = {'오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸'}
 # Manual icons are images, so the text only has each light's name. Drivers describe the icon instead.
-# Read off the K5 icon table (사용 설명서 요약본 9. 경고등 및 표시등); the team confirmed 아반떼 uses the same icons.
-WARNING_LIGHTS = {
-    '엔진 오일 압력 경고등': ('주전자', '오일캔', '오일경고등', '엔진오일경고등'),
-    '충전 경고등': ('배터리', '충전경고등'),
-    '엔진 경고등': ('엔진모양', '엔진경고등'),
-    '브레이크 경고등': ('원안에느낌표', '동그라미안에느낌표', 'BRAKE', '브레이크경고등'),
-    'ABS 경고등': ('ABS',),
-    '에어백 경고등': ('에어백',),
-    '안전벨트 미착용 경고등': ('안전벨트', '벨트'),
-    '전동식 파워스티어링 경고등': ('핸들', '스티어링'),
-    '저압 타이어 경고등': ('말굽', '타이어', 'TPMS'),
-    '통합 경고등': ('삼각형',),
-    '연료 부족 경고등': ('주유기', '연료', '기름'),
-    '전자식 파킹 브레이크 (EPB) 경고등': ('EPB', '파킹브레이크'),
-    '전방 안전 경고등': ('차두대', '충돌'),
-    '도어 열림 경고등': ('도어', '문열림', '문이열'),
-    '부주의 운전 경고등': ('커피', '찻잔'),
-    'LED 전조등 고장 표시등': ('전구',),
-    '차체자세제어장치(ESC) 작동 표시등': ('ESC', '미끄러지', '구불구불'),
-}
+# Shapes were read off the K5 icon table; 아반떼 uses the same icons (icons compared side by side).
+# The list lives in data/warning_lights.json together with every manual's spelling of each light.
+WARNING_LIGHTS = {light['name']: tuple(light['shapes']) for light in load_warning_lights() if light['shapes']}
 WARNING_QUESTION = re.compile(r'경고등|표시등|경고\s?불|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)')
 # Words that say nothing about which light it is: colour, place, or a question word.
 VAGUE = re.compile(r'(?:빨간|빨강|노란|노랑|주황|초록|녹색|파란|하얀|흰|적|황|청)색?|계기판|클러스터|무슨|어떤|이상한|웬|이|그|저|이런|저런')
