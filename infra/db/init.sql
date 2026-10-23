@@ -44,3 +44,17 @@ CREATE TABLE IF NOT EXISTS maintenance_records (
   KEY idx_maintenance_vehicle (vehicle_id, item, performed_at),
   CONSTRAINT fk_maintenance_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicles (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 대화 기록 (RAG에 이전 대화로 보낸다. rag 서버는 상태를 갖지 않는다)
+-- conversation_id는 api-server가 첫 질문 때 만든다 (c_ + 32자리). 질문 1번 = user 1줄 + assistant 1줄
+CREATE TABLE IF NOT EXISTS conversation_messages (
+  id               BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  conversation_id  VARCHAR(40)     NOT NULL,
+  user_id          BIGINT UNSIGNED NOT NULL,              -- 대화 주인 (JWT sub). 남의 대화는 이어 쓸 수 없다
+  role             VARCHAR(10)     NOT NULL,              -- user · assistant
+  content          TEXT            NOT NULL,              -- user: 질문 / assistant: 화면용 answer
+  created_at       TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_conversation (conversation_id, id),
+  CONSTRAINT fk_conversation_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
