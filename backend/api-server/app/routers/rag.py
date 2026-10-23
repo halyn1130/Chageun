@@ -58,7 +58,7 @@ def rag_query(req: RagRequest):
                          "차량을 먼저 선택해 주세요.")
         return reply(req, "answered", "설명서 기준 엔진오일 교환 주기는 (목업 답변)입니다.",
                      "설명서 기준 교환 주기를 알려드릴게요.",
-                     sources=[{"title": "2024 K5 취급설명서", "page": "p.512", "url": "https://example.com/k5"}])
+                     sources=[{"title": "2026 K5 취급설명서", "page": "p.512", "url": "https://example.com/k5"}])
     if any(w in q for w in ("우회전", "주정차", "보호구역", "교차로", "좌회전")):
         return reply(req, "answered", "도로교통법에 따르면 (목업 답변)입니다.", "도로교통법 기준으로 알려드릴게요.",
                      sources=[{"title": "도로교통법", "page": "제25조", "url": "https://www.law.go.kr"}])

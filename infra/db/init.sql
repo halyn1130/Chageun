@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS vehicles (
   nickname      VARCHAR(50)     NULL,                  -- 예: 내 K5
   manufacturer  VARCHAR(20)     NOT NULL,              -- 기아 · 현대
   model         VARCHAR(50)     NOT NULL,              -- K5 · 디 올 뉴 아반떼
-  model_year    VARCHAR(10)     NOT NULL,              -- 예: 2024
-  powertrain    VARCHAR(50)     NOT NULL,              -- 예: 가솔린 1.6T
+  model_year    VARCHAR(10)     NOT NULL,              -- 예: 2026
+  powertrain    VARCHAR(50)     NOT NULL,              -- 예: G2.0
   mileage_km    INT UNSIGNED    NULL,                  -- 현재 주행거리
   is_primary    BOOLEAN         NOT NULL DEFAULT FALSE,-- 기본 차량 여부
   created_at    TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
