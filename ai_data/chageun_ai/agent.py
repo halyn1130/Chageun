@@ -12,7 +12,8 @@ from .core import answer_from_hits, load_warning_lights, read_json, WARNING_LIGH
 MAINTENANCE_ITEMS = ['engine_oil', 'air_filter', 'tire', 'brake_pad', 'coolant', 'battery', 'wiper', 'other']
 # Everyday words drivers say that the documents spell differently; added to the retrieval query only.
 TERMS = {'오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸', '버스정류장': '버스여객자동차의 정류지', '교환': '교체',
-         '소화전': '소방용수시설 비상소화장치', '멈춰': '일시정지', '멈추': '일시정지'}
+         '소화전': '소방용수시설 비상소화장치', '멈춰': '일시정지', '멈추': '일시정지',
+         '앞차와거리': '앞차와의 충돌을 피할 수 있는 필요한 거리', '안전거리': '앞차와의 충돌을 피할 수 있는 필요한 거리'}
 # Signal colours as drivers say them; law only (a "빨간 불" on the dashboard is a warning light).
 LAW_TERMS = {'빨간불': '적색의 등화', '적색신호': '적색의 등화', '빨간신호': '적색의 등화',
              '노란불': '황색의 등화', '황색신호': '황색의 등화', '노란신호': '황색의 등화',
@@ -98,6 +99,34 @@ def vague_warning(question):
         return False
     words = re.findall(r'([가-힣A-Za-z0-9]+)\s*(?:경고등|표시등|경고\s?불|불)', question)
     return all(VAGUE.fullmatch(w) for w in words)
+
+
+SIGNAL_TABLE = 'road-traffic-act-rule-appendix-2'
+SIGNAL_GROUPS = ('보행', '자전거', '버스', '노면전차')
+
+
+def focus_signal_rows(question, hits):
+    """Keep only the 별표 2 signal rows the question is about.
+
+    The rows differ by a word (황색의등화 / 황색등화의점멸 / 황색화살표등화의점멸) and read alike, so a model given
+    several of them mixes their rules. Other documents pass through; if nothing fits, the hits stay as they were.
+    """
+    rows = [h for h in hits if h['chunk']['metadata'].get('doc_id') == SIGNAL_TABLE and h['chunk']['metadata'].get('article_title')]
+    if not rows:
+        return hits
+    flat = question.replace(' ', '')
+    color = {'적색': '적색', '황색': '황색', '녹색': '녹색'}.get(color_in(question) or '', None) or next(
+        (c for c in ('적색', '황색', '녹색') if c in flat), None)
+    group = next((g for g in SIGNAL_GROUPS if g in flat), None)
+    def fits(title):
+        return (('점멸' in title) == ('점멸' in flat)
+                and ('화살표' in title) <= ('화살표' in flat)
+                and (color is None or color in title)
+                and (title.startswith(group) if group else title.startswith('차량신호등')))
+    keep = [h for h in rows if fits(h['chunk']['metadata']['article_title'])]
+    if not keep:
+        return hits
+    return [h for h in hits if h not in rows or h in keep]
 
 
 def color_in(text):
@@ -229,6 +258,8 @@ def rag_query(request, choose, retrieve, generate):
         asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
     asked += f' (이전 질문: {previous} — 지금 질문을 이해하는 데만 참고)' if previous else ''
     style = 'solution' if name == 'search_manual' and PROBLEM.search(question) else None
+    if name == 'search_law':
+        hits = focus_signal_rows(f'{question} {" ".join(known.values())}', hits)
     result = answer_from_hits(asked, hits, generate, car, style)
     if result['status'] != 'answered':
         if name == 'search_manual':

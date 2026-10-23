@@ -225,6 +225,23 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(answer_from_hits('질문', hits, fixed)['status'], 'answered')
         self.assertEqual(seen, [None, ['답']])
 
+    def test_answers_cite_sentence_ids_that_must_exist(self):
+        chunks, _ = chunk_pages(document(), ['엔진 오일을 점검한다. 냉각수를 확인한다.'], 'a')
+        hits = [{'chunk': chunks[0], 'score': .5}]
+        seen = []
+        def make(cites):
+            def generate(system, user):
+                if system == VERIFY_SYSTEM:
+                    return SUPPORTED
+                seen.append(json.loads(user)['evidence'][0]['sentences'])
+                return json.dumps({'status': 'answered', 'answer_text': '냉각수를 확인해요.', 'speech_text': '확인해요.',
+                                   'missing_terms': [], 'cites': cites})
+            return generate
+        result = answer_from_hits('질문', hits, make(['c1.2', 'c9.9']))
+        self.assertEqual(seen[0][1], {'id': 'c1.2', 'text': '냉각수를 확인한다.'})
+        self.assertEqual((result['status'], [s['chunk_id'] for s in result['sources']]), ('answered', [chunks[0]['chunk_id']]))
+        self.assertEqual(answer_from_hits('질문', hits, make(['c9.9']))['status'], 'insufficient_evidence')
+
     def test_answer_dropping_a_rule_condition_is_caught(self):
         from chageun_ai.core import missing_conditions
         quote = [{'chunk_id': 'x', 'quote': '제2호에도 불구하고 차마는 우회전 삼색등이 적색의 등화인 경우 우회전할 수 없다.'}]

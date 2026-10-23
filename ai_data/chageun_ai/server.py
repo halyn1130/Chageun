@@ -15,7 +15,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from .agent import rag_query
-from .core import read_json, search
+from .core import read_json, search, VERIFY_SYSTEM
 
 log = logging.getLogger('chageun.rag')
 
@@ -68,15 +68,23 @@ class RagRequest(BaseModel):
 
 
 class Engine:
-    """Loads the models once; the index path and its embedding model come from the index manifest."""
+    """Loads the models once; the index path and its embedding model come from the index manifest.
 
-    def __init__(self, index, llm_model):
+    llm_model routes questions and verifies answers; answer_model (default: the same) writes the answers.
+    A stronger writer keeps a rule's exceptions straight, while a stronger verifier rejected correct answers.
+    """
+
+    def __init__(self, index, llm_model, answer_model=None):
         from langchain_openai import ChatOpenAI, OpenAIEmbeddings
         self.index = Path(index)
         manifest = read_json(self.index / 'manifest.json')
         self.embedding = OpenAIEmbeddings(model=manifest['embedding_model'])
-        llm = ChatOpenAI(model=llm_model, temperature=0, timeout=20, max_retries=1)
-        self.llm, self.json_llm = llm, llm.bind(response_format={'type': 'json_object'})
+        make = lambda model, **kw: ChatOpenAI(model=model, temperature=0, timeout=20, max_retries=1, **kw)
+        self.llm = make(llm_model)
+        self.json_llm = self.llm.bind(response_format={'type': 'json_object'})
+        # Output length is most of the latency (about 75 tokens a second); a short answer also suits driving.
+        # The cap stops a runaway answer; a cut-off JSON fails closed like any invalid answer.
+        self.answer_llm = make(answer_model or llm_model, max_tokens=500).bind(response_format={'type': 'json_object'})
 
     def choose(self, system, question, tools):
         calls = self.llm.bind_tools(tools, tool_choice='required').invoke([('system', system), ('human', question)]).tool_calls
@@ -86,7 +94,8 @@ class Engine:
         return search(self.index, self.embedding.embed_query(query), filters, 8, query=query)
 
     def generate(self, system, user):
-        return self.json_llm.invoke([('system', system), ('human', user)]).content
+        llm = self.json_llm if system == VERIFY_SYSTEM else self.answer_llm
+        return llm.invoke([('system', system), ('human', user)]).content
 
     def ask(self, request):
         return rag_query(request, self.choose, self.retrieve, self.generate)
@@ -99,7 +108,8 @@ def create_app(engine_factory=None, secret=None, timeout_s=None):
     @contextlib.asynccontextmanager
     async def lifespan(app):
         try:
-            factory = engine_factory or (lambda: Engine(os.environ['RAG_INDEX'], os.getenv('RAG_LLM_MODEL', 'gpt-4o-mini')))
+            factory = engine_factory or (lambda: Engine(os.environ['RAG_INDEX'], os.getenv('RAG_LLM_MODEL', 'gpt-4o-mini'),
+                                                        os.getenv('RAG_ANSWER_MODEL') or None))
             app.state.engine = factory()
         except Exception:  # the server still starts so /health can report that it is not ready
             log.exception('index not ready')

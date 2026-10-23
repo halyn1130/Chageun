@@ -93,6 +93,17 @@ class AgentTests(unittest.TestCase):
         self.assertIn('법에서 빨간색으로 정한 경고등', r['answer'])
         self.assertEqual(r['sources'][-1]['page'], '별표 2')
 
+    def test_signal_rows_not_asked_about_are_left_out(self):
+        from chageun_ai.agent import focus_signal_rows
+        row = lambda title: {'chunk': {'chunk_id': title, 'text': title,
+                                       'metadata': {'doc_id': 'road-traffic-act-rule-appendix-2', 'article_title': title}}}
+        hits = [row('차량신호등 황색의등화'), row('차량신호등 황색등화의점멸'), row('차량신호등 황색화살표등화의점멸'),
+                row('버스신호등 황색등화의점멸'), {'chunk': {'chunk_id': 'law', 'text': '', 'metadata': {'doc_id': 'act'}}}]
+        ids = lambda question: [h['chunk']['chunk_id'] for h in focus_signal_rows(question, hits)]
+        self.assertEqual(ids('황색 신호가 깜빡이면? 점멸'), ['차량신호등 황색등화의점멸', 'law'])
+        self.assertEqual(ids('노란불이면 어떻게 해? 황색의 등화'), ['차량신호등 황색의등화', 'law'])
+        self.assertEqual(ids('녹색 화살표면?'), [h['chunk']['chunk_id'] for h in hits])  # nothing fits: unchanged
+
     def test_follow_up_question_is_routed_with_the_previous_one(self):
         routed = []
         choose = lambda system, question, tools: routed.append(question) or ('decline', {'kind': 'unrelated'})

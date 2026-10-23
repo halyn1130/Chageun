@@ -29,6 +29,7 @@ def main():
                 q.add_argument('--runs', type=int, default=1, help='repeat each case to measure stability')
                 q.add_argument('--include-drafts', action='store_true', help='score unreviewed cases (provisional)')
                 q.add_argument('--llm-model', default='gpt-4o-mini')
+                q.add_argument('--answer-model', help='model that writes answers (default: --llm-model)')
         elif name == 'ask':
             q.add_argument('question')
             q.add_argument('--vehicle', help='vehicle object as the api-server sends it, e.g. {"id":3,"manufacturer":"기아",...}')
@@ -82,7 +83,7 @@ def main():
         elif args.command == 'evaluate-answers':
             from .evaluation import evaluate_pipeline
             from .server import Engine
-            engine = Engine(args.index, args.llm_model)
+            engine = Engine(args.index, args.llm_model, args.answer_model)
 
             retrieve = engine.retrieve
 
@@ -96,7 +97,7 @@ def main():
                 engine.retrieve = traced
                 return engine.ask(request), seen
             report = evaluate_pipeline(read_json(args.cases)['cases'], ask, args.runs, args.include_drafts)
-            write_json(args.out, dict(report, index=args.index, llm_model=args.llm_model))
+            write_json(args.out, dict(report, index=args.index, llm_model=args.llm_model, answer_model=args.answer_model))
             result = {k: v for k, v in report.items() if k != 'results'}
         elif args.command == 'ask':
             from langchain_openai import ChatOpenAI
