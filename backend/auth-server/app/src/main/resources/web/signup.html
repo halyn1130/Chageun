@@ -1,24 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
+    <title>차근 · 계정 만들기</title>
+    <link rel="icon" type="image/png" href="/static/chageun-logo.png">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="container">
-    <h1>Sign Up</h1>
+    <div class="brand"><img src="/static/chageun-logo.png" alt="차근 로고"><strong>차근</strong></div>
+    <h1>계정 만들기</h1>
     <form id="signupForm" method="POST" action="/api/signup">
-        <label>Username
+        <label>아이디
             <input type="text" name="username" required>
         </label>
-        <label>Password
+        <label>비밀번호
             <input type="password" name="password" required>
         </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit">계정 만들기</button>
     </form>
     <p id="msg"></p>
-    <p><a href="/login">Back to Login</a></p>
+    <p><a href="/login">로그인으로 돌아가기</a></p>
 </div>
 <script>
 // /api/signup은 JSON으로 응답하므로 fetch로 보내고 성공하면 로그인 화면으로 이동한다

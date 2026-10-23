@@ -657,7 +657,7 @@ def missing_conditions(quotes, question, answer):
     return missing
 
 
-def answer_from_hits(question, hits, generate, vehicle=None, style=None):
+def answer_from_hits(question, hits, generate, vehicle=None, style=None, history=None):
     empty = {'status': 'insufficient_evidence', 'answer_text': '확인할 문서 근거가 부족해요. 차량 정보나 질문 상황을 더 알려주세요.',
              'speech_text': '확인할 근거가 부족해요. 정보를 조금 더 알려주세요.', 'sources': []}
     if not hits:
@@ -686,16 +686,28 @@ def answer_from_hits(question, hits, generate, vehicle=None, style=None):
               '다만 "갈아", "둬야" 같은 동사나 일상 표현은 근거의 표현(교체, 확보)으로 바꿔 판단하고, '
               'missing_terms에는 근거에 없는 대상(기능, 표지, 장소, 수치 기준)만 넣는다. '
               '비슷한 일반 규정을 질문의 특정 상황에 끼워 맞춰 추정하지 마라. '
+              '조작 방법은 사용자가 요청한 동작 자체의 근거가 필요하다. 켜는 방법만으로 끄는 방법을 추정하거나, '
+              '한 번 더 누르면 반대 동작이 된다고 가정하지 마라. 그림에만 있고 제공된 텍스트에 없는 조작 순서도 만들지 마라. '
               '거리·속도·금액 같은 수치와 조건은 근거 문장에 붙은 대상 그대로 쓰고, 서로 다른 기준을 하나로 묶지 마라. '
               '근거에 원칙과 예외("다만", "~에도 불구하고", "~인 경우")가 함께 있으면 원칙을 먼저 쓰고 예외는 그 조건과 함께 쓴다. '
               '예외의 조건을 빼서 일반 규칙처럼 쓰지 마라. '
               '"언제", "어떤 경우"처럼 경우를 묻는 질문에는 근거에 있는 해당 경우를 하나만 고르지 말고 빠짐없이 나열하라. '
               '줄바꿈 없는 한 줄 JSON 객체만 반환: status(answered 또는 insufficient_evidence), answer_text, speech_text, '
               'missing_terms(문자열 배열), cites(문장 id 배열). '
-              '운전 중에 듣는 답이므로 질문에 필요한 내용만 간결하게 쓰고 같은 말을 되풀이하지 마라. speech_text는 '
-              '가장 중요한 내용 한두 문장이다. evidence의 문장마다 id(예: c1.3)가 있다. answered는 답변의 근거가 되는 '
+              '운전 중에 듣는 답이므로 질문에 필요한 내용만 간결하게 쓰고 같은 말을 되풀이하지 마라. '
+              'speech_text는 화면을 보지 않는 초보 운전자에게 들려줄 완결된 2~3문장이다. 필요한 조작 대상과 순서, '
+              'answer_text의 적용 조건·주의사항·수치를 빠뜨리지 말고, "화면을 보세요"처럼 화면에 의존하지 마라. '
+              'evidence의 문장마다 id(예: c1.3)가 있다. answered는 답변의 근거가 되는 '
               '문장의 id를 cites에 최소 하나 넣고, 문장을 다시 옮겨 쓰지 마라. 모르는 출처나 조항을 만들지 마라.')
     request = {'question': question, 'evidence': evidence}
+    if history:
+        request['history'] = history
+        system += (' history는 같은 상담의 최근 대화이며 생략된 질문의 대상을 이해하는 용도로만 쓴다. '
+                   '현재 질문의 새 주제·정정과 현재 vehicle을 우선한다. '
+                   '먼저 생략된 대상과 목적을 복원한 뒤 그 대상의 근거가 evidence에 있는지 확인하라. '
+                   '복원한 대상의 근거가 없으면 insufficient_evidence다. 다른 비슷한 기능의 사용법으로 대체하지 마라. '
+                   '이전 사용자 발언이나 AI 답변을 공식 근거로 사용하지 마라. '
+                   '답변과 quotes의 근거는 이번 evidence에서만 가져와야 한다.')
     if vehicle:
         # One manual covers several engines; values such as oil intervals differ between them.
         system += (' vehicle은 사용자의 차량이다. 엔진이나 사양별로 값이 다르면 vehicle의 동력계통에 해당하는 값만 쓰고, '
