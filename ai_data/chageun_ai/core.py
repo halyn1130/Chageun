@@ -39,8 +39,8 @@ def validate_document(doc):
         for key in ('manufacturer', 'model', 'model_year', 'powertrain'):
             if not isinstance(doc.get(key), str) or not doc[key].strip():
                 raise ValueError(f'{key}: select exact manual variant first')
-        if (doc['manufacturer'], doc['model']) not in (('기아', 'K5'), ('현대', '디 올 뉴 아반떼')):
-            raise ValueError('manual outside initial K5 / 디 올 뉴 아반떼 scope')
+        if (doc['manufacturer'], doc['model']) not in (('기아', 'K5'), ('현대', '더 뉴 아반떼')):
+            raise ValueError('manual outside initial K5 / 더 뉴 아반떼 scope')
     else:
         date.fromisoformat(doc.get('effective_date', ''))
 

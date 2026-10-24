@@ -2,4 +2,4 @@ id,document_group,manufacturer,model,model_year,powertrain,status,owner,decision
 LAW-01,도로교통법,,,,,not_collected,변현준,시행일과 개정판 확인
 LAW-02,도로교통법 시행규칙,,,,,not_collected,변현준,사용할 조항과 별표 범위 확인
 MAN-01,차량 설명서,기아,K5,,,scope_pending,유하린·변현준,연식 및 파워트레인 선택
-MAN-02,차량 설명서,현대,디 올 뉴 아반떼,,,scope_pending,유하린·변현준,연식 및 파워트레인 선택
+MAN-02,차량 설명서,현대,더 뉴 아반떼,,,scope_pending,유하린·변현준,연식 및 파워트레인 선택
