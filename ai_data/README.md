@@ -34,7 +34,7 @@
 문서 공통 필수값: `doc_id`, `title`, `kind`, `source_url`, `retrieved_at`, `revision`, `file`, `usage_note`.
 
 - `kind=law`: `effective_date` 필수. 이번 버전에서 사용할 시행일과 개정판을 사람이 확인합니다. 같은 법령의 과거·현재 버전을 함께 등록하지 않거나 `doc_id`/`revision`/`effective_date`를 명시하여 검색합니다. 최신 법령을 자동 확인하지 않습니다.
-- `kind=manual`: `manufacturer`, `model`, `model_year`, `powertrain` 필수. `model`은 `K5` 또는 `디 올 뉴 아반떼`. 실제 지원 연식과 동력계통은 팀에서 확정합니다. 여러 연식에 적용되는 문서의 범위 규격은 후속 설계 대상입니다.
+- `kind=manual`: `manufacturer`, `model`, `model_year`, `powertrain` 필수. `model`은 `K5` 또는 `더 뉴 아반떼`. 실제 지원 연식과 동력계통은 팀에서 확정합니다. 여러 연식에 적용되는 문서의 범위 규격은 후속 설계 대상입니다.
 - `source_url`: PDF를 확인한 공식 출처. HTTPS 형식 검사는 공식성/사용권 확인을 대신하지 않습니다. 수집 담당자가 출처와 이용조건을 확인해 `usage_note`에 기록합니다.
 - 청크: `schema_version`, `chunk_id`, `text`, `metadata`.
 - 추가 메타데이터: `pdf_page`는 1부터 시작하는 **PDF 파일 순서**, `printed_page`는 책에 인쇄된 페이지입니다. 현재는 `printed_page`, `article`, `section`이 null이며 추측하지 않습니다.

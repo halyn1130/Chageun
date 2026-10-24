@@ -15,7 +15,7 @@ router = APIRouter(prefix="/vehicles", tags=["내 차"])
 # RAG가 이 값으로 설명서를 걸러 검색한다 (다르면 "설명서가 아직 등록되지 않았어요")
 CATALOG = [
     {"manufacturer": "기아", "model": "K5", "model_year": "2026", "powertrain": "G2.0"},
-    {"manufacturer": "현대", "model": "디 올 뉴 아반떼", "model_year": "2026", "powertrain": "G1.6"},
+    {"manufacturer": "현대", "model": "더 뉴 아반떼", "model_year": "2026", "powertrain": "G1.6"},
 ]
 
 VEHICLE_COLUMNS = "id, nickname, manufacturer, model, model_year, powertrain, mileage_km, is_primary"

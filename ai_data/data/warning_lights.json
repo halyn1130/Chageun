@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "계기판 경고등·표시등 사전. name은 대표 이름, aliases는 K5(DL3 2026)·디 올 뉴 아반떼(CN7 2026) 설명서에 실린 다른 표기, shapes는 운전자가 아이콘을 묘사하는 말. 청크 메타데이터(lights)와 질문 분류(agent.WARNING_LIGHTS)가 함께 쓴다. legal은 자동차규칙 [별표 2]의 해당 항목과 법정 식별색상(실제 차량은 제작사 사양에 따라 다를 수 있어 후보를 좁힐 때만 쓴다), shape_label은 되물을 때 보여 줄 모양 설명.",
+  "description": "계기판 경고등·표시등 사전. name은 대표 이름, aliases는 K5(DL3 2026)·더 뉴 아반떼(CN7 2026) 설명서에 실린 다른 표기, shapes는 운전자가 아이콘을 묘사하는 말. 청크 메타데이터(lights)와 질문 분류(agent.WARNING_LIGHTS)가 함께 쓴다. legal은 자동차규칙 [별표 2]의 해당 항목과 법정 식별색상(실제 차량은 제작사 사양에 따라 다를 수 있어 후보를 좁힐 때만 쓴다), shape_label은 되물을 때 보여 줄 모양 설명.",
   "lights": [
     {
       "id": "engine_oil_pressure",
