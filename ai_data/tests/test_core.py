@@ -152,6 +152,16 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(hits[0]['chunk']['text'], texts[0])
             self.assertEqual(len(hits), 3)
 
+    def test_restored_spacing_is_kept_only_when_letters_are_unchanged(self):
+        from chageun_ai.core import respace_lines, load_spacing
+        lines = ['차마는우회전할수있다.', '차마는정지해야한다.']
+        fake = lambda system, user: json.dumps({'lines': ['차마는 우회전할 수 있다.', '차마는 정지하지 않아도 된다.']})
+        kept = respace_lines(lines, fake)
+        self.assertEqual(kept, [{'original': '차마는우회전할수있다.', 'spaced': '차마는 우회전할 수 있다.'}])
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / 'doc.json').write_text(json.dumps({'lines': kept + [{'original': '가나다', 'spaced': '가 나 라'}]}))
+            self.assertEqual(load_spacing('doc', d), {'차마는우회전할수있다.': '차마는 우회전할 수 있다.'})
+
     def test_keyword_score_ignores_spacing(self):
         from chageun_ai.core import bm25_scores
         texts = ['엔진 오일 및 필터 교체 주기', '냉각수 점검']
@@ -215,6 +225,30 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(answer_from_hits('질문', hits, fixed)['status'], 'answered')
         self.assertEqual(seen, [None, ['답']])
 
+    def test_answers_cite_sentence_ids_that_must_exist(self):
+        chunks, _ = chunk_pages(document(), ['엔진 오일을 점검한다. 냉각수를 확인한다.'], 'a')
+        hits = [{'chunk': chunks[0], 'score': .5}]
+        seen = []
+        def make(cites):
+            def generate(system, user):
+                if system == VERIFY_SYSTEM:
+                    return SUPPORTED
+                seen.append(json.loads(user)['evidence'][0]['sentences'])
+                return json.dumps({'status': 'answered', 'answer_text': '냉각수를 확인해요.', 'speech_text': '확인해요.',
+                                   'missing_terms': [], 'cites': cites})
+            return generate
+        result = answer_from_hits('질문', hits, make(['c1.2', 'c9.9']))
+        self.assertEqual(seen[0][1], {'id': 'c1.2', 'text': '냉각수를 확인한다.'})
+        self.assertEqual((result['status'], [s['chunk_id'] for s in result['sources']]), ('answered', [chunks[0]['chunk_id']]))
+        self.assertEqual(answer_from_hits('질문', hits, make(['c9.9']))['status'], 'insufficient_evidence')
+
+    def test_answer_dropping_a_rule_condition_is_caught(self):
+        from chageun_ai.core import missing_conditions
+        quote = [{'chunk_id': 'x', 'quote': '제2호에도 불구하고 차마는 우회전 삼색등이 적색의 등화인 경우 우회전할 수 없다.'}]
+        question = '적색 신호에서 우회전할 수 있어?'
+        self.assertTrue(missing_conditions(quote, question, '적색 신호에서는 우회전할 수 없습니다.'))
+        self.assertFalse(missing_conditions(quote, question, '정지한 뒤 우회전할 수 있고, 우회전 삼색등이 적색이면 할 수 없습니다.'))
+
     def test_quote_may_join_an_item_to_its_lead_sentence(self):
         from chageun_ai.core import quoted_in
         text = '모든 차의 운전자는 다음 각 호의 곳에서는 차를 정차하거나 주차하여서는 아니 된다. 4. 가상 정류지로부터 10미터 이내인 곳'
@@ -231,6 +265,9 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(answer_from_hits('질문', hits, make('엔진 오일을 점검해요.'), 'K5 G2.0')['status'], 'answered')
         self.assertEqual(answer_from_hits('질문', hits, make('엔진 오일과 LPI 연료 필터를 점검해요.'), 'K5 G2.0')['status'],
                          'insufficient_evidence')
+        # A sentence naming another engine is cut out when the rest still answers.
+        cut = answer_from_hits('질문', hits, make('엔진 오일을 점검해요. LPI 연료 필터도 점검해요.'), 'K5 G2.0')
+        self.assertEqual(cut['answer_text'], '엔진 오일을 점검해요.')
         # The model gets one retry told which engine words to drop.
         answers = iter(['엔진 오일과 LPI 연료 필터를 점검해요.', '엔진 오일을 점검해요.'])
         retried = lambda system, user: SUPPORTED if system == VERIFY_SYSTEM else make(next(answers))(system, user)
