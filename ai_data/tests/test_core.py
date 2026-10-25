@@ -2,7 +2,11 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from chageun_ai.core import chunk_pages, chunk_law_pages, chunk_manual_pages, load_warning_lights, lights_named, chunk_appendix_pages, build_index, search, answer_from_hits, evaluate, ingest
+from chageun_ai.core import (chunk_pages, chunk_law_pages, chunk_manual_pages, load_warning_lights, lights_named,
+                              chunk_appendix_pages, build_index, search,
+                              answer_from_hits, evaluate, ingest, VERIFY_SYSTEM)
+
+SUPPORTED = json.dumps({'supported': True, 'unsupported': []})
 
 
 def document(doc_id='k5', model='K5'):
@@ -116,7 +120,7 @@ class PipelineTests(unittest.TestCase):
 
     def make_index(self, folder):
         a, _ = chunk_pages(document(), ['K5 fixture'], 'a')
-        b, _ = chunk_pages(document('avante', '디 올 뉴 아반떼'), ['Avante fixture'], 'b')
+        b, _ = chunk_pages(document('avante', '더 뉴 아반떼'), ['Avante fixture'], 'b')
         corpus = folder / 'chunks.jsonl'
         corpus.write_text(''.join(json.dumps(c) + '\n' for c in a+b))
         build_index(corpus, folder / 'index', lambda texts: [[0, 1], [1, 0]], 'fake-test-embedding')
@@ -148,6 +152,21 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(hits[0]['chunk']['text'], texts[0])
             self.assertEqual(len(hits), 3)
 
+    def test_restored_spacing_is_kept_only_when_letters_are_unchanged(self):
+        from chageun_ai.core import respace_lines, load_spacing
+        lines = ['차마는우회전할수있다.', '차마는정지해야한다.']
+        fake = lambda system, user: json.dumps({'lines': ['차마는 우회전할 수 있다.', '차마는 정지하지 않아도 된다.']})
+        kept = respace_lines(lines, fake)
+        self.assertEqual(kept, [{'original': '차마는우회전할수있다.', 'spaced': '차마는 우회전할 수 있다.'}])
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / 'doc.json').write_text(json.dumps({'lines': kept + [{'original': '가나다', 'spaced': '가 나 라'}]}))
+            self.assertEqual(load_spacing('doc', d), {'차마는우회전할수있다.': '차마는 우회전할 수 있다.'})
+
+    def test_keyword_score_ignores_spacing(self):
+        from chageun_ai.core import bm25_scores
+        texts = ['엔진 오일 및 필터 교체 주기', '냉각수 점검']
+        self.assertEqual(bm25_scores('엔진오일 교체', texts), bm25_scores('엔진 오일 교체', texts))
+
     def test_tampered_corpus_is_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             index, _ = self.make_index(Path(d))
@@ -169,11 +188,16 @@ class PipelineTests(unittest.TestCase):
         chunks, _ = chunk_pages(document(), ['가상 설명서의 엔진오일 점검 문장이다. (괄호 설명) 계기판을 확인한다.'], 'a')
         hits = [{'chunk': chunks[0], 'score': .5}]
         cid = chunks[0]['chunk_id']
-        reply = lambda quotes, **extra: lambda *args: json.dumps(
+        # The fake model answers, then approves its own answer in the verification pass.
+        reply = lambda quotes, verdict=SUPPORTED, **extra: lambda system=None, user=None: verdict if system == VERIFY_SYSTEM else json.dumps(
             {'status': 'answered', 'answer_text': '답', 'speech_text': '답', 'missing_terms': [], 'quotes': quotes, **extra})
         refused = lambda make: answer_from_hits('질문', hits, make)['status'] == 'insufficient_evidence'
         self.assertTrue(refused(reply([{'chunk_id': 'invented', 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}])))
         self.assertTrue(refused(reply([{'chunk_id': cid, 'quote': '가상 설명서의 냉각수 교환 주기는 매년이다.'}])))
+        # One made-up quote beside a real one: the made-up quote is dropped and never cited.
+        mixed = answer_from_hits('질문', hits, reply([{'chunk_id': 'invented', 'quote': '없는 문장을 지어낸 인용이다.'},
+                                                    {'chunk_id': cid, 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}]))
+        self.assertEqual([s['chunk_id'] for s in mixed['sources']], [cid])
         self.assertTrue(refused(reply([{'chunk_id': cid, 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}],
                                       missing_terms=['냉각수'])))
         self.assertTrue(refused(reply([])))
@@ -185,8 +209,69 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(result['status'], 'answered')
         self.assertEqual(result['sources'][0]['pdf_page'], 1)
         self.assertEqual(result['sources'][0]['source_url'], document()['source_url'])
-        fenced = lambda *args: '```json\n' + good() + '\n```'
+        fenced = lambda system, user: '```json\n' + good(system, user) + '\n```'
         self.assertEqual(answer_from_hits('질문', hits, fenced)['status'], 'answered')
+        # A real quote wrapped in claims the evidence does not make is rejected by the verification pass.
+        quote = [{'chunk_id': cid, 'quote': '가상 설명서의 엔진오일 점검 문장이다.'}]
+        self.assertTrue(refused(reply(quote, json.dumps({'supported': False, 'unsupported': ['답']}))))
+        self.assertTrue(refused(reply(quote, 'not JSON')))
+        # A rejected answer gets one retry that names the unsupported sentences.
+        verdicts, seen = iter([json.dumps({'supported': False, 'unsupported': ['답']}), SUPPORTED]), []
+        def fixed(system, user):
+            if system == VERIFY_SYSTEM:
+                return next(verdicts)
+            seen.append(json.loads(user).get('remove_claims'))
+            return reply(quote)(system, user)
+        self.assertEqual(answer_from_hits('질문', hits, fixed)['status'], 'answered')
+        self.assertEqual(seen, [None, ['답']])
+
+    def test_answers_cite_sentence_ids_that_must_exist(self):
+        chunks, _ = chunk_pages(document(), ['엔진 오일을 점검한다. 냉각수를 확인한다.'], 'a')
+        hits = [{'chunk': chunks[0], 'score': .5}]
+        seen = []
+        def make(cites):
+            def generate(system, user):
+                if system == VERIFY_SYSTEM:
+                    return SUPPORTED
+                seen.append(json.loads(user)['evidence'][0]['sentences'])
+                return json.dumps({'status': 'answered', 'answer_text': '냉각수를 확인해요.', 'speech_text': '확인해요.',
+                                   'missing_terms': [], 'cites': cites})
+            return generate
+        result = answer_from_hits('질문', hits, make(['c1.2', 'c9.9']))
+        self.assertEqual(seen[0][1], {'id': 'c1.2', 'text': '냉각수를 확인한다.'})
+        self.assertEqual((result['status'], [s['chunk_id'] for s in result['sources']]), ('answered', [chunks[0]['chunk_id']]))
+        self.assertEqual(answer_from_hits('질문', hits, make(['c9.9']))['status'], 'insufficient_evidence')
+
+    def test_answer_dropping_a_rule_condition_is_caught(self):
+        from chageun_ai.core import missing_conditions
+        quote = [{'chunk_id': 'x', 'quote': '제2호에도 불구하고 차마는 우회전 삼색등이 적색의 등화인 경우 우회전할 수 없다.'}]
+        question = '적색 신호에서 우회전할 수 있어?'
+        self.assertTrue(missing_conditions(quote, question, '적색 신호에서는 우회전할 수 없습니다.'))
+        self.assertFalse(missing_conditions(quote, question, '정지한 뒤 우회전할 수 있고, 우회전 삼색등이 적색이면 할 수 없습니다.'))
+
+    def test_quote_may_join_an_item_to_its_lead_sentence(self):
+        from chageun_ai.core import quoted_in
+        text = '모든 차의 운전자는 다음 각 호의 곳에서는 차를 정차하거나 주차하여서는 아니 된다. 4. 가상 정류지로부터 10미터 이내인 곳'
+        self.assertTrue(quoted_in('가상 정류지로부터 10미터 이내인 곳에서는 차를 정차하거나 주차하여서는 아니 된다.', text))
+        self.assertFalse(quoted_in('가상 정류지로부터 5미터 이내인 곳에서는 주차할 수 있다.', text))
+
+    def test_answer_naming_another_engine_is_rejected(self):
+        doc = dict(document(), other_powertrain_terms=['LPI'])
+        chunks, _ = chunk_pages(doc, ['가솔린 엔진 오일 점검 항목이다. LPI 연료 필터 점검 항목이다.'], 'a')
+        hits = [{'chunk': chunks[0], 'score': .5}]
+        make = lambda text: lambda system, user: SUPPORTED if system == VERIFY_SYSTEM else json.dumps(
+            {'status': 'answered', 'answer_text': text, 'speech_text': '점검해요.', 'missing_terms': [],
+             'quotes': [{'chunk_id': chunks[0]['chunk_id'], 'quote': '가솔린 엔진 오일 점검 항목이다.'}]})
+        self.assertEqual(answer_from_hits('질문', hits, make('엔진 오일을 점검해요.'), 'K5 G2.0')['status'], 'answered')
+        self.assertEqual(answer_from_hits('질문', hits, make('엔진 오일과 LPI 연료 필터를 점검해요.'), 'K5 G2.0')['status'],
+                         'insufficient_evidence')
+        # A sentence naming another engine is cut out when the rest still answers.
+        cut = answer_from_hits('질문', hits, make('엔진 오일을 점검해요. LPI 연료 필터도 점검해요.'), 'K5 G2.0')
+        self.assertEqual(cut['answer_text'], '엔진 오일을 점검해요.')
+        # The model gets one retry told which engine words to drop.
+        answers = iter(['엔진 오일과 LPI 연료 필터를 점검해요.', '엔진 오일을 점검해요.'])
+        retried = lambda system, user: SUPPORTED if system == VERIFY_SYSTEM else make(next(answers))(system, user)
+        self.assertEqual(answer_from_hits('질문', hits, retried, 'K5 G2.0')['answer_text'], '엔진 오일을 점검해요.')
 
     def test_pending_cases_do_not_inflate_metrics(self):
         cases = [{'id':'draft','status':'draft','category':'rag'},

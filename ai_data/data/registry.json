@@ -57,6 +57,18 @@
       "usage_note": "국가법령정보센터 별표 원문(HWP→PDF). 표지 그림은 추출되지 않아 모양은 답할 수 없음. 저작권법 제7조에 따라 보호 대상 아님"
     },
     {
+      "doc_id": "vehicle-standards-rule-appendix-2",
+      "title": "자동차 및 자동차부품의 성능과 기준에 관한 규칙 [별표 2] 손조작식 조종장치 또는 표시장치의 식별표시 및 조명기준",
+      "kind": "law",
+      "source_url": "https://www.law.go.kr/법령/자동차및자동차부품의성능과기준에관한규칙",
+      "retrieved_at": "2026-10-23",
+      "revision": "국토교통부령 별표 2 (2018-12-31 개정본, 법제처 PDF)",
+      "effective_date": "2018-12-31",
+      "file": "raw/[별표 2] 손조작식 조종장치 또는 표시장치의 식별표시 및 조명기준(제13조제4항 및 제5항 관련).pdf",
+      "chunking": "page",
+      "usage_note": "국가법령정보센터 별표 원문. 경고등·표시등의 법정 식별색상 표. 표가 글자 조각으로 추출되어 페이지 단위로 저장. 저작권법 제7조에 따라 보호 대상 아님"
+    },
+    {
       "doc_id": "kia-k5-dl3-2026",
       "title": "기아 K5 (DL3) 2026 사용 설명서",
       "kind": "manual",
@@ -68,7 +80,16 @@
       "manufacturer": "기아",
       "model": "K5",
       "model_year": "2026",
-      "powertrain": "G2.0"
+      "powertrain": "G2.0",
+      "other_powertrain_terms": [
+        "L2.0",
+        "LPI",
+        "LPG",
+        "LPi",
+        "G1.6 T-GDi",
+        "T-GDI",
+        "T-GDi"
+      ]
     },
     {
       "doc_id": "hyundai-avante-cn7-2026",
@@ -80,9 +101,14 @@
       "file": "raw/manual-hyundai-avante_2026_cn7.pdf",
       "usage_note": "현대자동차 공식 PDF(443쪽)를 K5 변환본 형식으로 재구성한 비공식 변환본(manual_scope_filter_v1 제외 구간 삭제). 섹션의 p.x-y가 원본 인쇄 쪽번호. 저작권 현대자동차 주식회사, 팀 내부 RAG 실험용, 재배포 금지",
       "manufacturer": "현대",
-      "model": "디 올 뉴 아반떼",
+      "model": "더 뉴 아반떼",
       "model_year": "2026",
-      "powertrain": "G1.6"
+      "powertrain": "G1.6",
+      "other_powertrain_terms": [
+        "LPI",
+        "LPG",
+        "LPi"
+      ]
     }
   ]
 }

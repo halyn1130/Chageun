@@ -1,7 +1,7 @@
 import json
 import unittest
 from chageun_ai.agent import rag_query, TOOLS
-from chageun_ai.core import chunk_law_pages
+from chageun_ai.core import chunk_law_pages, VERIFY_SYSTEM
 
 LAW = {'doc_id': 'law', 'title': '가상법', 'kind': 'law', 'source_url': 'https://example.invalid/law',
        'retrieved_at': '2026-10-22', 'revision': 'fixture-v1', 'effective_date': '2026-10-01',
@@ -21,6 +21,34 @@ class AgentTests(unittest.TestCase):
         return rag_query(request, choose, retrieve or (lambda q, f: self.fail('must not search')),
                          generate or (lambda s, u: self.fail('must not generate')))
 
+    def test_fuel_focus_excludes_adjacent_warning_instructions(self):
+        from chageun_ai.agent import focus_fuel_evidence
+        fuel = '연료의 잔류량이 적을 때 경고등이 켜집니다. 경고등이 켜지면 바로 연료를 보충하십시오.'
+        hit = {'score': 1, 'chunk': {'chunk_id': 'fuel', 'metadata': {'section': '클러스터 > 경고등 및 표시등'},
+               'text': '제목\n엔진 오일 압력 경고등\n오일을 점검하세요.\n연료 부족 경고등\n' + fuel + '\nLPG 과충전 경고등\nLPG 점검 안내'}}
+        focused = focus_fuel_evidence([hit])
+        self.assertEqual(focused[0]['chunk']['text'], '연료 부족 경고등\n' + fuel)
+        self.assertEqual(focused[0]['chunk']['chunk_id'], 'fuel')
+        self.assertIn('LPG 점검 안내', hit['chunk']['text'])  # original corpus is untouched
+        unrelated = {'score': 1, 'chunk': {'chunk_id': 'other', 'metadata': {}, 'text': '다른 항목'}}
+        self.assertEqual(focus_fuel_evidence([unrelated]), [unrelated])
+
+    def test_fuel_alias_reaches_answer_evidence(self):
+        from unittest.mock import patch
+        seen = []
+        hit = {'chunk': {'chunk_id': 'fuel', 'text': '연료 부족 경고등', 'metadata': {}}, 'score': 1}
+        with patch('chageun_ai.agent.answer_from_hits', return_value={
+            'status': 'answered', 'answer_text': '안내', 'speech_text': '안내', 'sources': []
+        }) as answer:
+            r = self.ask(picks('search_manual', query='연료계 확인'),
+                         retrieve=lambda q, f: seen.append((q, f)) or [hit],
+                         question='주유등이 켜졌어. 계기판에서 무엇을 확인해?', vehicle=VEHICLE)
+        self.assertEqual(r['status'], 'answered')
+        self.assertIn('연료 부족 경고등', seen[0][0])
+        self.assertIn('연료 부족 경고등이 켜졌어', answer.call_args.args[0])
+        self.assertNotIn('주유등', answer.call_args.args[0])
+        self.assertEqual(answer.call_args.args[4], 'solution')
+
     def test_contract_fields_and_conversation_id(self):
         r = self.ask(picks('decline', kind='realtime'), conversation_id='c_1')
         self.assertEqual(set(r), {'request_id', 'conversation_id', 'status', 'answer', 'speech_text', 'sources',
@@ -39,32 +67,104 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(self.ask(picks('open_maintenance', item='engine_oil'))['status'], 'need_vehicle')
         self.assertEqual(self.ask(picks('open_maintenance', item='engine_oil'), vehicle=VEHICLE)['action'],
                          {'type': 'open_my_car', 'vehicle_id': 3, 'item': 'engine_oil'})
+        for item in ('oil_filter', 'cabin_filter', 'brake_fluid'):
+            self.assertEqual(self.ask(picks('open_maintenance', item=item), vehicle=VEHICLE)['action'],
+                             {'type': 'open_my_car', 'vehicle_id': 3, 'item': item})
         # Arguments outside the enums, unknown tools and no tool call are never passed to the UI.
         self.assertEqual(self.ask(picks('open_maintenance', item='hospital'), vehicle=VEHICLE)['status'], 'not_found')
         self.assertEqual(self.ask(picks('find_places', category='parking'))['status'], 'not_found')
         self.assertEqual(self.ask(lambda *a: None)['status'], 'not_found')
 
-    def test_vague_warning_light_asks_back_and_shape_names_the_light(self):
-        for question in ('지금 계기판에 빨간 불 들어왔어', '계기판에 빨간색 경고등이 켜졌는데 뭐야?'):
-            for choice in (picks('search_manual', query='경고등'), picks('decline', kind='realtime')):
-                r = self.ask(choice, question=question, vehicle=VEHICLE)
-                self.assertEqual((r['status'], r['missing_fields']), ('need_clarification', ['warning_light']))
+    def test_warning_light_is_asked_one_question_at_a_time(self):
+        manual = picks('search_manual', query='경고등')
+        ask = lambda question, history=(): self.ask(manual, question=question, vehicle=VEHICLE, history=list(history))
+        # A colour alone names no light: ask the shape, without a list of examples.
+        for question in ('지금 계기판에 빨간 불 들어왔어', '이상해 무슨 불이 켜졌어'):
+            r = ask(question)
+            self.assertEqual((r['status'], r['missing_fields'], r['answer']),
+                             ('need_clarification', ['warning_light'], '어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요.'))
+        # The decline tool is overridden for a lit light ("지금" made the router think of a road judgement).
+        self.assertEqual(self.ask(picks('decline', kind='realtime'), question='지금 계기판에 빨간 불 들어왔어',
+                                  vehicle=VEHICLE)['status'], 'need_clarification')
+        # Shape given: ask the colour next, unless it was already said.
+        history = [{'role': 'user', 'content': '이상해 무슨 불이 켜졌어'},
+                   {'role': 'assistant', 'content': ask('이상해 무슨 불이 켜졌어')['answer']}]
+        r = ask('주전자 모양이야', history)
+        self.assertEqual((r['status'], r['missing_fields']), ('need_clarification', ['warning_light_color']))
+        history += [{'role': 'user', 'content': '주전자 모양이야'}, {'role': 'assistant', 'content': r['answer']}]
+        # Colour given: the whole exchange is answered as the light itself.
         seen, asked = [], []
-        self.ask(picks('search_manual', query='경고등'), lambda s, u: asked.append(u) or '{}',
-                 lambda q, f: seen.append(q) or [{'chunk': {'chunk_id': 'x', 'text': 't', 'metadata': {}}, 'score': 1}],
-                 question='계기판에 주전자 모양 빨간 불이 켜졌어', vehicle=VEHICLE)
+        hit = [{'chunk': {'chunk_id': 'x', 'text': 't', 'metadata': {}}, 'score': 1}]
+        self.ask(manual, lambda s, u: asked.append(u) or '{}', lambda q, f: seen.append(q) or hit,
+                 question='빨간색이야', vehicle=VEHICLE, history=history)
+        self.assertTrue(seen[0].startswith('이상해 무슨 불이 켜졌어 주전자 모양이야 빨간색이야'))
         self.assertIn('엔진 오일 압력 경고등', seen[0])
-        self.assertIn('주전자 = 엔진 오일 압력 경고등', asked[0])
-        # A light named outside the icon table is searched, not questioned.
-        self.ask(picks('search_manual', query='냉각수'), lambda s, u: '{}', lambda q, f: seen.append(q) or [],
-                 question='냉각수 경고등이 켜지면?', vehicle=VEHICLE)
-        self.assertEqual(len(seen), 2)
+        self.assertTrue(json.loads(asked[0])['question'].startswith('엔진 오일 압력 경고등이 빨간색으로 켜졌어요.'))
+        # Colour said up front, or "모르겠어": no colour question.
+        self.ask(manual, lambda s, u: '{}', lambda q, f: seen.append(q) or [], question='주전자 모양 빨간 불이 켜졌어',
+                 vehicle=VEHICLE)
+        self.ask(manual, lambda s, u: '{}', lambda q, f: seen.append(q) or [], question='모르겠어', vehicle=VEHICLE,
+                 history=history)
+        self.assertEqual(len(seen), 3)
+        # A named light is answered at once; so is one outside the icon table.
+        self.ask(manual, lambda s, u: '{}', lambda q, f: seen.append(q) or [], question='엔진 경고등이 켜졌어',
+                 vehicle=VEHICLE)
+        self.ask(manual, lambda s, u: '{}', lambda q, f: seen.append(q) or [], question='냉각수 경고등이 켜지면?',
+                 vehicle=VEHICLE)
+        self.assertEqual(len(seen), 5)
+
+    def test_frontend_clarified_question_is_answered_without_asking_again(self):
+        manual = picks('search_manual', query='경고등')
+        seen = []
+        ask = lambda details: self.ask(manual, lambda s, u: '{}', lambda q, f: seen.append(q) or [],
+                                       question=f'이상해 무슨 불이 켜졌어\n추가 정보 — {details}', vehicle=VEHICLE)
+        # The frontend asks colour, shape and blinking itself, then sends one question.
+        for details, light in (('색: 빨간색; 모양: 주전자 모양; 점멸: 계속 켜져 있음', '엔진 오일 압력 경고등'),
+                               ('색: 노란색; 모양: 말발굽 모양; 점멸: 깜빡임', '저압 타이어 경고등')):
+            self.assertEqual(ask(details)['status'], 'not_found')  # searched (no hits in this fake), not asked
+            self.assertIn(light, seen[-1])
+        # A shape we have no entry for is searched as described, not asked for again.
+        self.assertEqual(ask('색: 빨간색; 모양: 온도계 모양')['status'], 'not_found')
+        # "다른 색이에요" answered the colour question; it is not asked again.
+        r = self.ask(manual, lambda s, u: '{}', lambda q, f: seen.append(q) or [], vehicle=VEHICLE,
+                     question='이상해 무슨 불이 켜졌어\n추가 정보 — 모양: 주전자 모양\n확인 질문: 불빛이 어떤 색인가요?\n사용자 답변: 다른 색이에요')
+        self.assertEqual(r['status'], 'not_found')
+
+    def test_colour_unlike_the_legal_colour_adds_a_note(self):
+        chunk = {'chunk_id': 'x', 'text': '엔진 오일 압력 경고등은 엔진 오일이 부족하면 켜집니다.',
+                 'metadata': {'title': '설명서', 'section': '경고등', 'source_url': 'u'}}
+        answer = lambda s, u: json.dumps({'supported': True}) if s == VERIFY_SYSTEM else json.dumps(
+            {'status': 'answered', 'answer_text': '무슨 뜻: 오일이 부족해요.', 'speech_text': '오일을 확인하세요.',
+             'missing_terms': [], 'quotes': [{'chunk_id': 'x', 'quote': '엔진 오일 압력 경고등은 엔진 오일이 부족하면 켜집니다.'}]})
+        r = self.ask(picks('search_manual', query='경고등'), answer, lambda q, f: [{'chunk': chunk, 'score': 1}],
+                     question='주전자 모양 노란 불이 켜졌어', vehicle=VEHICLE)
+        self.assertIn('법에서 빨간색으로 정한 경고등', r['answer'])
+        self.assertEqual(r['sources'][-1]['page'], '별표 2')
+
+    def test_signal_rows_not_asked_about_are_left_out(self):
+        from chageun_ai.agent import focus_signal_rows
+        row = lambda title: {'chunk': {'chunk_id': title, 'text': title,
+                                       'metadata': {'doc_id': 'road-traffic-act-rule-appendix-2', 'article_title': title}}}
+        hits = [row('차량신호등 황색의등화'), row('차량신호등 황색등화의점멸'), row('차량신호등 황색화살표등화의점멸'),
+                row('버스신호등 황색등화의점멸'), {'chunk': {'chunk_id': 'law', 'text': '', 'metadata': {'doc_id': 'act'}}}]
+        ids = lambda question: [h['chunk']['chunk_id'] for h in focus_signal_rows(question, hits)]
+        self.assertEqual(ids('황색 신호가 깜빡이면? 점멸'), ['차량신호등 황색등화의점멸', 'law'])
+        self.assertEqual(ids('노란불이면 어떻게 해? 황색의 등화'), ['차량신호등 황색의등화', 'law'])
+        self.assertEqual(ids('녹색 화살표면?'), [h['chunk']['chunk_id'] for h in hits])  # nothing fits: unchanged
+
+    def test_follow_up_question_is_routed_with_the_previous_one(self):
+        routed = []
+        choose = lambda system, question, tools: routed.append(question) or ('decline', {'kind': 'unrelated'})
+        self.ask(choose, question='그럼 가혹조건은 뭐야?', history=[
+            {'role': 'user', 'content': '엔진오일 교환 기준 알려줘'}, {'role': 'assistant', 'content': '기준이 달라요.'}])
+        sent = json.loads(routed[0])
+        self.assertEqual((sent['question'], sent['history'][0]['content']), ('그럼 가혹조건은 뭐야?', '엔진오일 교환 기준 알려줘'))
 
     def test_law_search_cites_article_and_refusal_asks_review(self):
         chunks, _ = chunk_law_pages(LAW, ['제5조(가상 규칙) ① 모든 운전자는 가상 교차로에서 일시정지하여야 한다.'], 'h')
         seen = []
         retrieve = lambda query, filters: seen.append((query, filters)) or [{'chunk': chunks[0], 'score': 1}]
-        good = lambda s, u: json.dumps({'status': 'answered', 'answer_text': '일시정지해야 해요.', 'speech_text': '멈춰요.',
+        good = lambda s, u: json.dumps({'supported': True}) if s == VERIFY_SYSTEM else json.dumps({'status': 'answered', 'answer_text': '일시정지해야 해요.', 'speech_text': '멈춰요.',
                                         'missing_terms': [], 'quotes': [{'chunk_id': chunks[0]['chunk_id'],
                                                                          'quote': '모든 운전자는 가상 교차로에서 일시정지하여야 한다.'}]})
         r = self.ask(picks('search_law', query='교차로 일시정지'), good, retrieve)
@@ -89,6 +189,63 @@ class AgentTests(unittest.TestCase):
             params = t['function']['parameters']
             self.assertFalse(params['additionalProperties'])
             self.assertEqual(set(params['required']), set(params['properties']))
+
+    def test_seat_heater_slang_keeps_original_question_and_adds_manual_term(self):
+        seen, asked = [], []
+        self.ask(picks('search_manual', query='열선 시트'), lambda s, u: asked.append(u) or '{}',
+                 lambda q, f: seen.append(q) or [{'chunk': {'chunk_id': 'x', 'text': 't', 'metadata': {}}, 'score': 1}],
+                 question='엉따 어떻게 켜?\n추가 정보 — 좌석: 운전석', vehicle=VEHICLE)
+        self.assertIn('열선 시트', seen[0])
+        self.assertIn('엉따 = 열선 시트', asked[0])
+        self.assertIn('좌석: 운전석', asked[0])
+
+    def test_followup_uses_only_recent_session_turns_for_routing_and_grounding(self):
+        chunks, _ = chunk_law_pages(LAW, ['제5조(가상 규칙) ① 가상 교차로에서는 일시정지하여야 한다.'], 'h')
+        history = [{'role': 'user', 'content': f'이전 질문 {i}'} for i in range(8)]
+        history[-1] = {'role': 'user', 'content': '가상 교차로의 규칙은?'}
+        routed, retrieved, generated = [], [], []
+        def choose(system, question, tools):
+            routed.append(json.loads(question))
+            return 'search_law', {'query': '가상 교차로 일시정지'}
+        def generate(system, question):
+            if system == VERIFY_SYSTEM:
+                return json.dumps({'supported': True})
+            generated.append(json.loads(question))
+            return json.dumps({'status': 'answered', 'answer_text': '일시정지해야 해요.',
+                               'speech_text': '가상 교차로에서는 일시정지해야 해요.', 'missing_terms': [],
+                               'quotes': [{'chunk_id': chunks[0]['chunk_id'], 'quote': '가상 교차로에서는 일시정지하여야 한다.'}]})
+        def retrieve(query, filters):
+            retrieved.append(query)
+            return [{'chunk': chunks[0], 'score': 1}]
+        result = self.ask(choose, generate, retrieve,
+                          question='그럼 뭘 해야 해?', vehicle=VEHICLE, history=history)
+        self.assertEqual(result['status'], 'answered')
+        self.assertEqual(routed[0]['question'], '그럼 뭘 해야 해?')
+        self.assertEqual(routed[0]['history'], history[-6:])
+        self.assertEqual(routed[0]['selected_vehicle'], '기아 K5')
+        self.assertEqual(retrieved, ['가상 교차로 일시정지'])
+        self.assertEqual(generated[0]['history'], history[-6:])
+        self.assertEqual(generated[0]['question'], '그럼 뭘 해야 해?')
+
+    def test_session_history_cannot_supply_a_citation_or_override_selected_vehicle(self):
+        history = [{'role': 'assistant', 'content': '예전 답변의 내용은 근거가 아니다.'}]
+        seen = []
+        self.ask(picks('search_manual', query='열선 시트'), lambda s, u: '{}',
+                 lambda q, f: seen.append(f) or [], question='그건 어떻게 써?', vehicle=VEHICLE, history=history)
+        self.assertEqual(seen, [{'kind': 'manual', **CAR}])
+        chunks, _ = chunk_law_pages(LAW, ['제5조(가상 규칙) 가상 내용이다.'], 'h')
+        fabricated = lambda s, u: json.dumps({'status': 'answered', 'answer_text': '과거 답', 'speech_text': '과거 답',
+                                              'missing_terms': [], 'quotes': [{'chunk_id': 'from_history', 'quote': history[0]['content']}]})
+        result = self.ask(picks('search_law', query='가상'), fabricated,
+                          lambda q, f: [{'chunk': chunks[0], 'score': 1}], history=history)
+        self.assertEqual(result['status'], 'not_found')
+        self.assertEqual(result['sources'], [])
+
+    def test_unclear_followup_requests_clarification_with_existing_response_fields(self):
+        result = self.ask(picks('ask_missing_detail', missing_detail='symptom', question='어떤 부분이 궁금하신가요?'), question='뭐가 문제야?')
+        self.assertEqual((result['status'], result['missing_fields']), ('need_clarification', ['question']))
+        self.assertEqual(result['answer'], '어떤 부분이 궁금하신가요?')
+        self.assertEqual(result['sources'], [])
 
 
 if __name__ == '__main__':

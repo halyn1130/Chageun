@@ -1,0 +1,538 @@
+[
+  {
+    "manufacturer": "기아",
+    "model": "K5",
+    "model_year": "2026",
+    "powertrain": "G2.0",
+    "items": {
+      "engine_oil": {
+        "normal": {
+          "km": 8000,
+          "months": 12,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "c899db930ecd587d2911f2c1"
+          },
+          "manual_km": 15000,
+          "basis": "user_setting"
+        },
+        "severe": {
+          "km": 7500,
+          "months": 6,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "d8f76e07676318831ffd6574"
+          }
+        }
+      },
+      "oil_filter": {
+        "normal": {
+          "km": 8000,
+          "months": 12,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "c899db930ecd587d2911f2c1"
+          },
+          "manual_km": 15000,
+          "basis": "user_setting"
+        },
+        "severe": {
+          "km": 7500,
+          "months": 6,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "d8f76e07676318831ffd6574"
+          }
+        }
+      },
+      "cabin_filter": {
+        "normal": {
+          "km": 15000,
+          "months": 12,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "f4430e9bd7b6820361274484"
+          }
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "257b88db5aec7bc16db40581"
+          },
+          "note": "가혹 조건에서는 필터 상태를 수시로 점검하고 필요시 교체하세요."
+        }
+      },
+      "brake_fluid": {
+        "normal": {
+          "km": 50000,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "8f3d4f327f0df96628dc4593"
+          }
+        },
+        "severe": {
+          "km": 50000,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "8f3d4f327f0df96628dc4593"
+          }
+        }
+      },
+      "coolant": {
+        "normal": {
+          "km": 40000,
+          "months": 24,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "8f3d4f327f0df96628dc4593"
+          },
+          "note": "최초 교환은 200,000km 또는 10년, 최초 교환 이후에는 40,000km 또는 24개월입니다. 아래 남은 기간·거리는 등록된 교환 기록 이후 기준이에요.",
+          "initial_km": 200000,
+          "initial_months": 120
+        },
+        "severe": {
+          "km": 40000,
+          "months": 24,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "8f3d4f327f0df96628dc4593"
+          },
+          "note": "최초 교환은 200,000km 또는 10년, 최초 교환 이후에는 40,000km 또는 24개월입니다. 아래 남은 기간·거리는 등록된 교환 기록 이후 기준이에요.",
+          "initial_km": 200000,
+          "initial_months": 120
+        }
+      },
+      "air_filter": {
+        "normal": {
+          "km": 40000,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "8f3d4f327f0df96628dc4593"
+          },
+          "note": "매 10,000km 점검, 매 40,000km 교체. 먼지가 많은 환경에서는 더 자주 점검하세요.",
+          "inspection_km": 10000
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "d8f76e07676318831ffd6574"
+          },
+          "note": "먼지가 많거나 비포장도로를 운행하면 수시 점검하고 상태에 따라 교체하세요."
+        }
+      },
+      "tire": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 타이어 및 휠 점검 > 타이어의 교체",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "1615daaa1306b08924bd6042"
+          },
+          "note": "마모 한도 표시밴드가 드러나거나 이상 마모가 있으면 교체하세요. 홈 깊이 기준은 일반도로 1.6mm 이하, 고속도로 2.4mm 이하입니다. 타이어 위치 교환은 새 타이어 교체와 달라요. 제조일로부터 6년이 지난 타이어는 교체 대상이며, 교환일이 아닌 제조일 확인이 필요해요.",
+          "mode": "condition",
+          "age_source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 타이어 및 휠 점검 > 타이어 측면 표시",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "fd8c80d5ce3aafdde9028962"
+          }
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 타이어 및 휠 점검 > 타이어의 교체",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "1615daaa1306b08924bd6042"
+          },
+          "note": "마모 한도 표시밴드가 드러나거나 이상 마모가 있으면 교체하세요. 홈 깊이 기준은 일반도로 1.6mm 이하, 고속도로 2.4mm 이하입니다. 타이어 위치 교환은 새 타이어 교체와 달라요. 제조일로부터 6년이 지난 타이어는 교체 대상이며, 교환일이 아닌 제조일 확인이 필요해요.",
+          "mode": "condition",
+          "age_source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 타이어 및 휠 점검 > 타이어 측면 표시",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "fd8c80d5ce3aafdde9028962"
+          }
+        }
+      },
+      "brake_pad": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "8f3d4f327f0df96628dc4593"
+          },
+          "note": "패드와 디스크 상태를 점검하고 필요시 교체하세요. 주행거리만으로 남은 수명을 계산하지 않아요.",
+          "mode": "condition"
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 정기 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "d8f76e07676318831ffd6574"
+          },
+          "note": "가혹 조건에서는 브레이크 디스크와 패드를 수시로 점검하고 상태에 따라 교체하세요.",
+          "mode": "condition"
+        }
+      },
+      "wiper": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 와이퍼 블레이드 점검 > 블레이드 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "93ec7890aefcbae136dbb334"
+          },
+          "note": "유리와 블레이드를 세척한 뒤에도 줄무늬·소음·떨림·닦임 불량이 남으면 정비소에 점검을 의뢰하세요.",
+          "mode": "condition"
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 와이퍼 블레이드 점검 > 블레이드 점검",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "93ec7890aefcbae136dbb334"
+          },
+          "note": "유리와 블레이드를 세척한 뒤에도 줄무늬·소음·떨림·닦임 불량이 남으면 정비소에 점검을 의뢰하세요.",
+          "mode": "condition"
+        }
+      },
+      "battery": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 배터리 점검 > 배터리 관리 요령",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "85e1a4caba9292d783caf8c1"
+          },
+          "note": "배터리와 단자 상태를 점검하세요. 교환한 지 지난 시간만으로 배터리 수명이나 교체 필요 여부를 판단하지 않아요.",
+          "mode": "condition"
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "기아 K5 (DL3) 2026 사용 설명서",
+            "page": "정기 점검 > 배터리 점검 > 배터리 관리 요령",
+            "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+            "chunk_id": "85e1a4caba9292d783caf8c1"
+          },
+          "note": "배터리와 단자 상태를 점검하세요. 교환한 지 지난 시간만으로 배터리 수명이나 교체 필요 여부를 판단하지 않아요.",
+          "mode": "condition"
+        }
+      }
+    }
+  },
+  {
+    "manufacturer": "현대",
+    "model": "더 뉴 아반떼",
+    "model_year": "2026",
+    "powertrain": "G1.6",
+    "items": {
+      "engine_oil": {
+        "normal": {
+          "km": 15000,
+          "months": 12,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-8",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "df70ecd460c6edb2a591bd6e"
+          }
+        },
+        "severe": {
+          "km": 7500,
+          "months": 6,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-13",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "1ef683fb4f171bef7f75d60a"
+          }
+        }
+      },
+      "oil_filter": {
+        "normal": {
+          "km": 15000,
+          "months": 12,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-8",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "df70ecd460c6edb2a591bd6e"
+          }
+        },
+        "severe": {
+          "km": 7500,
+          "months": 6,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-13",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "1ef683fb4f171bef7f75d60a"
+          }
+        }
+      },
+      "cabin_filter": {
+        "normal": {
+          "km": null,
+          "months": 12,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-12",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "c6f2ca278c11727e53acb72c"
+          }
+        },
+        "severe": {
+          "km": null,
+          "months": 12,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-13",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "1ef683fb4f171bef7f75d60a"
+          },
+          "note": "먼지가 많은 환경에서는 필터 상태도 자주 확인하세요."
+        }
+      },
+      "brake_fluid": {
+        "normal": {
+          "km": 50000,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-11",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "43eb86a7d1b8cd071a0078bb"
+          }
+        },
+        "severe": {
+          "km": 50000,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-11",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "43eb86a7d1b8cd071a0078bb"
+          }
+        }
+      },
+      "coolant": {
+        "normal": {
+          "km": 40000,
+          "months": 24,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-11",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "43eb86a7d1b8cd071a0078bb"
+          },
+          "note": "최초 교환은 200,000km 또는 10년, 최초 교환 이후에는 40,000km 또는 24개월입니다. 아래 남은 기간·거리는 등록된 교환 기록 이후 기준이에요.",
+          "initial_km": 200000,
+          "initial_months": 120
+        },
+        "severe": {
+          "km": 40000,
+          "months": 24,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-11",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "43eb86a7d1b8cd071a0078bb"
+          },
+          "note": "최초 교환은 200,000km 또는 10년, 최초 교환 이후에는 40,000km 또는 24개월입니다. 아래 남은 기간·거리는 등록된 교환 기록 이후 기준이에요.",
+          "initial_km": 200000,
+          "initial_months": 120
+        }
+      },
+      "air_filter": {
+        "normal": {
+          "km": 40000,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-8",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "df70ecd460c6edb2a591bd6e"
+          },
+          "note": "매 10,000km 점검, 매 40,000km 교체. 먼지가 많은 환경에서는 더 자주 점검하세요.",
+          "inspection_km": 10000
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-13",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "1ef683fb4f171bef7f75d60a"
+          },
+          "note": "먼지가 많거나 비포장도로를 운행하면 수시 점검하고 상태에 따라 교체하세요."
+        }
+      },
+      "tire": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-29",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "dcb94deb4077d2acc53a166f"
+          },
+          "note": "마모 한도 표시밴드가 드러나거나 이상 마모가 있으면 교체하세요. 홈 깊이 기준은 일반도로 1.6mm 이하, 고속도로 2.4mm 이하입니다. 타이어 위치 교환은 새 타이어 교체와 달라요. 제조일로부터 6년이 지난 타이어는 교체 대상이며, 교환일이 아닌 제조일 확인이 필요해요.",
+          "mode": "condition",
+          "age_source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-31",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "158c12448d016bca8cc45a80"
+          }
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-29",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "dcb94deb4077d2acc53a166f"
+          },
+          "note": "마모 한도 표시밴드가 드러나거나 이상 마모가 있으면 교체하세요. 홈 깊이 기준은 일반도로 1.6mm 이하, 고속도로 2.4mm 이하입니다. 타이어 위치 교환은 새 타이어 교체와 달라요. 제조일로부터 6년이 지난 타이어는 교체 대상이며, 교환일이 아닌 제조일 확인이 필요해요.",
+          "mode": "condition",
+          "age_source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-31",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "158c12448d016bca8cc45a80"
+          }
+        }
+      },
+      "brake_pad": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-11",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "43eb86a7d1b8cd071a0078bb"
+          },
+          "note": "패드와 디스크 상태를 점검하고 필요시 교체하세요. 주행거리만으로 남은 수명을 계산하지 않아요.",
+          "mode": "condition"
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-13",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "1ef683fb4f171bef7f75d60a"
+          },
+          "note": "가혹 조건에서는 브레이크 디스크와 패드를 수시로 점검하고 상태에 따라 교체하세요.",
+          "mode": "condition"
+        }
+      },
+      "wiper": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-23",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "5ee3d8040273b0a869ed9c28"
+          },
+          "note": "유리와 블레이드를 세척한 뒤에도 줄무늬·소음·떨림·닦임 불량이 남으면 정비소에 점검을 의뢰하세요.",
+          "mode": "condition"
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-23",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "5ee3d8040273b0a869ed9c28"
+          },
+          "note": "유리와 블레이드를 세척한 뒤에도 줄무늬·소음·떨림·닦임 불량이 남으면 정비소에 점검을 의뢰하세요.",
+          "mode": "condition"
+        }
+      },
+      "battery": {
+        "normal": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-26",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "518f52ce29fa008491bc9ba8"
+          },
+          "note": "배터리와 단자 상태를 점검하세요. 교환한 지 지난 시간만으로 배터리 수명이나 교체 필요 여부를 판단하지 않아요.",
+          "mode": "condition"
+        },
+        "severe": {
+          "km": null,
+          "months": null,
+          "source": {
+            "title": "현대 아반떼 (CN7) 2026 취급설명서",
+            "page": "9-26",
+            "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+            "chunk_id": "518f52ce29fa008491bc9ba8"
+          },
+          "note": "배터리와 단자 상태를 점검하세요. 교환한 지 지난 시간만으로 배터리 수명이나 교체 필요 여부를 판단하지 않아요.",
+          "mode": "condition"
+        }
+      }
+    }
+  }
+]

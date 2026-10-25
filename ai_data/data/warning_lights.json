@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "계기판 경고등·표시등 사전. name은 대표 이름, aliases는 K5(DL3 2026)·디 올 뉴 아반떼(CN7 2026) 설명서에 실린 다른 표기, shapes는 운전자가 아이콘을 묘사하는 말. 청크 메타데이터(lights)와 질문 분류(agent.WARNING_LIGHTS)가 함께 쓴다.",
+  "description": "계기판 경고등·표시등 사전. name은 대표 이름, aliases는 K5(DL3 2026)·더 뉴 아반떼(CN7 2026) 설명서에 실린 다른 표기, shapes는 운전자가 아이콘을 묘사하는 말. 청크 메타데이터(lights)와 질문 분류(agent.WARNING_LIGHTS)가 함께 쓴다. legal은 자동차규칙 [별표 2]의 해당 항목과 법정 식별색상(실제 차량은 제작사 사양에 따라 다를 수 있어 후보를 좁힐 때만 쓴다), shape_label은 되물을 때 보여 줄 모양 설명.",
   "lights": [
     {
       "id": "engine_oil_pressure",
@@ -10,8 +10,16 @@
         "주전자",
         "오일캔",
         "오일경고등",
-        "엔진오일경고등"
-      ]
+        "엔진오일경고등",
+        "오일모양"
+      ],
+      "legal": {
+        "item": "오일압력자동표시기",
+        "colors": [
+          "적색"
+        ]
+      },
+      "shape_label": "주전자 모양"
     },
     {
       "id": "charging",
@@ -20,7 +28,14 @@
       "shapes": [
         "배터리",
         "충전경고등"
-      ]
+      ],
+      "legal": {
+        "item": "충전자동표시기",
+        "colors": [
+          "적색"
+        ]
+      },
+      "shape_label": "배터리 모양"
     },
     {
       "id": "engine",
@@ -29,7 +44,14 @@
       "shapes": [
         "엔진모양",
         "엔진경고등"
-      ]
+      ],
+      "legal": {
+        "item": "고장자동표시기(engine malfunction)",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "엔진 모양"
     },
     {
       "id": "brake",
@@ -40,7 +62,15 @@
         "동그라미안에느낌표",
         "BRAKE",
         "브레이크경고등"
-      ]
+      ],
+      "legal": {
+        "item": "제동장치고장자동표시기·주차제동장치자동표시기",
+        "colors": [
+          "적색",
+          "황색"
+        ]
+      },
+      "shape_label": "원 안에 느낌표나 BRAKE 글자"
     },
     {
       "id": "abs",
@@ -48,7 +78,14 @@
       "aliases": [],
       "shapes": [
         "ABS"
-      ]
+      ],
+      "legal": {
+        "item": "ABS고장자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "원 안에 ABS 글자"
     },
     {
       "id": "airbag",
@@ -56,7 +93,15 @@
       "aliases": [],
       "shapes": [
         "에어백"
-      ]
+      ],
+      "legal": {
+        "item": "에어백고장자동표시기",
+        "colors": [
+          "적색",
+          "황색"
+        ]
+      },
+      "shape_label": "앉은 사람 앞 에어백 모양"
     },
     {
       "id": "seatbelt",
@@ -68,7 +113,14 @@
       "shapes": [
         "안전벨트",
         "벨트"
-      ]
+      ],
+      "legal": {
+        "item": "안전띠자동표시기",
+        "colors": [
+          "적색"
+        ]
+      },
+      "shape_label": "안전벨트 맨 사람 모양"
     },
     {
       "id": "power_steering",
@@ -91,8 +143,16 @@
       "shapes": [
         "말굽",
         "타이어",
-        "TPMS"
-      ]
+        "TPMS",
+        "말발굽"
+      ],
+      "legal": {
+        "item": "타이어공기압경고장치 자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "말굽 안에 느낌표"
     },
     {
       "id": "master_warning",
@@ -110,7 +170,14 @@
         "주유기",
         "연료",
         "기름"
-      ]
+      ],
+      "legal": {
+        "item": "연료량자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "주유기 모양"
     },
     {
       "id": "epb",
@@ -171,7 +238,14 @@
         "ESC",
         "미끄러지",
         "구불구불"
-      ]
+      ],
+      "legal": {
+        "item": "자동차안정성제어장치 기능고장 자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "미끄러지는 차 모양"
     },
     {
       "id": "esc_off",
@@ -179,7 +253,14 @@
       "aliases": [
         "ESC 작동 정지 표시등"
       ],
-      "shapes": []
+      "shapes": [],
+      "legal": {
+        "item": "자동차안정성제어장치 기능정지 자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "미끄러지는 차와 OFF 글자"
     },
     {
       "id": "ebd",
@@ -298,5 +379,11 @@
       ],
       "shapes": []
     }
-  ]
+  ],
+  "legal_source": {
+    "doc_id": "vehicle-standards-rule-appendix-2",
+    "title": "자동차 및 자동차부품의 성능과 기준에 관한 규칙 [별표 2]",
+    "page": "별표 2",
+    "url": "https://www.law.go.kr/법령/자동차및자동차부품의성능과기준에관한규칙"
+  }
 }
