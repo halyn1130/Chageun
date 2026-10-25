@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
 import GuideIcon from './GuideIcon.vue'
+import { remainingLabel } from '../maintenanceRules.js'
 import { usageState } from '../maintenanceUsage.js'
 const props = defineProps({ usage: { type: Object, required: true }, disabled: Boolean })
 defineEmits(['select'])
@@ -19,10 +20,12 @@ const emptyLabel = computed(() => ({ loading: '기록을 확인하고 있어요'
     <span class="maintenance-card-body">
       <span class="maintenance-card-title"><strong>{{ usage.item.label }}</strong><span class="maintenance-state">{{ state.label }}</span></span>
       <span v-if="usage.status === 'recorded'" class="maintenance-metrics">
-        <span class="maintenance-metric"><span class="maintenance-metric-reading"><span class="maintenance-metric-label">주행</span><strong>{{ usage.distance == null ? '미입력' : number(usage.distance) }}</strong><span>{{ usage.interval ? `/ ${number(usage.interval.km)} km` : 'km' }}</span></span><span v-if="usage.distanceRatio != null" class="maintenance-meter"><i :style="{ width: `${usage.distanceRatio * 100}%` }" /></span><small v-else>교환 기준 확인 필요</small></span>
-        <span class="maintenance-metric"><span class="maintenance-metric-reading"><span class="maintenance-metric-label">기간</span><strong>{{ usage.months }}</strong><span>{{ usage.interval ? `/ ${usage.interval.months}개월` : '개월 경과' }}</span></span><span v-if="usage.timeRatio != null" class="maintenance-meter"><i :style="{ width: `${usage.timeRatio * 100}%` }" /></span><small v-else>{{ usage.last.performed_at.replaceAll('-', '.') }} 교환</small></span>
+        <span class="maintenance-metric"><span class="maintenance-metric-reading"><span class="maintenance-metric-label">주행</span><strong>{{ usage.distance == null ? '미입력' : number(usage.distance) }}</strong><span>{{ usage.interval?.km ? `/ ${number(usage.interval.km)} km` : 'km' }}</span></span><span v-if="usage.distanceRatio != null" class="maintenance-meter"><i :style="{ width: `${usage.distanceRatio * 100}%` }" /></span><small v-else>{{ usage.conditionBased ? '상태에 따라 교환' : usage.interval?.months ? '기간 기준 관리' : '교환 기준 확인 필요' }}</small></span>
+        <span class="maintenance-metric"><span class="maintenance-metric-reading"><span class="maintenance-metric-label">기간</span><strong>{{ usage.months }}</strong><span>{{ usage.interval?.months ? `/ ${usage.interval.months}개월` : '개월 경과' }}</span></span><span v-if="usage.timeRatio != null" class="maintenance-meter"><i :style="{ width: `${usage.timeRatio * 100}%` }" /></span><small v-else>{{ usage.last.performed_at.replaceAll('-', '.') }} 교환</small></span>
       </span>
-      <span v-else class="maintenance-empty-copy">{{ emptyLabel }}</span>
+      <small v-if="usage.intervalSource === 'user_setting'" class="usage-caption">사용자 설정 기준</small>
+      <span v-if="remainingLabel(usage)" class="usage-remaining">{{ remainingLabel(usage) }}</span>
+      <span v-if="usage.status !== 'recorded'" class="maintenance-empty-copy">{{ emptyLabel }}</span>
     </span>
     <ChevronRight class="maintenance-chevron" :size="22" />
   </button>
