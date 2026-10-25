@@ -77,6 +77,18 @@ services:
       - ../ai_data/data/indexes:/app/data/indexes:ro
     # 외부 포트 없음 — api-server만 compose 내부에서 http://rag:8001 로 호출한다
 
+  frontend:                     # Vue 빌드본 + nginx 프록시 (/auth · /api · /voice → 각 서버, frontend/nginx.conf)
+    build:
+      context: ../frontend
+      additional_contexts:
+        chageun_ai: ../ai_data/chageun_ai   # 정비 규칙 JSON을 프론트 빌드에 포함
+    ports:
+      - "5174:80"               # 개발 서버(npm run dev)는 5173 그대로 쓸 수 있다
+    depends_on:
+      - auth-server
+      - api-server
+      - voice-ai
+
   test-page:                    # 팀 확인용 테스트 페이지 (tools/test-page) — 로그인 · 내 차 · 대화 · 음성
     image: nginx:1.27-alpine
     volumes:
