@@ -399,6 +399,44 @@ def tag_manual_chunk(section, body, lights):
             'content_role': 'summary' if section.startswith('사용 설명서(요약본)') else 'detail'}
 
 
+DANGLING_END = re.compile(r'[.!?다요오)\]」:]$')
+
+
+def is_dangling_heading(line):
+    """A short title-like last line ("엔진 경고등", "경고", "주의") that would be cut off from its body.
+
+    Table rows (○ ●, footnote marks like *2) are not headings: they are complete on their own line.
+    """
+    line = line.strip()
+    return bool(line) and len(line) <= 30 and not DANGLING_END.search(line) and not re.search(r'[○●]|\*\d', line)
+
+
+def carry_dangling_headings(chunks, lights=None):
+    """Moves a heading stranded at the end of a manual chunk to the start of its continuation chunk.
+
+    For an index built before chunk_manual_pages kept headings with their text: chunk ids stay the same
+    (evaluation sets point at them), only text and retrieval tags change. Returns (chunks, changed ids).
+    """
+    lights = load_warning_lights() if lights is None else lights
+    out = [dict(c, metadata=dict(c['metadata'])) for c in chunks]
+    changed = []
+    for a, b in zip(out, out[1:]):
+        if (a['metadata'].get('kind') != 'manual' or a['metadata'].get('doc_id') != b['metadata'].get('doc_id')
+                or a['metadata'].get('section') != b['metadata'].get('section')):
+            continue
+        b_head, _, b_body = b['text'].partition('\n')
+        if not b_head.endswith(' (계속)'):
+            continue
+        kept, _, last = a['text'].rpartition('\n')
+        if '\n' not in kept or not is_dangling_heading(last):  # never leave a chunk with only its title line
+            continue
+        a['text'], b['text'] = kept, f'{b_head}\n{last}\n{b_body}'
+        for c in (a, b):
+            c['metadata'].update(tag_manual_chunk(c['metadata']['section'], c['text'].partition('\n')[2], lights))
+        changed += [a['chunk_id'], b['chunk_id']]
+    return out, list(dict.fromkeys(changed))
+
+
 def chunk_manual_pages(doc, pages, file_hash, size=1000, lights=None):
     validate_document(doc)
     sections = manual_sections(pages)
@@ -411,8 +449,13 @@ def chunk_manual_pages(doc, pages, file_hash, size=1000, lights=None):
         parts, current = [], ''
         for line in s['lines']:
             if current and len(current) + len(line) > size:
-                parts.append(current)
-                current = ''
+                kept, _, last = current.rpartition('\n')
+                if kept and is_dangling_heading(last):  # a heading belongs with the text it introduces
+                    parts.append(kept)
+                    current = last
+                else:
+                    parts.append(current)
+                    current = ''
             current += ('\n' if current else '') + line
         if parts and len(current) < size // 5:  # a short tail reads better with the text it ends
             parts[-1] += '\n' + current

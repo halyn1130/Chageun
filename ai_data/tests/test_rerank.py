@@ -68,5 +68,15 @@ class EngineRetrieveTests(unittest.TestCase):
         self.assertEqual(ids(result), ['c14', 'c13', 'c0', 'c1', 'c2', 'c3', 'c4', 'c5'])
 
 
+class EngineVerifyModelTests(unittest.TestCase):
+    def test_verify_prompt_goes_to_the_verify_model_and_answers_to_the_answer_model(self):
+        engine = server.Engine.__new__(server.Engine)
+        engine.verify_llm = mock.Mock(invoke=lambda m: mock.Mock(content='verify'))
+        engine.answer_llm = mock.Mock(invoke=lambda m: mock.Mock(content='answer'))
+        engine.json_llm = mock.Mock(invoke=lambda m: mock.Mock(content='router-json'))
+        self.assertEqual(engine.generate(server.VERIFY_SYSTEM, '{}'), 'verify')
+        self.assertEqual(engine.generate('answer system', '{}'), 'answer')
+
+
 if __name__ == '__main__':
     unittest.main()

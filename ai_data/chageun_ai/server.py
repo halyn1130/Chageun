@@ -71,11 +71,15 @@ class RagRequest(BaseModel):
 class Engine:
     """Loads the models once; the index path and its embedding model come from the index manifest.
 
-    llm_model routes questions and verifies answers; answer_model (default: the same) writes the answers.
-    A stronger writer keeps a rule's exceptions straight, while a stronger verifier rejected correct answers.
+    llm_model routes questions and verifies answers; answer_model (default: the same) writes the answers;
+    verify_model (default: llm_model) checks them. gpt-4o-mini as verifier rejected answers copied almost
+    word for word from the manual (2026-10-25: engine/brake lights 0/3), gpt-4o passed them 3/3.
+    (An earlier note found the opposite - "a stronger verifier rejected correct answers" - so the verifier
+    must also be checked on wrong answers; see evaluation/experiments/README section 6.)
+    A stronger writer keeps a rule's exceptions straight.
     """
 
-    def __init__(self, index, llm_model, answer_model=None):
+    def __init__(self, index, llm_model, answer_model=None, verify_model=None):
         from langchain_openai import ChatOpenAI, OpenAIEmbeddings
         self.index = Path(index)
         manifest = read_json(self.index / 'manifest.json')
@@ -86,6 +90,8 @@ class Engine:
         # Output length is most of the latency (about 75 tokens a second); a short answer also suits driving.
         # The cap stops a runaway answer; a cut-off JSON fails closed like any invalid answer.
         self.answer_llm = make(answer_model or llm_model, max_tokens=500).bind(response_format={'type': 'json_object'})
+        self.verify_llm = (make(verify_model).bind(response_format={'type': 'json_object'})
+                           if verify_model and verify_model != llm_model else self.json_llm)
         # Reranking is optional: a short timeout and no retry, so a slow call falls back to the search order
         # well inside the 30 s request budget instead of spending it.
         self.rerank_llm = ChatOpenAI(model=llm_model, temperature=0, timeout=8, max_retries=0).bind(
@@ -113,7 +119,7 @@ class Engine:
         return ranked
 
     def generate(self, system, user):
-        llm = self.json_llm if system == VERIFY_SYSTEM else self.answer_llm
+        llm = self.verify_llm if system == VERIFY_SYSTEM else self.answer_llm
         return llm.invoke([('system', system), ('human', user)]).content
 
     def ask(self, request):
@@ -128,7 +134,8 @@ def create_app(engine_factory=None, secret=None, timeout_s=None):
     async def lifespan(app):
         try:
             factory = engine_factory or (lambda: Engine(os.environ['RAG_INDEX'], os.getenv('RAG_LLM_MODEL', 'gpt-4o-mini'),
-                                                        os.getenv('RAG_ANSWER_MODEL') or None))
+                                                        os.getenv('RAG_ANSWER_MODEL') or None,
+                                                        os.getenv('RAG_VERIFY_MODEL') or None))
             app.state.engine = factory()
         except Exception:  # the server still starts so /health can report that it is not ready
             log.exception('index not ready')
