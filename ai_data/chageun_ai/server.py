@@ -7,6 +7,7 @@ import asyncio
 import contextlib
 import logging
 import os
+import time
 from pathlib import Path
 from typing import Literal
 import jwt
@@ -15,7 +16,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from .agent import rag_query
-from .core import read_json, search, VERIFY_SYSTEM
+from .core import read_json, rerank_hits, search, VERIFY_SYSTEM
 
 log = logging.getLogger('chageun.rag')
 
@@ -85,13 +86,31 @@ class Engine:
         # Output length is most of the latency (about 75 tokens a second); a short answer also suits driving.
         # The cap stops a runaway answer; a cut-off JSON fails closed like any invalid answer.
         self.answer_llm = make(answer_model or llm_model, max_tokens=500).bind(response_format={'type': 'json_object'})
+        # Reranking is optional: a short timeout and no retry, so a slow call falls back to the search order
+        # well inside the 30 s request budget instead of spending it.
+        self.rerank_llm = ChatOpenAI(model=llm_model, temperature=0, timeout=8, max_retries=0).bind(
+            response_format={'type': 'json_object'})
 
     def choose(self, system, question, tools):
         calls = self.llm.bind_tools(tools, tool_choice='required').invoke([('system', system), ('human', question)]).tool_calls
         return (calls[0]['name'], calls[0]['args']) if calls else None
 
+    TOP_K, RERANK_POOL = 8, 15
+
     def retrieve(self, query, filters):
-        return search(self.index, self.embedding.embed_query(query), filters, 8, query=query)
+        # RAG_RERANK=1: take 15 candidates and let the LLM put the passage that answers first
+        # (evaluation/experiments/exp03: MRR 0.52 -> 0.80~0.86, about +1 s). Off: the original top 8.
+        rerank = os.getenv('RAG_RERANK', '0') == '1'
+        hits = search(self.index, self.embedding.embed_query(query), filters,
+                      self.RERANK_POOL if rerank else self.TOP_K, query=query)
+        if not rerank:
+            return hits
+        started = time.perf_counter()
+        ranked = rerank_hits(query, hits, lambda system, user: self.rerank_llm.invoke(
+            [('system', system), ('human', user)]).content, keep=self.TOP_K)
+        log.info('rerank candidates=%d kept=%d ms=%d', len(hits), len(ranked),
+                 (time.perf_counter() - started) * 1000)
+        return ranked
 
     def generate(self, system, user):
         llm = self.json_llm if system == VERIFY_SYSTEM else self.answer_llm
