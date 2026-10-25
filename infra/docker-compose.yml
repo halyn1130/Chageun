@@ -70,7 +70,9 @@ services:
       dockerfile: ../infra/rag/Dockerfile
     env_file: ../.env           # JWT_SECRET · OPENAI_API_KEY
     environment:
-      RAG_INDEX: data/indexes/v13b-the-new-avante   # 사용할 인덱스 버전 (AI팀이 정한 것)
+      RAG_INDEX: data/indexes/v13c-headings   # 사용할 인덱스 버전 (v13b + 청크 끝 제목을 본문으로 옮김, scripts/carry_headings_index.py)
+      RAG_RERANK: "1"      # 검색 후보 15개를 LLM이 재정렬해 상위 8개 사용 (끄려면 "0", 질문당 약 +1초)
+      RAG_VERIFY_MODEL: gpt-4o   # 답변 검증만 gpt-4o (gpt-4o-mini는 근거 있는 답변도 탈락시킴, experiments/README 6절)
     volumes:
       - ../ai_data/data/indexes:/app/data/indexes:ro
     # 외부 포트 없음 — api-server만 compose 내부에서 http://rag:8001 로 호출한다
