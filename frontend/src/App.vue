@@ -20,15 +20,21 @@ import {
   Square,
   Volume2,
   Wrench,
+  Settings,
 } from 'lucide-vue-next'
+import VoiceSettings from './components/VoiceSettings.vue'
 import DialogSheet from './components/DialogSheet.vue'
 import VoiceControl from './components/VoiceControl.vue'
 import VoiceOrb from './components/VoiceOrb.vue'
 import DiagnosticView from './components/DiagnosticView.vue'
+import AnswerContent from './components/AnswerContent.vue'
+import { sourceLabel } from './answerSections.js'
 import WarningSymbol from './components/WarningSymbol.vue'
 import GuidanceMenu from './components/GuidanceMenu.vue'
 import BrandLogo from './components/BrandLogo.vue'
 import { createVoiceSession } from './voiceSession.js'
+import { createRemoteSpeech } from './remoteSpeech.js'
+import { getToken, api } from './api.js'
 import { spokenReply, isHomeCommand } from './spokenReply.js'
 import { contextualOptions } from './conversation.js'
 import { useChageun } from './composables/useChageun.js'
@@ -82,6 +88,8 @@ const {
   toggleTheme,
   returnHome,
   cancelQuestion,
+  canReturnToPreviousStep,
+  returnToPreviousStep,
   selectVehicle,
   saveCar,
   deleteCar,
@@ -108,6 +116,8 @@ const headerVehicle = computed(() =>
 )
 const diagnosticEntry = ref({})
 const diagnosticMode = ref('browse')
+const settingsOpen = ref(false)
+watch(user, () => { settingsOpen.value = false })
 const diagnosticVersion = ref(0)
 const vehicleIntroShown = ref(false)
 const guidedContext = ref(null)
@@ -120,6 +130,8 @@ const voiceState = ref({
 const composerVisible = computed(() => keyboardOpen.value || (hasConversation.value && (isMobile.value || !voiceState.value.active)))
 const voice = createVoiceSession({
   platform: window,
+  remoteSpeech: import.meta.env.VITE_TTS_PROVIDER === 'typecast'
+    ? createRemoteSpeech({ platform: window, getToken, getVoice: async signal => (await api('/settings/voice', { signal })).voice_id }) : null,
   onChange: (state) => {
     voiceState.value = state
   },
@@ -263,7 +275,7 @@ watch(screen, (next) => {
 watch(isMobile, mobile => {
   if (mobile && screen.value === 'diagnostics' && diagnosticMode.value === 'conversation') go('assistant')
 })
-watch([panel, carFormOpen, maintenanceFormOpen, authOpen], (values) => {
+watch([panel, carFormOpen, maintenanceFormOpen, authOpen, settingsOpen], (values) => {
   if (values.some(Boolean)) voice.stop()
 })
 function pauseOnHide() {
@@ -303,9 +315,11 @@ function switchAuthMode() {
 
 <template>
   <div class="chageun" :data-theme="theme">
+    <VoiceSettings v-if="settingsOpen" @close="settingsOpen = false" />
     <header class="app-header">
-      <BrandLogo />
+      <button class="brand-home" type="button" aria-label="차근 홈으로 돌아가기" @click="goHome"><BrandLogo /></button>
       <div class="header-actions">
+        <button class="icon-button" aria-label="개인 설정" @click="user ? settingsOpen = true : authOpen = true"><Settings :size="20" /></button>
         <button
           class="vehicle-button"
           :disabled="asking"
@@ -372,7 +386,8 @@ function switchAuthMode() {
                 </p>
                 <template v-else>
                   <div class="mobile-chat-reply">
-                    <p>{{ spokenReply(message) }}</p>
+                    <AnswerContent v-if="!message.followup_question && message.answer" :text="message.answer" />
+                    <p v-else>{{ spokenReply(message) }}</p>
                     <div v-if="message.sources?.some(source => !isMockSource(source))" class="mobile-message-sources">
                       <BookOpen :size="12" /><span>{{ [...new Set(message.sources.filter(source => !isMockSource(source)).map(source => source.title))].join(' · ') }}</span>
                     </div>
@@ -380,16 +395,7 @@ function switchAuthMode() {
                   <h2 v-if="message.followup_question">
                     {{ message.followup_question }}
                   </h2>
-                  <p
-                    v-if="message.answer"
-                    :class="
-                      message.followup_question
-                        ? 'answer-support'
-                        : 'answer-text'
-                    "
-                  >
-                    {{ message.answer }}
-                  </p>
+                  <AnswerContent v-if="message.answer" :text="message.answer" />
                   <div v-if="message.facts?.length" class="guide-facts">
                     <div v-for="fact in message.facts" :key="fact.label">
                       <span>{{ fact.label }}</span
@@ -474,7 +480,7 @@ function switchAuthMode() {
                       class="text-button"
                       @click="panel = { sourceId: message.id }"
                     >
-                      <BookOpen :size="18" />근거 보기
+                      <BookOpen :size="18" />{{ sourceLabel(message.sources) }}
                     </button>
                     <button
                       v-if="message.action?.type === 'open_my_car'"
@@ -565,6 +571,7 @@ function switchAuthMode() {
       :entry="diagnosticEntry"
       :message="currentMessage"
       :asking="asking"
+      :can-go-previous="canReturnToPreviousStep"
       :voice-state="voiceState"
       :vehicles="vehicles"
       :intro="!vehicleIntroShown"
@@ -583,6 +590,7 @@ function switchAuthMode() {
       @retry="retryQuestion"
       @speak="playSpeech"
       @reset="resetGuidance"
+      @previous="voice.stop(); returnToPreviousStep()"
       @mode="diagnosticMode = $event"
     />
 

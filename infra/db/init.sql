@@ -58,3 +58,10 @@ CREATE TABLE IF NOT EXISTS conversation_messages (
   KEY idx_conversation (conversation_id, id),
   CONSTRAINT fk_conversation_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS user_voice_settings (
+ user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+ voice_id VARCHAR(64) NULL,
+ updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ CONSTRAINT fk_voice_settings_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

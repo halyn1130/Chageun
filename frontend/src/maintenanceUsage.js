@@ -1,3 +1,4 @@
+import { manualRule } from './maintenanceRules.js'
 import { latestRecords, maintenanceCatalog } from './guidance.js'
 import { oilSchedule, supportsOilSchedule } from './vehicleGuide.js'
 
@@ -46,8 +47,14 @@ export function maintenanceUsage(vehicle, records, item, { condition = 'normal',
   const reviewed = item?.recordId === 'engine_oil' && supportsOilSchedule(vehicle)
   const schedule = reviewed ? oilSchedule(vehicle, records || [], condition, now) : null
   const demoInterval = demo && records?.some(record => record.memo?.startsWith('[차근 시연]')) ? demoMaintenanceIntervals[item?.recordId] : null
-  base.interval = schedule?.interval || demoInterval || null
-  base.intervalSource = schedule?.interval ? 'manual' : demoInterval ? 'demo' : null
+  const rule = manualRule(vehicle, item?.recordId, condition)
+  base.source = rule?.source || null
+  base.ruleNote = rule?.note || null
+  base.ageSource = rule?.age_source || null
+  base.conditionBased = Boolean(rule && !rule.km && !rule.months)
+  base.manualKm = rule?.manual_km || null
+  base.interval = rule ? (rule.km || rule.months ? { km: rule.km, months: rule.months } : null) : schedule?.interval || demoInterval || null
+  base.intervalSource = rule?.basis === 'user_setting' ? 'user_setting' : rule || schedule?.interval ? 'manual' : demoInterval ? 'demo' : null
   if (!last) return { ...base, status: 'no_record' }
   const start = validDay(last.performed_at), end = validDay(now)
   if (!start || !end || start > end || !Number.isFinite(last.mileage_km) || last.mileage_km < 0 ||
@@ -57,8 +64,8 @@ export function maintenanceUsage(vehicle, records, item, { condition = 'normal',
   const distance = Number.isFinite(vehicle.mileage_km) ? vehicle.mileage_km - last.mileage_km : null
   const months = (end.getUTCFullYear() - start.getUTCFullYear()) * 12 + end.getUTCMonth() - start.getUTCMonth() - (end.getUTCDate() < start.getUTCDate() ? 1 : 0)
   const days = Math.floor((end - start) / 86400000)
-  const nextDate = base.interval ? afterMonths(last.performed_at, base.interval.months) : null
-  const distanceProgress = base.interval && distance != null ? distance / base.interval.km : null
+  const nextDate = base.interval?.months ? afterMonths(last.performed_at, base.interval.months) : null
+  const distanceProgress = base.interval?.km && distance != null ? distance / base.interval.km : null
   const timeProgress = nextDate ? (end - start) / (validDay(nextDate) - start) : null
   const dateDue = timeProgress != null && timeProgress >= 1
   const mileageDue = distanceProgress != null && distanceProgress >= 1
@@ -68,13 +75,20 @@ export function maintenanceUsage(vehicle, records, item, { condition = 'normal',
     timeRatio: timeProgress == null ? null : clamp(timeProgress),
     priorityRatio: base.interval ? Math.max(distanceProgress || 0, timeProgress || 0) : null,
     dateDue, mileageDue, nextDate,
-    nextKm: base.interval ? last.mileage_km + base.interval.km : null,
+    nextKm: base.interval?.km ? last.mileage_km + base.interval.km : null,
+    remainingKm: base.interval?.km && distance != null ? base.interval.km - distance : null,
+    remainingDays: nextDate ? Math.round((validDay(nextDate) - end) / 86400000) : null,
+    remainingMonths: nextDate && nextDate >= now ? (() => {
+      const target = validDay(nextDate)
+      const count = (target.getUTCFullYear() - end.getUTCFullYear()) * 12 + target.getUTCMonth() - end.getUTCMonth()
+      return afterMonths(now, count) === nextDate ? count : null
+    })() : null,
     needsConfirmation: dateDue || mileageDue,
   }
 }
 
 export function usageState(usage) {
-  if (usage.priorityRatio == null) return { tone: 'unknown', label: usage.status === 'recorded' ? '기준 확인' : usage.status === 'no_record' ? '기록 필요' : '기록 확인' }
+  if (usage.priorityRatio == null) return { tone: 'unknown', label: usage.status === 'recorded' ? (usage.conditionBased ? '상태 점검' : '기준 확인') : usage.status === 'no_record' ? '기록 필요' : '기록 확인' }
   if (usage.priorityRatio >= 1) return { tone: 'urgent', label: '교환 시점' }
   if (usage.priorityRatio >= .9) return { tone: 'urgent', label: '교환 임박' }
   if (usage.priorityRatio >= .7) return { tone: 'soon', label: '교환 준비' }
@@ -100,4 +114,13 @@ export function vehicleMaintenanceTones(usages) {
     if (tones[layer] == null || ranks[tone] > ranks[tones[layer]]) tones[layer] = tone
   }
   return tones
+}
+
+// Stable catalog order by default; deadline sorting is an explicit display choice.
+export function sortMaintenanceUsages(usages, order = 'default') {
+  const rank = new Map(maintenanceCatalog.map((item, index) => [item.id, index]))
+  return [...usages].sort((a, b) => {
+    const byCatalog = (rank.get(a.item.id) ?? Infinity) - (rank.get(b.item.id) ?? Infinity)
+    return order === 'urgent' ? (b.priorityRatio ?? -1) - (a.priorityRatio ?? -1) || byCatalog : byCatalog
+  })
 }

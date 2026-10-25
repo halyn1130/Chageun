@@ -17,12 +17,15 @@ import {
   ArrowRight,
   MessageCircle,
 } from 'lucide-vue-next'
+import AnswerContent from './AnswerContent.vue'
+import { sourceLabel } from '../answerSections.js'
 import VehicleStructure from './VehicleStructure.vue'
 import GuideIcon from './GuideIcon.vue'
 import RoadContext from './RoadContext.vue'
 import MaintenanceUsage from './MaintenanceUsage.vue'
 import MaintenanceCard from './MaintenanceCard.vue'
-import { maintenanceUsage, maintenancePriorities, usageState, vehicleMaintenanceTones } from '../maintenanceUsage.js'
+import CareSortSelect from './CareSortSelect.vue'
+import { maintenanceUsage, maintenancePriorities, sortMaintenanceUsages, usageState, vehicleMaintenanceTones } from '../maintenanceUsage.js'
 import {
   guidanceCategories,
   maintenanceCatalog,
@@ -38,12 +41,14 @@ const props = defineProps({
   entry: Object,
   message: Object,
   asking: Boolean,
+  canGoPrevious: Boolean,
   voiceState: Object,
   vehicles: Array,
   intro: Boolean,
 })
 const emit = defineEmits([
   'consult',
+  'previous',
   'reply',
   'voice',
   'stop',
@@ -126,6 +131,8 @@ const workspace = ref(null)
 let careScroll = 0
 let overviewScroll = 0
 const priorities = computed(() => maintenancePriorities(props.vehicle, props.records, props))
+const careSort = ref('default')
+const visibleUsages = computed(() => sortMaintenanceUsages(priorities.value, careSort.value))
 const urgentParts = computed(() => priorities.value.filter(usage => usage.priorityRatio >= .9))
 const vehicleTones = computed(() => vehicleMaintenanceTones(priorities.value))
 const itemReturnMode = ref('browse')
@@ -373,6 +380,7 @@ watch(
     </section>
     <section class="care-panel" :class="{ 'care-overview-panel': isCareOverview }" aria-label="단계별 맞춤 안내">
       <div v-if="hasCareTabs" class="care-section-bar">
+        <div v-if="isCareOverview" class="care-sort"><span>정렬</span><CareSortSelect v-model="careSort" /></div>
         <nav class="care-section-tabs" aria-label="관리 화면 선택">
           <button :class="{ active: isCareOverview }" :aria-pressed="isCareOverview" @click="showOverview">소모품 관리</button>
           <button :class="{ active: mode === 'history' }" :aria-pressed="mode === 'history'" @click="openHistory()">정비 기록<span v-if="records.length">{{ records.length }}</span></button>
@@ -452,7 +460,7 @@ watch(
               <p>{{ item.description }}</p>
             </div>
             <div class="item-usage-card">
-              <div v-if="selectedUsage.intervalSource === 'manual'" class="usage-conditions"><span>운행 기준 비교</span><button :class="{ selected: condition === 'normal' }" @click="condition = 'normal'">일반 운행</button><button :class="{ selected: condition === 'severe' }" @click="condition = 'severe'">가혹 운행</button></div>
+              <div v-if="['manual', 'user_setting'].includes(selectedUsage.intervalSource)" class="usage-conditions"><span>운행 기준 비교</span><button :class="{ selected: condition === 'normal' }" @click="condition = 'normal'">일반 운행</button><button :class="{ selected: condition === 'severe' }" @click="condition = 'severe'">가혹 운행</button></div>
               <div v-else-if="selectedUsage.intervalSource === 'demo'" class="usage-demo-label">시연 관리 기준</div>
               <MaintenanceUsage :usage="selectedUsage" />
               <div class="usage-record-note"><span>등록된 주행거리·교환 기록 기준</span><button v-if="selectedRecord" @click="openHistory(item.recordId)">교환 기록 보기<ChevronRight :size="13" /></button><button v-else-if="error" @click="emit('reload-records')">다시 불러오기</button></div>
@@ -511,14 +519,10 @@ watch(
                   <Volume2 :size="19" />
                 </button>
               </div>
-              <h3>
-                {{
-                  message.followup_question || message.title || '확인한 내용'
-                }}
+              <h3 v-if="message.followup_question || (message.title && !['확인한 내용', '차근이 알려드릴게요', '차근히 알려드릴게요'].includes(message.title))">
+                {{ message.followup_question || message.title }}
               </h3>
-              <p v-if="message.answer" class="guide-answer">
-                {{ message.answer }}
-              </p>
+              <AnswerContent v-if="message.answer" :text="message.answer" />
               <div v-if="message.facts?.length" class="guide-facts">
                 <div v-for="fact in message.facts" :key="fact.label">
                   <span>{{ fact.label }}</span
@@ -557,7 +561,7 @@ watch(
                   v-if="message.sources?.length"
                   @click="emit('source', message)"
                 >
-                  <BookOpen :size="17" />근거·상세</button
+                  <BookOpen :size="17" />{{ sourceLabel(message.sources) }}</button
                 ><button
                   v-if="message.action?.type === 'open_my_car'"
                   @click="openHistory(message.action.item || 'all')"
@@ -602,8 +606,8 @@ watch(
             </div>
           </template>
           <template v-else-if="categoryId === 'maintenance'">
-            <div ref="careList" class="maintenance-list" aria-label="교환 우선순 소모품 목록">
-              <MaintenanceCard v-for="usage in priorities" :key="usage.item.id" :usage="usage" :disabled="asking" @select="selectItem" />
+            <div ref="careList" class="maintenance-list" :aria-label="careSort === 'urgent' ? '교환 임박순 소모품 목록' : '기본 순서 소모품 목록'">
+              <MaintenanceCard v-for="usage in visibleUsages" :key="usage.item.id" :usage="usage" :disabled="asking" @select="selectItem" />
             </div>
           </template>
           <template v-else-if="categoryId === 'warning'">
@@ -664,6 +668,7 @@ watch(
         </div>
       </Transition>
       <footer v-if="isConclusion" class="conclusion-actions">
+        <button v-if="canGoPrevious" @click="keyboard = false; typed = ''; emit('previous')"><ArrowLeft :size="18" />이전 단계</button>
         <button class="conclusion-return" @click="returnToQuestion"><MessageCircle :size="18" />질문으로 돌아가기</button>
       </footer>
       <footer v-else-if="mode === 'conversation'" class="care-voice-bar">

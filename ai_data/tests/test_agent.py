@@ -21,6 +21,34 @@ class AgentTests(unittest.TestCase):
         return rag_query(request, choose, retrieve or (lambda q, f: self.fail('must not search')),
                          generate or (lambda s, u: self.fail('must not generate')))
 
+    def test_fuel_focus_excludes_adjacent_warning_instructions(self):
+        from chageun_ai.agent import focus_fuel_evidence
+        fuel = '연료의 잔류량이 적을 때 경고등이 켜집니다. 경고등이 켜지면 바로 연료를 보충하십시오.'
+        hit = {'score': 1, 'chunk': {'chunk_id': 'fuel', 'metadata': {'section': '클러스터 > 경고등 및 표시등'},
+               'text': '제목\n엔진 오일 압력 경고등\n오일을 점검하세요.\n연료 부족 경고등\n' + fuel + '\nLPG 과충전 경고등\nLPG 점검 안내'}}
+        focused = focus_fuel_evidence([hit])
+        self.assertEqual(focused[0]['chunk']['text'], '연료 부족 경고등\n' + fuel)
+        self.assertEqual(focused[0]['chunk']['chunk_id'], 'fuel')
+        self.assertIn('LPG 점검 안내', hit['chunk']['text'])  # original corpus is untouched
+        unrelated = {'score': 1, 'chunk': {'chunk_id': 'other', 'metadata': {}, 'text': '다른 항목'}}
+        self.assertEqual(focus_fuel_evidence([unrelated]), [unrelated])
+
+    def test_fuel_alias_reaches_answer_evidence(self):
+        from unittest.mock import patch
+        seen = []
+        hit = {'chunk': {'chunk_id': 'fuel', 'text': '연료 부족 경고등', 'metadata': {}}, 'score': 1}
+        with patch('chageun_ai.agent.answer_from_hits', return_value={
+            'status': 'answered', 'answer_text': '안내', 'speech_text': '안내', 'sources': []
+        }) as answer:
+            r = self.ask(picks('search_manual', query='연료계 확인'),
+                         retrieve=lambda q, f: seen.append((q, f)) or [hit],
+                         question='주유등이 켜졌어. 계기판에서 무엇을 확인해?', vehicle=VEHICLE)
+        self.assertEqual(r['status'], 'answered')
+        self.assertIn('연료 부족 경고등', seen[0][0])
+        self.assertIn('연료 부족 경고등이 켜졌어', answer.call_args.args[0])
+        self.assertNotIn('주유등', answer.call_args.args[0])
+        self.assertEqual(answer.call_args.args[4], 'solution')
+
     def test_contract_fields_and_conversation_id(self):
         r = self.ask(picks('decline', kind='realtime'), conversation_id='c_1')
         self.assertEqual(set(r), {'request_id', 'conversation_id', 'status', 'answer', 'speech_text', 'sources',

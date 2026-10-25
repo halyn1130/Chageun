@@ -8,12 +8,13 @@ from __future__ import annotations
 import json
 import re
 import uuid
+from .maintenance import maintenance_answer
 from .core import answer_from_hits, load_warning_lights, read_json, WARNING_LIGHTS_PATH
 
 MAINTENANCE_ITEMS = ['engine_oil', 'oil_filter', 'air_filter', 'cabin_filter', 'brake_fluid',
                      'tire', 'brake_pad', 'coolant', 'battery', 'wiper', 'other']
 # Everyday words drivers say that the documents spell differently; added to the retrieval query only.
-TERMS = {'오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸', '버스정류장': '버스여객자동차의 정류지', '교환': '교체',
+TERMS = {'주유등': '연료 부족 경고등', '기름불': '연료 부족 경고등', '기름경고등': '연료 부족 경고등', '오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸', '버스정류장': '버스여객자동차의 정류지', '교환': '교체',
          '소화전': '소방용수시설 비상소화장치', '멈춰': '일시정지', '멈추': '일시정지', '엉따': '열선 시트',
          '앞차와거리': '앞차와의 충돌을 피할 수 있는 필요한 거리', '안전거리': '앞차와의 충돌을 피할 수 있는 필요한 거리'}
 # Signal colours as drivers say them; law only (a "빨간 불" on the dashboard is a warning light).
@@ -38,7 +39,7 @@ COLOR_WORDS = {'적색': '빨간색', '황색': '노란색', '녹색': '초록�
 UNKNOWN = re.compile(r'모르|몰라|잘\s?안\s?보|기억')
 SHAPE_TALK = re.compile(r'모양|그림|처럼|생겼|생긴')
 # A driver describing a problem wants what it means, why it matters and what to do now.
-PROBLEM = re.compile(r'경고등|표시등|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)|고장|이상해|소리가|냄새|연기|떨려|떨림|진동|'
+PROBLEM = re.compile(r'주유등|기름불|경고등|표시등|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)|고장|이상해|소리가|냄새|연기|떨려|떨림|진동|'
                      r'방전|펑크|과열|시동이\s?안|안\s?걸려')
 WARNING_QUESTION = re.compile(r'경고등|표시등|경고\s?불|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)|(?:모양|표시)[이가]?\s*(?:들어|켜|떴|떠|나왔)')
 # Words that say nothing about which light it is: colour, place, or a question word.
@@ -53,6 +54,9 @@ def tool(name, description, **properties):
 
 
 TOOLS = [
+    tool('maintenance_due', '내 차량의 정비 기록과 매뉴얼 주기를 합쳐 다음 교환까지 남은 기간·거리, 교환 예정일을 계산한다. 내 엔진오일 언제 또 갈아야 해, 교환 시기가 지났나, 소모품 관리 화면에서 점검·교환 시기 질문도 여기다. 일반적인 주기만 묻는 질문은 search_manual이다.',
+         item={'type': 'string', 'enum': MAINTENANCE_ITEMS},
+         condition={'type': 'string', 'enum': ['normal', 'severe'], 'description': '사용자가 가혹 조건(짧은 거리 반복·잦은 정체 등)을 명시하면 severe. 미확인이면 normal이며 답변에 조건을 명시한다.'}),
     tool('search_law', '도로교통법·시행령·시행규칙에서 교통 규칙, 통행 방법, 금지 행위, 범칙 기준을 찾는다.',
          query={'type': 'string', 'description': '질문을 법령 용어로 바꾼 검색어. 예: 주정차 → 정차 및 주차의 금지 장소'}),
     tool('search_manual', '선택한 차량의 취급설명서에서 기능 사용법, 계기판 경고등·표시등의 의미와 조치, 점검·교환 주기와 방법을 찾는다. '
@@ -76,6 +80,7 @@ TOOLS = [
 ]
 
 SYSTEM = ('너는 초보 운전자를 돕는 차근의 질문 분류기다. 질문 하나에 도구 하나를 반드시 고른다. '
+          '개인 정비 기록을 바탕으로 다음 교환 시점·남은 기간·거리를 물으면 maintenance_due를 고른다. '
           '법규 질문은 search_law, 차량 기능·계기판 경고등·정비 기준은 search_manual, '
           '"내 차"의 마지막 정비나 교환 시점은 open_maintenance를 고른다. '
           '차량 상담인데 대상이나 증상이 없어 검색할 수 없을 때만 ask_missing_detail을 고른다. '
@@ -103,6 +108,28 @@ MESSAGES = {
     'unrelated': ('차근은 교통 법규, 내 차 설명서, 정비 기록을 도와드려요. 그와 관련된 질문을 해 주세요.', '운전과 관련된 질문을 해 주세요.'),
     'open_my_car': ('정비 이력을 열어 드릴게요.', '정비 이력을 확인해 볼게요.'),
 }
+
+
+def focus_fuel_evidence(hits):
+    """Keep bounded fuel sections, excluding adjacent oil/TPMS/LPG instructions.
+
+    Only verbatim excerpts are passed on; source ids and metadata stay unchanged.
+    If a heading boundary is unavailable, preserve the original retrieval results.
+    """
+    focused = []
+    for hit in hits:
+        text = hit['chunk']['text']
+        section = hit['chunk']['metadata'].get('section', '')
+        excerpt = None
+        if '경고등 및 표시등' in section:
+            match = re.search(r'\n연료 부족 경고등\n(.+?)(?=\n[^\n]*(?:경고등|표시등)\n)', text, re.S)
+            if match and len(match.group(1).strip()) > 40:
+                excerpt = '연료 부족 경고등\n' + match.group(1).strip()
+        elif section.endswith('계측기') and '\n연료계\n' in text:
+            excerpt = '연료계\n' + text.split('\n연료계\n', 1)[1]
+        if excerpt:
+            focused.append({**hit, 'chunk': {**hit['chunk'], 'text': excerpt}})
+    return focused or hits
 
 
 def lights_in(question):
@@ -254,6 +281,17 @@ def rag_query(request, choose, retrieve, generate):
     if name == 'decline':
         kind = args.get('kind')
         return reply('out_of_scope', *MESSAGES[kind if kind in ('navigation', 'unrelated') else 'out_of_scope'])
+    if name == 'maintenance_due' and args.get('item') in MAINTENANCE_ITEMS:
+        if vehicle_id is None:
+            return reply('need_vehicle')
+        result = maintenance_answer(vehicle, request.get('maintenance') or {}, args['item'], args.get('condition', 'normal'))
+        if result:
+            answer, sources = result
+            return reply('answered', answer, answer, sources=sources,
+                         action={'type': 'open_my_car', 'vehicle_id': vehicle_id, 'item': args['item']})
+        return reply('answered', '이 항목은 검증된 고정 교환 주기가 없어 남은 기간을 계산하지 않았어요. 차량 설명서의 점검 기준과 부품 상태를 확인해 주세요.',
+                     '고정 교환 주기를 확인하지 못해 시점을 계산하지 않았어요.',
+                     action={'type': 'open_my_car', 'vehicle_id': vehicle_id, 'item': args['item']})
     if name == 'open_maintenance' and args.get('item') in MAINTENANCE_ITEMS:
         if vehicle_id is None:
             return reply('need_vehicle')
@@ -302,9 +340,16 @@ def rag_query(request, choose, retrieve, generate):
         asked = f'{named[0]}이 {seen}켜졌어요. 무슨 뜻이고 어떻게 해야 하나요? (사용자 표현: {question})'
     else:
         asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
+    # Use the canonical light name in both generation and verification. A glossary
+    # suffix alone still left the verifier treating '주유등' as an unknown target.
+    if name == 'search_manual':
+        for alias in ('주유등', '기름불', '기름경고등'):
+            asked = asked.replace(alias, TERMS[alias])
     style = 'solution' if name == 'search_manual' and PROBLEM.search(question) else None
     if name == 'search_law':
         hits = focus_signal_rows(f'{question} {" ".join(known.values())}', hits)
+    if name == 'search_manual' and '연료 부족 경고등' in asked and not re.search(r'LPG|LPI|과충전', asked, re.I):
+        hits = focus_fuel_evidence(hits)
     result = answer_from_hits(asked, hits, generate, car, style, history=history)
     if result['status'] != 'answered':
         if name == 'search_manual':
