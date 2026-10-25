@@ -140,7 +140,7 @@ export function clarificationFor(flow) {
     return {
       field: 'vehicle',
       status: 'need_vehicle',
-      answer: '차종과 연식에 따라 조작 방법과 기준이 달라요.',
+      answer: '차종과 연식에 맞춰 안내해 드릴게요.',
       question: '어떤 차량인가요?',
       suggestions: ['차량 정보 없이 계속'],
     }
@@ -157,7 +157,7 @@ export function clarificationFor(flow) {
       suggestions: ['운전석', '조수석', '뒷좌석', '잘 모르겠어요'],
     }
   }
-  if (intent === 'fuel' && !details.range) {
+  if (intent === 'fuel' && !details.range && !flow.preparedEligible) {
     return {
       field: 'range',
       answer:
@@ -350,6 +350,8 @@ export function clarificationFor(flow) {
       suggestions: next[2],
     }
   if (intent === 'warning') {
+    // Explicit unknown/ambiguous menu choices end identification, not another guess.
+    if (flow.preparedEligible && (details.color === UNKNOWN || details.shape === UNKNOWN || details.shape === '느낌표 모양')) return null
     if (!details.color)
       return {
         field: 'color',

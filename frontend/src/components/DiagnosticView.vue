@@ -49,6 +49,7 @@ const props = defineProps({
 const emit = defineEmits([
   'consult',
   'previous',
+  'home',
   'reply',
   'voice',
   'stop',
@@ -100,6 +101,9 @@ const message = computed(() =>
     ? props.message
     : null,
 )
+watch(message, value => {
+  if (value?.followup_question && !value.suggestions?.length) keyboard.value = true
+}, { immediate: true })
 const activeItem = computed(() =>
   !message.value ||
   !message.value.topicId ||
@@ -171,7 +175,8 @@ const stageKey = computed(
   () => `${categoryId.value}-${groupId.value}-${itemId.value}-${mode.value}`,
 )
 watch(mode, value => emit('mode', value), { immediate: true })
-const hasBack = computed(() => groupId.value || mode.value !== 'browse')
+const isControlsRoot = computed(() => categoryId.value === 'controls' && mode.value === 'browse' && !groupId.value)
+const hasBack = computed(() => groupId.value || mode.value !== 'browse' || isControlsRoot.value)
 const voiceActive = computed(
   () => props.voiceState.active || props.voiceState.phase === 'speaking',
 )
@@ -258,6 +263,10 @@ function viewRecord(record) {
   if (value) selectItem(value)
 }
 function back() {
+  if (isControlsRoot.value) {
+    emit('home')
+    return
+  }
   emit('stop')
   emit('reset')
   keyboard.value = false
@@ -393,7 +402,7 @@ watch(
           v-if="hasBack && !isConclusion"
           class="guide-back"
           :disabled="asking"
-          aria-label="이전 단계"
+          :aria-label="isControlsRoot ? '홈으로 돌아가기' : '이전 단계'"
           @click="back"
         >
           <ArrowLeft :size="20" />
@@ -700,6 +709,7 @@ watch(
             voiceState.error || voiceState.transcript
           }}</span></template
         >
+        <button v-if="keyboard" class="guide-keyboard" aria-label="말로 답하기" @click="toggleVoice"><Mic :size="20" /></button>
         <button
           class="guide-keyboard"
           :aria-label="keyboard ? '글 입력 닫기' : '글로 답하기'"
