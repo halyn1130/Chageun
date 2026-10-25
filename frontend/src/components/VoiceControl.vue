@@ -4,6 +4,7 @@ import { Mic, Square, Keyboard, Volume2 } from 'lucide-vue-next'
 import VoiceOrb from './VoiceOrb.vue'
 const props = defineProps({ state: Object, compact: Boolean, busy: Boolean, keyboardOpen: Boolean })
 defineEmits(['toggle', 'keyboard'])
+const usesTypecast = import.meta.env.VITE_TTS_PROVIDER === 'typecast'
 const label = computed(
   () =>
     (props.busy && !props.state.active ? '답변을 준비하고 있어요' : {
@@ -69,8 +70,8 @@ const label = computed(
     <button v-if="!compact || !keyboardOpen" class="keyboard-link" @click="$emit('keyboard')">
       <Keyboard :size="17" />{{ keyboardOpen ? '입력창 닫기' : compact ? '글로 이어 묻기' : '글로 물어보기' }}
     </button>
-    <span v-if="!compact && !state.active" class="voice-service-note"
-      >브라우저 음성 인식 · 마이크 권한 필요</span
+    <span v-if="!compact && !state.active" class="voice-service-note" :class="{ 'has-tts-credit': usesTypecast }"
+      >브라우저 음성 인식 · 마이크 권한 필요<template v-if="usesTypecast"> · <a href="https://typecast.ai" target="_blank" rel="noopener noreferrer">음성 제공: Typecast</a></template></span
     >
   </section>
 </template>

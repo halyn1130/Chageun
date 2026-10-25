@@ -68,6 +68,26 @@ export function useChageun() {
   let activeRequest = null
   const pendingQuestion = ref(null)
   const activePromptId = ref(null)
+  const clarificationHistory = ref([])
+  const canReturnToPreviousStep = computed(() => clarificationHistory.value.length > 0 && !asking.value)
+  function rememberClarification(id) {
+    clarificationHistory.value.push(JSON.parse(JSON.stringify({
+      flow: pendingQuestion.value,
+      message: messages.value.find(message => message.id === id),
+    })))
+  }
+  function returnToPreviousStep() {
+    if (!canReturnToPreviousStep.value) return
+    const previous = JSON.parse(JSON.stringify(clarificationHistory.value.at(-1)))
+    questionRevision++
+    activeRequest?.abort()
+    activeRequest = null
+    question.value = ''
+    // Start a fresh server branch; the restored flow carries only earlier answers.
+    conversationId.value = null
+    pendingQuestion.value = previous.flow
+    activePromptId.value = appendMessage(previous.message)
+  }
   const chatBody = ref(null)
   let messageId = 1
   watch(
@@ -348,6 +368,7 @@ export function useChageun() {
     activeRequest = null
     asking.value = false
     pendingQuestion.value = null
+    clarificationHistory.value = []
     activePromptId.value = null
     conversationId.value = null
     question.value = ''
@@ -408,6 +429,7 @@ export function useChageun() {
         vehicleLabel:
           flow.vehicleId != null ? vehicleLabel(chatVehicle.value) : null,
       })
+      rememberClarification(activePromptId.value)
       asking.value = false
       return
     }
@@ -566,6 +588,7 @@ export function useChageun() {
             serverQuestion: result.followup_question,
           }
           activePromptId.value = id
+          rememberClarification(id)
         }
         if (result.action?.type === 'open_my_car' && flow.vehicleId != null) {
           selectedVehicleId.value = flow.vehicleId
@@ -734,6 +757,8 @@ export function useChageun() {
     saveMaintenance,
     vehicleLabel,
     cancelQuestion,
+    canReturnToPreviousStep,
+    returnToPreviousStep,
     chooseChatVehicle,
     replyTo,
     ask,

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { createVoiceSession } from '../src/voiceSession.js'
 import { spokenReply } from '../src/spokenReply.js'
 
-function setup(onQuestion = async (text) => `답변: ${text}`) {
+function setup(onQuestion = async (text) => `답변: ${text}`, remoteSpeech = null) {
   const recognizers = [],
     spoken = [],
     states = []
@@ -43,6 +43,7 @@ function setup(onQuestion = async (text) => `답변: ${text}`) {
     platform,
     onChange: (state) => states.push(state),
     onQuestion,
+    remoteSpeech,
   })
   return { session, platform, recognizers, spoken, states }
 }
@@ -130,7 +131,7 @@ test('read-only answer playback never starts recognition; unsupported browser ha
   assert.match(unsupported.getState().error, /글로/)
 })
 
-test('a voice clarification speaks the choices before reopening the microphone', async () => {
+test('a warning clarification asks only the color before reopening the microphone', async () => {
   const { session, recognizers, spoken } = setup(async () => spokenReply({
     followup_question: '불빛이 어떤 색인가요?', clarificationField: 'color',
     suggestions: ['빨간색', '노란색', '다른 색이에요', '잘 모르겠어요'],
@@ -138,8 +139,37 @@ test('a voice clarification speaks the choices before reopening the microphone',
   session.start()
   await recognizers[0].result('경고등이 켜졌어')
   assert.equal(recognizers.length, 1, 'do not listen while reading choices')
-  for (const choice of ['빨간색인가요', '노란색인가요', '다른 색', '모르겠어요']) assert.ok(spoken[0].text.includes(choice))
+  assert.equal(spoken[0].text, '불빛이 어떤 색인가요?')
   spoken[0].onend()
   assert.equal(recognizers.length, 2)
   assert.equal(session.getState().phase, 'listening')
+})
+
+
+test('remote speech resumes listening only after audio ends and ignores cancelled callbacks', async () => {
+  const callbacks = []
+  const remote = { speak(text, events) { callbacks.push(events) }, stop() {} }
+  const x = setup(async () => '서버 음성 답변', remote)
+  x.session.start()
+  await x.recognizers[0].result('질문')
+  assert.equal(x.spoken.length, 0, 'must not also use browser speech')
+  assert.equal(x.recognizers.length, 1)
+  callbacks[0].onEnd()
+  assert.equal(x.recognizers.length, 2)
+  await x.recognizers[1].result('후속 질문')
+  x.session.stop()
+  callbacks[1].onEnd()
+  assert.equal(x.recognizers.length, 2)
+  assert.equal(x.session.getState().phase, 'idle')
+})
+
+test('remote synthesis failure ends session without browser fallback', async () => {
+  let callbacks
+  const x = setup(async () => '답변', { speak(text, events) { callbacks = events }, stop() {} })
+  x.session.start()
+  await x.recognizers[0].result('질문')
+  callbacks.onError('Typecast 음성 실패')
+  assert.equal(x.session.getState().phase, 'error')
+  assert.equal(x.session.getState().active, false)
+  assert.equal(x.spoken.length, 0)
 })

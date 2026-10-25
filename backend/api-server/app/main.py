@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app import db
-from app.routers import places, rag, vehicles
+from app.routers import places, rag, vehicles, settings
 
 app = FastAPI(title="차근 api-server")
 
@@ -20,6 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(settings.router)
 app.include_router(vehicles.router)
 app.include_router(places.router)
 app.include_router(rag.router)
