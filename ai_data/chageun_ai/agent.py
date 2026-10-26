@@ -20,11 +20,19 @@ TERMS = {'주유등': '연료 부족 경고등', '기름불': '연료 부족 경
 # Signal colours as drivers say them; law only (a "빨간 불" on the dashboard is a warning light).
 LAW_TERMS = {'빨간불': '적색의 등화', '적색신호': '적색의 등화', '빨간신호': '적색의 등화',
              '노란불': '황색의 등화', '황색신호': '황색의 등화', '노란신호': '황색의 등화',
-             '초록불': '녹색의 등화', '녹색신호': '녹색의 등화', '파란불': '녹색의 등화'}
+             '초록불': '녹색의 등화', '녹색신호': '녹색의 등화', '파란불': '녹색의 등화',
+             # 2026-10-26 diagnosis: these questions found the article but the answer model called the
+             # everyday word missing from the evidence (missing_terms: ['버스전용차로']) or never retrieved it.
+             '소방차': '긴급자동차', '구급차': '긴급자동차', '경찰차': '긴급자동차', '버스전용차로': '전용차로'}
 # Retrieval-only hints: a "what is the difference" question needs the definitions article.
 QUERY_HINTS = {'차이': '정의 용어의 뜻', '달라': '정의 용어의 뜻',
                # Turning right is mostly about pedestrians (제27조), which the question rarely says.
-               '우회전': '보행자의 보호 횡단보도 앞 일시정지'}
+               '우회전': '보행자의 보호 횡단보도 앞 일시정지',
+               # A signal colour alone matched bicycle/bus/tram rows first; drivers mean the vehicle signal.
+               '노란불': '차량신호등', '빨간불': '차량신호등', '초록불': '차량신호등', '파란불': '차량신호등',
+               # "소방차가 사이렌 켜고 오면" retrieved 제20조(slow vehicles yielding) instead of 제29조.
+               '사이렌': '긴급자동차의 우선 통행 진로 양보', '소방차': '긴급자동차의 우선 통행 진로 양보',
+               '구급차': '긴급자동차의 우선 통행 진로 양보'}
 # Manual icons are images, so the text only has each light's name. Drivers describe the icon instead.
 # Shapes were read off the K5 icon table; 아반떼 uses the same icons (icons compared side by side).
 # The list lives in data/warning_lights.json together with every manual's spelling of each light.

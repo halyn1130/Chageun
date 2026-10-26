@@ -80,6 +80,20 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(r['status'], 'out_of_scope')
         self.assertIn('말해 주시면', r['answer'])
 
+    def test_everyday_law_words_reach_the_search_query_and_the_answer(self):
+        from unittest.mock import patch
+        hit = {'chunk': {'chunk_id': 'x', 'text': '근거', 'metadata': {'article': '제29조'}}, 'score': 1}
+        cases = {'뒤에서 소방차가 사이렌 켜고 오면 어떻게 해?': ('긴급자동차의 우선 통행 진로 양보', '소방차 = 긴급자동차'),
+                 '버스전용차로로 달려도 돼?': ('전용차로', '버스전용차로 = 전용차로'),
+                 '신호등이 노란불로 바뀌었는데 지나가도 돼?': ('차량신호등', '노란불 = 황색의 등화')}
+        for question, (in_query, in_asked) in cases.items():
+            queries = []
+            with patch('chageun_ai.agent.answer_from_hits', return_value={'status': 'insufficient_evidence'}) as answer:
+                self.ask(picks('search_law', query=question), question=question,
+                         retrieve=lambda q, f: queries.append(q) or [hit])
+            self.assertIn(in_query, queries[0], question)
+            self.assertIn(in_asked, answer.call_args.args[0], question)
+
     def test_navigation_is_declined_and_maintenance_opens_my_car(self):
         r = self.ask(picks('decline', kind='navigation'))
         self.assertEqual((r['status'], r['action']), ('out_of_scope', None))
