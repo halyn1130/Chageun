@@ -96,6 +96,13 @@ test('plain replies stay in the flow, while a new topic starts over', () => {
   assert.equal(isNewQuestion('엔진오일 언제 갈아?', flow), true)
 })
 
+test('a plain reply to the server question stays in that conversation', () => {
+  const flow = { ...startQuestion('사람을 쳤는데 어떡해', 3), awaiting: 'server', serverFollowup: true }
+  assert.equal(isNewQuestion('빨간불인데 그냥 갔어', flow), false)
+  assert.equal(isNewQuestion('횡단보도였어', flow), false)
+  assert.equal(isNewQuestion('엉따 어떻게 켜?', flow), true)
+})
+
 test('negated blinking is not classified as blinking', () => {
   const flow = startQuestion('노란색 엔진 경고등인데 깜빡이지 않아', 3)
   assert.equal(flow.details.blink, '계속 켜져 있음')

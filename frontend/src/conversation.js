@@ -418,8 +418,12 @@ export function findSpokenVehicle(text, vehicles) {
 
 export function isNewQuestion(text, flow) {
   const intent = classifyQuestion(text)
+  const asksAgain = /어떻게|언제|알려\s*줘|방법|[?？]/.test(text) && intent !== 'general'
+  // A plain reply to the server's own question ("사고 당시 어떤 상황이었나요?" → "빨간불인데 그냥 갔어") belongs
+  // to that conversation even when its words look like another topic; only a fresh question starts over.
+  if (flow.awaiting === 'server') return asksAgain
   if (intent !== 'general' && intent !== flow.intent) return true
-  return /어떻게|언제|알려\s*줘|방법|[?？]/.test(text) && intent !== 'general'
+  return asksAgain
 }
 
 const DETAIL_LABELS = {
