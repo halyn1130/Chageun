@@ -103,6 +103,32 @@ test('a plain reply to the server question stays in that conversation', () => {
   assert.equal(isNewQuestion('엉따 어떻게 켜?', flow), true)
 })
 
+test('a reply to the server question stays in the flow even when it looks like another topic', () => {
+  const flow = { ...startQuestion('지금 우회전해도 괜찮아?', 3), awaiting: 'server', serverFollowup: true }
+  assert.equal(isNewQuestion('지금 빨간불이고, 보행자는 파란불이야', flow), false)
+  assert.equal(isNewQuestion('엔진오일 언제 갈아?', flow), true)
+})
+
+test('a traffic signal question is a road rule, while a dashboard light stays a warning', () => {
+  assert.equal(startQuestion('빨간불에 직진해도 괜찮아?', 3).intent, 'rules')
+  assert.equal(startQuestion('노란불일 때 교차로 진입해도 돼?', 3).intent, 'rules')
+  assert.equal(startQuestion('빨간불에 유턴 돼?', 3).intent, 'rules')
+  assert.equal(clarificationFor(startQuestion('빨간불에 직진해도 괜찮아?', 3)), null)
+  assert.equal(startQuestion('빨간 불이 켜졌어', 3).intent, 'warning')
+  assert.equal(startQuestion('계기판에 노란 불이 떴어', 3).intent, 'warning')
+})
+
+test('a bare light goes to the server, which asks whether it is a signal or the dashboard', () => {
+  for (const text of ['빨간불', '노란불 깜빡이면 어떻게 해?', '빨간불 깜빡여']) {
+    const flow = startQuestion(text, 3)
+    assert.equal(flow.intent, 'general', text)
+    assert.equal(clarificationFor(flow), null, text)
+  }
+  const flow = { ...startQuestion('빨간불', 3), awaiting: 'server', serverFollowup: true }
+  assert.equal(isNewQuestion('신호등이에요', flow), false)
+  assert.equal(isNewQuestion('계기판 불이에요', flow), false)
+})
+
 test('negated blinking is not classified as blinking', () => {
   const flow = startQuestion('노란색 엔진 경고등인데 깜빡이지 않아', 3)
   assert.equal(flow.details.blink, '계속 켜져 있음')

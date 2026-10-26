@@ -7,9 +7,11 @@ const SKIP = /모르|확인.*못|잘 안|정보 없이|건너뛰/
 
 export function classifyQuestion(text) {
   if (
-    /비보호|우회전|좌회전|주정차|보호구역|교차로|차선|도로.*규칙|횡단보도|노면.*표시|황색선/.test(
+    /비보호|우회전|좌회전|직진|유턴|추월|정지선|신호등|신호\s*위반|주정차|보호구역|교차로|차선|도로.*규칙|횡단보도|노면.*표시|황색선/.test(
       text,
-    )
+    ) ||
+    // "빨간불에 직진" is a traffic signal, not a dashboard light ("빨간 불이 켜졌어")
+    /(빨간|노란|초록|파란|녹색|황색|적색)\s*(불|신호)\s*(에|일\s*때|이면)/.test(text)
   )
     return 'rules'
   if (
@@ -18,6 +20,12 @@ export function classifyQuestion(text) {
     )
   )
     return 'fuel'
+  // "빨간불" alone may be a signal or a dashboard light: the server asks which one
+  if (
+    /(빨간|빨강|노란|노랑|주황|초록|녹색|파란|파랑|적색|황색)\s?불/.test(text) &&
+    !/계기판|클러스터|경고|표시|모양|그림|켜졌|켜져|켜진|떴|떠\s?있|들어왔|들어와/.test(text)
+  )
+    return 'general'
   if (
     /경고등|계기판|온도계|(모양|빨간|노란|빨강|노랑).*(불|표시)|(불|표시).*(켜|켰|떴|뜨|들어)/.test(
       text,
@@ -418,12 +426,12 @@ export function findSpokenVehicle(text, vehicles) {
 
 export function isNewQuestion(text, flow) {
   const intent = classifyQuestion(text)
-  const asksAgain = /어떻게|언제|알려\s*줘|방법|[?？]/.test(text) && intent !== 'general'
-  // A plain reply to the server's own question ("사고 당시 어떤 상황이었나요?" → "빨간불인데 그냥 갔어") belongs
-  // to that conversation even when its words look like another topic; only a fresh question starts over.
-  if (flow.awaiting === 'server') return asksAgain
+  const asks = /어떻게|언제|알려\s*줘|방법|[?？]/.test(text) && intent !== 'general'
+  // An answer to the server's question names what it was asked for, which can look like another topic
+  // ("빨간불이야" after a right-turn question reads as a warning light). Only a question of its own starts over.
+  if (flow.serverFollowup) return asks
   if (intent !== 'general' && intent !== flow.intent) return true
-  return asksAgain
+  return asks
 }
 
 const DETAIL_LABELS = {

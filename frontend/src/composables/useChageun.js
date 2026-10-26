@@ -157,9 +157,10 @@ export function useChageun() {
     screen.value = 'assistant'
     panel.value = null
   }
-  function toggleTheme() {
-    theme.value = theme.value === 'dark' ? 'light' : 'dark'
-    localStorage.setItem('chageun-theme', theme.value)
+  function setTheme(value) {
+    if (!['light', 'dark', 'black'].includes(value)) return
+    theme.value = value
+    localStorage.setItem('chageun-theme', value)
   }
   function returnHome() {
     cancelQuestion()
@@ -249,6 +250,22 @@ export function useChageun() {
     maintenanceFilter.value = 'all'
     await loadMaintenance(id)
   }
+  async function updateVehicleMileage(vehicleId, mileage, { signal } = {}) {
+    if (!Number.isSafeInteger(mileage) || mileage < 0 || mileage > 4294967295)
+      throw new Error('주행거리는 0 이상의 정수로 입력해 주세요.')
+    if (!vehicles.value.some(car => car.id === vehicleId))
+      throw new Error('주행거리를 수정할 차량을 선택해 주세요.')
+    const revision = accountRevision
+    const saved = await api(`/vehicles/${apiVehicleId(vehicleId)}/mileage`, {
+      method: 'PATCH',
+      body: { mileage_km: mileage },
+      signal,
+    })
+    if (revision !== accountRevision || signal?.aborted) return null
+    const car = vehicles.value.find(car => car.id === vehicleId)
+    if (car) car.mileage_km = saved.mileage_km
+    return saved
+  }
   async function saveCar() {
     const chosen = catalog.value[Number(carForm.value.catalogIndex)]
     if (!chosen) return
@@ -321,7 +338,13 @@ export function useChageun() {
     maintenanceFormOpen.value = true
   }
   async function saveMaintenance() {
-    if (!selectedVehicleId.value) return
+    if (!selectedVehicle.value || formBusy.value) return
+    const enteredMileage = String(maintenanceForm.value.mileage_km ?? '').trim()
+    const mileage = Number(enteredMileage)
+    if (!/^\d+$/.test(enteredMileage) || !Number.isSafeInteger(mileage) || mileage > 4294967295) {
+      notify('교환 시점 주행거리를 0 이상의 정수로 입력해 주세요.')
+      return
+    }
     const vehicleId = selectedVehicleId.value
     formBusy.value = true
     try {
@@ -332,7 +355,7 @@ export function useChageun() {
           body: {
             item: maintenanceForm.value.item,
             performed_at: maintenanceForm.value.performed_at,
-            mileage_km: Number(maintenanceForm.value.mileage_km),
+            mileage_km: mileage,
             memo: maintenanceForm.value.memo.trim() || null,
           },
         },
@@ -343,8 +366,6 @@ export function useChageun() {
       ])
       maintenanceCache.set(vehicleId, records)
       if (selectedVehicleId.value === vehicleId) maintenance.value = records
-      const car = vehicles.value.find(entry => entry.id === vehicleId)
-      if (car && (car.mileage_km == null || record.mileage_km > car.mileage_km)) car.mileage_km = record.mileage_km
       maintenanceFilter.value = 'all'
       maintenanceFormOpen.value = false
       notify('교환 기록을 저장했어요. 관리 화면에도 반영했어요.')
@@ -768,9 +789,10 @@ export function useChageun() {
     itemLabel,
     isMockSource,
     go,
-    toggleTheme,
+    setTheme,
     returnHome,
     selectVehicle,
+    updateVehicleMileage,
     saveCar,
     deleteCar,
     openMaintenanceForm,

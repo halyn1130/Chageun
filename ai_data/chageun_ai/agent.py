@@ -33,6 +33,21 @@ QUERY_HINTS = {'차이': '정의 용어의 뜻', '달라': '정의 용어의 뜻
                # "소방차가 사이렌 켜고 오면" retrieved 제20조(slow vehicles yielding) instead of 제29조.
                '사이렌': '긴급자동차의 우선 통행 진로 양보', '소방차': '긴급자동차의 우선 통행 진로 양보',
                '구급차': '긴급자동차의 우선 통행 진로 양보'}
+# A crash is answered at once with what the driver must do now (제54조: stop, aid the injured, report); asking for
+# details first left "교통사고가 났어" waiting, and "사람을 쳤어" was searched as pedestrian protection (제27조).
+ACCIDENT = re.compile(r'사고|사람을\s?(?:쳤|치었|친)|(?:차|사람|보행자|자전거|오토바이)(?:를|을|랑|와|하고)?\s?(?:박았|들이받|부딪)')
+ACCIDENT_QUERY = '사고발생 시의 조치 즉시 정차 사상자 구호 신고'
+# A car that stopped or stalled is answered from the manual's emergency section, not asked about again and again.
+BREAKDOWN = re.compile(r'차가\s?(?:갑자기\s?)?(?:멈췄|멈춰|섰어|안\s?가|안\s?움직)|시동이\s?(?:꺼졌|꺼져|꺼짐|갑자기\s?꺼)|'
+                       r'(?:엑셀|액셀|가속\s?페달)을?\s?(?:밟아도|밟는데)|차가\s?퍼졌')
+BREAKDOWN_QUERY = '주행 중 고장이 나면 주행 중 시동이 꺼졌을 때 비상 경고등 안전한 곳으로 이동'
+# What to do first, said before anything we look up and even when the lookup fails. Fixed text: it must be instant
+# and must not depend on a model. 119 is not in 제54조 (it names the police), but an injured person comes first.
+URGENT = (
+    (re.compile(r'사고가?\s?(?:났|나서|났는데)|사람을\s?(?:쳤|치었|친)|(?:차|사람|보행자|자전거|오토바이)(?:를|을|랑|와|하고)?\s?(?:박았|들이받|부딪)'),
+     '먼저 차를 안전하게 세우고 비상등을 켜세요. 다친 사람이 있으면 바로 119에 신고하세요.'),
+    (BREAKDOWN, '먼저 비상등을 켜고, 할 수 있으면 차를 안전한 곳으로 옮기세요.'),
+)
 # Manual icons are images, so the text only has each light's name. Drivers describe the icon instead.
 # Shapes were read off the K5 icon table; 아반떼 uses the same icons (icons compared side by side).
 # The list lives in data/warning_lights.json together with every manual's spelling of each light.
@@ -51,11 +66,26 @@ PROBLEM = re.compile(r'주유등|기름불|경고등|표시등|불[이도]?\s*(?
                      r'방전|펑크|과열|시동이\s?안|안\s?걸려')
 WARNING_QUESTION = re.compile(r'경고등|표시등|경고\s?불|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)|(?:모양|표시)[이가]?\s*(?:들어|켜|떴|떠|나왔)')
 # Road features a driver can describe in words; a "~해도 돼?" question naming one asks for the rule for that scene.
+# Manoeuvres (우회전·좌회전·유턴) are not a scene: "지금 우회전해도 괜찮아?" says nothing about the signal, and searched
+# as it was, the answer model refused it as an on-the-spot judgement. Those questions ask for the scene first.
 RULE_SITUATION = re.compile(r'점선|실선|황색|백색|중앙선|차선|차로|노란\s?불|빨간\s?불|초록\s?불|녹색\s?불|황색\s?불|적색|신호|화살표|'
-                            r'점멸|표지|노면|횡단보도|교차로|회전교차로|터널|다리|교량|유턴|비보호|좌회전|우회전|전용차로|'
+                            r'점멸|표지|노면|횡단보도|교차로|회전교차로|터널|다리|교량|비보호|전용차로|'
                             r'보호구역|스쿨존|정지선|긴급자동차|소방차|구급차|경찰차|고속도로|갓길')
+# "지금 / 여기서 …해도 돼?" asks about the road in front of the driver, which we cannot see.
+RIGHT_HERE = re.compile(r'(?:지금|여기|현재|바로|이\s?자리).*도\s*(?:돼|되|괜찮)')
+# "빨간불" alone is a traffic signal to some drivers and a dashboard light to others; guessing answered one of them
+# wrong ("빨간불" got 제6조, "노란불 깜빡이면 어떻게 해?" got the warning-light shape question). We ask which first.
+BARE_LIGHT = re.compile(r'(?:빨간|빨강|노란|노랑|주황|초록|녹색|파란|파랑|적색|황색)\s?불')
+LIGHT_PLACE = re.compile(r'계기판|클러스터|경고|표시|모양|그림|켜졌|켜져|켜진|떴|떠\s?있|들어왔|들어와|'
+                         r'신호|교차로|횡단보도|정지선|직진|좌회전|우회전|유턴|건너|진입|출발|화살표|차선|차로|보행자')
 # Words that say nothing about which light it is: colour, place, or a question word.
 VAGUE = re.compile(r'(?:빨간|빨강|노란|노랑|주황|초록|녹색|파란|하얀|흰|적|황|청)색?|계기판|클러스터|무슨|어떤|이상한|웬|이|그|저|이런|저런')
+
+
+# Whether a question leans on the previous turns is the router's call: drivers leave the subject out without any
+# pointing word ("가혹 조건은?", "아반떼는?"), and a new question must not inherit the last topic.
+FOLLOW_UP = {'type': 'boolean', 'description': '최근 대화의 대상을 이어받아야 뜻이 통하는 질문이면 true. '
+             '예: "그럼 끄려면?", "가혹 조건은?", "아반떼는?", "노란색이야". 그 자체로 뜻이 완결된 새 질문이면 false.'}
 
 
 def tool(name, description, **properties):
@@ -70,11 +100,13 @@ TOOLS = [
          item={'type': 'string', 'enum': MAINTENANCE_ITEMS},
          condition={'type': 'string', 'enum': ['normal', 'severe'], 'description': '사용자가 가혹 조건(짧은 거리 반복·잦은 정체 등)을 명시하면 severe. 미확인이면 normal이며 답변에 조건을 명시한다.'}),
     tool('search_law', '도로교통법·시행령·시행규칙에서 교통 규칙, 통행 방법, 금지 행위, 범칙 기준을 찾는다.',
-         query={'type': 'string', 'description': '질문을 법령 용어로 바꾼 검색어. 예: 주정차 → 정차 및 주차의 금지 장소'}),
+         query={'type': 'string', 'description': '질문을 법령 용어로 바꾼 검색어. 예: 주정차 → 정차 및 주차의 금지 장소'},
+         follow_up=FOLLOW_UP),
     tool('search_manual', '선택한 차량의 취급설명서에서 기능 사용법, 계기판 경고등·표시등의 의미와 조치, 점검·교환 주기와 방법을 찾는다. '
          '"지금 계기판에 불이 들어왔어"처럼 경고등을 묻는 질문과 "이 차에 ○○ 기능 있어?"처럼 기능 유무를 묻는 질문도 여기다.',
          query={'type': 'string', 'description': '질문의 상황과 목적을 모두 담은 검색어. 기능 이름은 설명서 표기를 함께 쓴다. '
-                                  '예: 스마트키 배터리 방전 시 시동 거는 방법, 오토홀드 → 오토 홀드 AUTO HOLD'}),
+                                  '예: 스마트키 배터리 방전 시 시동 거는 방법, 오토홀드 → 오토 홀드 AUTO HOLD'},
+         follow_up=FOLLOW_UP),
     tool('open_maintenance', '내 차의 정비 기록에서 "마지막으로 언제 갈았지?"처럼 실제로 교환·점검한 시점을 확인한다. '
          '일반적인 교환 주기나 방법은 search_manual이다.',
          item={'type': 'string', 'enum': MAINTENANCE_ITEMS}),
@@ -118,14 +150,21 @@ MESSAGES = {
     # One question per turn, as people answer only what they are asked: the shape first, then the colour.
     'ask_shape': ('어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요.', '어떤 모양인지 알려 주세요.'),
     'ask_color': ('어떤 색으로 켜져 있나요? 잘 모르겠으면 모르겠다고 해 주세요.', '어떤 색으로 켜져 있나요?'),
-    # Planned behaviour: the driver describes the scene in words, and 차근 answers the rule for that scene.
-    'out_of_scope': ('주변 상황은 제가 볼 수 없어요. 차선이 점선인지 실선인지, 신호가 무슨 색인지처럼 지금 보이는 상황을 '
-                     '말해 주시면 그 상황의 규칙을 알려 드릴게요.',
-                     '주변은 제가 볼 수 없어요. 차선 모양이나 신호 색처럼 보이는 상황을 말해 주세요.'),
+    # Planned behaviour: we cannot see the road, but the driver can describe it, and the rule for that scene is in
+    # the law. A scene already in the question goes straight to search_law (RULE_SITUATION).
+    'ask_situation': ('지금 상황에 맞는 규칙을 찾아볼게요. 신호나 표지, 차선이 어떤지 알려 주세요. '
+                      '예: 빨간불이에요, 신호등이 없어요, 차선이 실선이에요.', '지금 신호나 표지가 어떤지 알려 주세요.'),
+    'ask_light_kind': ('신호등 불인가요, 계기판에 켜진 불인가요?', '신호등 불인가요, 계기판 불인가요?'),
+    'manual_not_found': ('설명서에서 근거를 찾지 못했어요. 정비소나 고객센터에 문의해 주세요.', '설명서에서 찾지 못했어요.'),
+    'law_not_found': ('법령에서 근거를 찾지 못했어요. 공식 자료로 한 번 더 확인해 주세요.', '법령에서 찾지 못했어요.'),
     'navigation': ('차근은 길 안내와 주변 장소 찾기는 하지 않아요. 내비게이션 앱을 이용해 주세요.', '길 안내는 내비게이션 앱을 이용해 주세요.'),
     'unrelated': ('차근은 교통 법규, 내 차 설명서, 정비 기록을 도와드려요. 그와 관련된 질문을 해 주세요.', '운전과 관련된 질문을 해 주세요.'),
     'open_my_car': ('정비 이력을 열어 드릴게요.', '정비 이력을 확인해 볼게요.'),
 }
+# Said on top of a rule found for a described situation: the rule is general, the road is the driver's to check.
+SITUATION_NOTE = '실제로 진행할지는 신호와 보행자, 주변 차를 직접 확인하고 판단해 주세요.'
+# Fixed replies that carry nothing to follow up on; in the history they only taught the model to give up again.
+EMPTY_REPLIES = {MESSAGES[k][0] for k in ('navigation', 'unrelated', 'manual_not_found', 'law_not_found')}
 
 
 def focus_fuel_evidence(hits):
@@ -155,8 +194,13 @@ def lights_in(question):
     if not WARNING_QUESTION.search(question):  # "타이어 교체" or "배터리 방전" is not about a lit icon
         return []
     flat = question.replace(' ', '')
-    return [name for name, shapes in WARNING_LIGHTS.items()
-            if name.replace(' ', '') in flat or any(shape.upper() in flat.upper() for shape in shapes)]
+    named = [name for name, shapes in WARNING_LIGHTS.items()
+             if name.replace(' ', '') in flat or any(shape.upper() in flat.upper() for shape in shapes)]
+    # The frontend offers a bare "느낌표 모양" for red lights. The tyre light's 느낌표 sits in a horseshoe and is
+    # yellow by law, so a red one is the brake light; a yellow one stays unidentified.
+    if not named and '느낌표' in flat and color_in(question) == '적색':
+        named = ['브레이크 경고등']
+    return named
 
 
 def described_shape(question):
@@ -208,7 +252,8 @@ def color_in(text):
 
 def clarified_turns(history):
     """The user's earlier words in a clarification exchange ("무슨 불이 켜졌어" → "주전자 모양이야"), oldest first."""
-    asks = (MESSAGES['ask_shape'][0], MESSAGES['ask_color'][0])
+    asks = (MESSAGES['ask_shape'][0], MESSAGES['ask_color'][0], MESSAGES['ask_situation'][0],
+            MESSAGES['ask_light_kind'][0])
     turns, i = [], len(history) - 1
     while (i >= 1 and len(turns) < 3 and history[i].get('role') == 'assistant'
            and history[i].get('content') in asks and history[i - 1].get('role') == 'user'):
@@ -236,14 +281,17 @@ def session_history(request):
     return [{'role': message['role'], 'content': message['content'][:2000]}
             for message in (request.get('history') or [])[-6:]
             if isinstance(message, dict) and message.get('role') in ('user', 'assistant')
-            and isinstance(message.get('content'), str) and message['content'].strip()]
+            and isinstance(message.get('content'), str) and message['content'].strip()
+            and not (message['role'] == 'assistant' and message['content'] in EMPTY_REPLIES)]
 
 
 def respond(request_id, conversation_id, status, answer, speech, sources=(), action=None, needs_review=False,
             handoff=False):
     missing = MISSING.get(status, [])
-    if status in ('ask_shape', 'ask_color'):  # both are the contract's need_clarification
-        status, missing = 'need_clarification', ['warning_light' if status == 'ask_shape' else 'warning_light_color']
+    if status in ('ask_shape', 'ask_color', 'ask_situation', 'ask_light_kind'):  # the contract's need_clarification
+        status, missing = 'need_clarification', [{'ask_shape': 'warning_light', 'ask_color': 'warning_light_color',
+                                                  'ask_situation': 'road_situation',
+                                                  'ask_light_kind': 'light_kind'}[status]]
     return {'request_id': request_id, 'conversation_id': conversation_id, 'status': status, 'answer': answer,
             'speech_text': speech, 'sources': list(sources), 'needs_review': needs_review, 'handoff': handoff,
             'action': action, 'missing_fields': missing}
@@ -272,13 +320,23 @@ def merge_citations(citations):
     return list(merged.values())
 
 
-def rag_query(request, choose, retrieve, generate):
+def rag_query(request, choose, retrieve, generate, retry_generate=None):
+    """Answers one request (see answer_request), with the first safety step in front for a crash or breakdown."""
+    result = answer_request(request, choose, retrieve, generate, retry_generate)
+    first = next((step for pattern, step in URGENT if pattern.search(request.get('question') or '')), None)
+    if first and result['status'] != 'out_of_scope':
+        result = {**result, 'answer': f"{first}\n{result['answer']}", 'speech_text': f"{first} {result['speech_text']}"}
+    return result
+
+
+def answer_request(request, choose, retrieve, generate, retry_generate=None):
     """request: the api-server body {request_id, conversation_id, question, vehicle, maintenance, history,
     location, destination}; vehicle is already ownership-checked by the api-server. location and
     destination are accepted for compatibility but unused since navigation was dropped.
 
     choose(system, question, tools) -> (tool name, args) or None
     retrieve(query, filters) -> hits; generate(system, user) -> raw model text
+    retry_generate(system, user): writes the one retry after a rejected answer (default: generate)
     """
     question = (request.get('question') or '').strip()
     if not 2 <= len(question) <= 500:
@@ -286,12 +344,26 @@ def rag_query(request, choose, retrieve, generate):
     # Replies to our own clarification ("주전자 모양이야") are read together with what they answer; that joined
     # question stands alone. Other follow-ups go to the router and the answer with the bounded history.
     earlier = clarified_turns(request.get('history') or [])
+    # The situation was described: in our history (voice) or in the frontend's "확인 질문: … 사용자 답변: …" lines.
+    last_reply = ((request.get('history') or [{}])[-1] or {}).get('content')
+    described_road = MESSAGES['ask_situation'][0] in question or bool(earlier) and last_reply == MESSAGES['ask_situation'][0]
+    # The frontend repeats our question, whose examples ("빨간불이에요") would otherwise reach the glossary and
+    # turn "차선이 실선이에요" into a search for signal rows.
+    question = question.replace(MESSAGES['ask_situation'][0], '지금 신호·표지·차선 상황은?')
+    asked_kind = MESSAGES['ask_light_kind'][0] in question or bool(earlier) and last_reply == MESSAGES['ask_light_kind'][0]
+    question = question.replace(MESSAGES['ask_light_kind'][0], '어떤 불인가요?')
     question = ' '.join([*earlier, question]) if earlier else question
     cid = request.get('conversation_id') or f'c_{uuid.uuid4().hex[:12]}'
     vehicle = request.get('vehicle')
     vehicle_id = (vehicle or {}).get('id')
     reply = lambda status, *args, **kw: respond(request.get('request_id'), cid, status,
                                                 *(args or MESSAGES[status]), **kw)
+
+    if (BARE_LIGHT.search(question) and not LIGHT_PLACE.search(question) and not asked_kind and not described_road
+            and not earlier and '확인 질문:' not in question):
+        result = reply('ask_light_kind')
+        result['suggestions'] = ['신호등이에요', '계기판 불이에요']
+        return result
 
     # Keep the selected-car hint from develop together with bounded follow-up context.
     car_note = ' '.join(str(vehicle.get(k, '')) for k in ('manufacturer', 'model')) if vehicle else ''
@@ -301,6 +373,16 @@ def rag_query(request, choose, retrieve, generate):
                         else f'{question} [선택한 차량: {car_note}]' if car_note else question)
     picked = choose(SYSTEM + (HISTORY_CONTEXT if history else ''), routing_question, TOOLS)
     name, args = picked if picked else (None, {})
+    if ACCIDENT.search(question) and name in ('ask_missing_detail', 'decline', 'search_manual'):
+        name, args = 'search_law', {**args, 'query': ACCIDENT_QUERY}
+    elif BREAKDOWN.search(question) and name in ('ask_missing_detail', 'decline', 'search_law'):
+        name, args = 'search_manual', {**args, 'query': BREAKDOWN_QUERY}
+    # One clarification, then answer from what we have: the router kept asking "어떤 증상이 있었나요?" after every
+    # reply. The frontend sends our earlier questions as "확인 질문:" lines; voice keeps them in the history.
+    asked_before = '확인 질문:' in question or bool(history) and history[-1]['role'] == 'assistant' and \
+        history[-1]['content'].rstrip().endswith('?')
+    if name == 'ask_missing_detail' and asked_before:
+        name, args = 'search_manual', {'query': question}
     if name == 'ask_missing_detail':
         clarification = args.get('question')
         if not isinstance(clarification, str) or not 2 <= len(clarification.strip()) <= 500:
@@ -312,9 +394,16 @@ def rag_query(request, choose, retrieve, generate):
         name, args = 'search_manual', {}  # a lit warning light is a manual question, not a road judgement
     if name == 'decline' and args.get('kind') == 'realtime' and RULE_SITUATION.search(question):
         name, args = 'search_law', {}  # a described scene ("점선인데 바꿔도 돼?") asks for the rule, not a live judgement
+    if (name == 'search_law' and not described_road and RIGHT_HERE.search(question)
+            and not RULE_SITUATION.search(question)):
+        name, args = 'decline', {'kind': 'realtime'}  # the router searched "여기서 유턴해도 돼?" with no scene to apply
     if name == 'decline':
         kind = args.get('kind')
-        return reply('out_of_scope', *MESSAGES[kind if kind in ('navigation', 'unrelated') else 'out_of_scope'])
+        if kind in ('navigation', 'unrelated'):
+            return reply('out_of_scope', *MESSAGES[kind])
+        if not described_road:
+            return reply('ask_situation')
+        name, args = 'search_law', {}  # asked once; now look up the rule for what the driver described
     if name == 'maintenance_due' and args.get('item') in MAINTENANCE_ITEMS:
         if vehicle_id is None:
             return reply('need_vehicle')
@@ -349,19 +438,25 @@ def rag_query(request, choose, retrieve, generate):
             return reply('need_vehicle')
         filters = {'kind': 'manual', **{k: vehicle[k] for k in VEHICLE_KEYS}}
         car = ' '.join(vehicle[k] for k in VEHICLE_KEYS)
-    # A follow-up needs the standalone query: embedding "그럼 끄려면?" alongside it can
-    # swamp the recovered subject. The original words and history still ground the answer.
+    # The router's rewrite recovers a follow-up's subject ("끄는 건?" → "오토홀드 끄는 방법"), but the question's own
+    # words stay in the query: the router also calls new questions follow-ups, and its rewrite of
+    # "우회전은 언제 할 수 있어?" ("우회전 시기") alone missed 제25조.
+    follow_up = bool(history) and args.get('follow_up') is True
     query = args.get('query', '').strip()
     if not query:
         query = question
-    elif not history and query != question:
+    elif query != question:
         query = f'{question} {query}'
     glossary = {**TERMS, **(LAW_TERMS if name == 'search_law' else {})}
     known = {word: term for word, term in glossary.items() if word in question.replace(' ', '')}
-    known.update({shape: light for light in lights_in(question) for shape in WARNING_LIGHTS[light]
+    known.update({shape: light for light in named for shape in WARNING_LIGHTS[light]
                   if shape.upper() in question.replace(' ', '').upper()})
+    if by_shape and named[0] not in known.values():  # told by colour, not by a listed shape ("빨간 느낌표")
+        known['느낌표'] = named[0]
     query += ''.join(f' {term}' for term in known.values())
     query += ''.join(f' {hint}' for word, hint in QUERY_HINTS.items() if name == 'search_law' and word in question)
+    if name == 'search_law' and ACCIDENT.search(question) and ACCIDENT_QUERY not in query:
+        query += f' {ACCIDENT_QUERY}'
     hits = retrieve(query, filters)
     if not hits and name == 'search_manual':  # retrieval filters first, so no hits means no manual for this car
         return reply('not_found', f'{car} 설명서는 아직 등록되지 않았어요. 정비소나 고객센터에 문의해 주세요.',
@@ -372,28 +467,40 @@ def rag_query(request, choose, retrieve, generate):
         # check are not thrown by "무슨 불 … 주전자 모양이야", which no manual sentence says.
         seen = f'{COLOR_WORDS[color]}으로 ' if color else ''
         asked = f'{named[0]}이 {seen}켜졌어요. 무슨 뜻이고 어떻게 해야 하나요? (사용자 표현: {question})'
+    elif name == 'search_manual' and BREAKDOWN.search(question):
+        # "차가 멈췄어" is no manual heading; asked as it was, the model would not tie it to the emergency section.
+        asked = f'주행 중 차가 멈추거나 시동이 꺼지는 등 고장이 났을 때 어떻게 해야 하나요? (사용자 표현: {question})'
     else:
         asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
+    if described_road:
+        # The answer prompt refuses on-the-spot judgements, and "여기서 바꿔도 돼?" still reads as one after the
+        # driver described the scene (2026-10-26: answer told "실선이면 안 된다" but marked insufficient_evidence).
+        asked += ' (운전자가 설명한 상황에 적용되는 법 규정을 묻는 질문이다. 현장 판단 대신 그 상황에서 허용·금지되는 조건을 전한다.)'
     # Use the canonical light name in both generation and verification. A glossary
     # suffix alone still left the verifier treating '주유등' as an unknown target.
     if name == 'search_manual':
         for alias in ('주유등', '기름불', '기름경고등'):
             asked = asked.replace(alias, TERMS[alias])
-    style = 'solution' if name == 'search_manual' and PROBLEM.search(question) else None
+    style = 'solution' if name == 'search_manual' and (PROBLEM.search(question) or BREAKDOWN.search(question)) else None
     if name == 'search_law':
         hits = focus_signal_rows(f'{question} {" ".join(known.values())}', hits)
     if name == 'search_manual' and '연료 부족 경고등' in asked and not re.search(r'LPG|LPI|과충전', asked, re.I):
         hits = focus_fuel_evidence(hits)
-    result = answer_from_hits(asked, hits, generate, car, style, history=history)
+    # A new question gets no history: told to recover an omitted subject, the model picked one from earlier
+    # turns ("우회전은 언제 할 수 있어?" after a warning-light talk) and called the evidence insufficient.
+    # The router still saw the history, so it is the one that says whether the subject was left out.
+    result = answer_from_hits(asked, hits, generate, car, style, history=history if follow_up else None,
+                              retry_generate=retry_generate)
     if result['status'] != 'answered':
         if name == 'search_manual':
-            return reply('not_found', '설명서에서 근거를 찾지 못했어요. 정비소나 고객센터에 문의해 주세요.',
-                         '설명서에서 찾지 못했어요.', handoff=True)
-        return reply('not_found', '법령에서 근거를 찾지 못했어요. 공식 자료로 한 번 더 확인해 주세요.',
-                     '법령에서 찾지 못했어요.', needs_review=True)
+            return reply('not_found', *MESSAGES['manual_not_found'], handoff=True)
+        return reply('not_found', *MESSAGES['law_not_found'], needs_review=True)
     sources = merge_citations(map(cite, result['sources']))
     note = color_mismatch(named[0], color) if by_shape else None
     if note:
         sources.append({k: LEGAL_SOURCE[k] for k in ('title', 'page', 'url')})
     answer = result['answer_text'] + (f'\n{note}' if note else '')
-    return reply('answered', answer, result['speech_text'], sources=sources)
+    speech = result['speech_text']
+    if described_road:
+        answer, speech = f'{answer}\n{SITUATION_NOTE}', f'{speech} {SITUATION_NOTE}'
+    return reply('answered', answer, speech, sources=sources)

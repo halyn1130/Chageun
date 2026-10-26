@@ -12,11 +12,9 @@ import {
   House,
   LogIn,
   LogOut,
-  Moon,
   Mic,
   Plus,
   RotateCcw,
-  Sun,
   Square,
   Volume2,
   Wrench,
@@ -85,12 +83,11 @@ const {
   itemLabel,
   isMockSource,
   go,
-  toggleTheme,
+  setTheme,
   returnHome,
   cancelQuestion,
-  canReturnToPreviousStep,
-  returnToPreviousStep,
   selectVehicle,
+  updateVehicleMileage,
   saveCar,
   deleteCar,
   openMaintenanceForm,
@@ -324,19 +321,21 @@ function switchAuthMode() {
 
 <template>
   <div class="chageun" :data-theme="theme">
-    <VoiceSettings v-if="settingsOpen" @close="settingsOpen = false" @saved="applyPersonalSettings" @logout="settingsOpen = false; signOut()" @register="settingsOpen = false; carFormOpen = true" />
+    <VoiceSettings
+      v-if="settingsOpen"
+      :vehicles="vehicles"
+      :initial-vehicle-id="headerVehicle?.id ?? selectedVehicleId"
+      :save-mileage="updateVehicleMileage"
+      :theme="theme"
+      @theme="setTheme"
+      @close="settingsOpen = false"
+      @saved="applyPersonalSettings"
+      @logout="settingsOpen = false; signOut()"
+      @register="settingsOpen = false; openCarRegistration()"
+    />
     <header class="app-header">
       <button class="brand-home" type="button" aria-label="차근 홈으로 돌아가기" @click="goHome"><BrandLogo /></button>
       <div class="header-actions">
-        <button
-          class="icon-button theme-button"
-          :aria-label="
-            theme === 'dark' ? '밝은 화면으로 전환' : '어두운 화면으로 전환'
-          "
-          @click="toggleTheme"
-        >
-          <Sun v-if="theme === 'dark'" :size="21" /><Moon v-else :size="20" />
-        </button>
         <button
           class="vehicle-button"
           :disabled="asking"
@@ -582,7 +581,6 @@ function switchAuthMode() {
       :entry="diagnosticEntry"
       :message="currentMessage"
       :asking="asking"
-      :can-go-previous="canReturnToPreviousStep"
       :voice-state="voiceState"
       :vehicles="vehicles"
       :intro="!vehicleIntroShown"
@@ -602,7 +600,6 @@ function switchAuthMode() {
       @speak="playSpeech"
       @reset="resetGuidance"
       @home="goHome"
-      @previous="voice.stop(); returnToPreviousStep()"
       @mode="diagnosticMode = $event"
     />
 
@@ -779,15 +776,11 @@ function switchAuthMode() {
               type="date"
               :max="today()"
               required /></label
-          ><label
-            >주행거리 <span>km</span
-            ><input
-              v-model="maintenanceForm.mileage_km"
-              type="number"
-              min="0"
-              step="1"
-              required
-          /></label>
+          >
+          <label>
+            교환 시점 주행거리 <span>km</span>
+            <input v-model="maintenanceForm.mileage_km" type="number" min="0" max="4294967295" step="1" inputmode="numeric" required placeholder="교환 당시 계기판 주행거리" />
+          </label>
         </div>
         <label
           >메모 <span>선택</span
@@ -795,7 +788,8 @@ function switchAuthMode() {
             v-model="maintenanceForm.memo"
             maxlength="255"
             placeholder="예: 엔진오일과 필터 교환" /></label
-        ><button class="primary-button" type="submit" :disabled="formBusy">
+        >
+        <button class="primary-button" type="submit" :disabled="formBusy">
           {{ formBusy ? '저장 중…' : '기록 추가' }}<ArrowRight :size="18" />
         </button></form
     ></DialogSheet>

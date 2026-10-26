@@ -770,7 +770,7 @@ def evidence_passage(text, quote, limit=300):
     return quote
 
 
-def answer_from_hits(question, hits, generate, vehicle=None, style=None, history=None):
+def answer_from_hits(question, hits, generate, vehicle=None, style=None, history=None, retry_generate=None):
     empty = {'status': 'insufficient_evidence', 'answer_text': '확인할 문서 근거가 부족해요. 차량 정보나 질문 상황을 더 알려주세요.',
              'speech_text': '확인할 근거가 부족해요. 정보를 조금 더 알려주세요.', 'sources': []}
     if not hits:
@@ -848,12 +848,21 @@ def answer_from_hits(question, hits, generate, vehicle=None, style=None, history
     parse = lambda raw: json.loads(re.sub(r'^```(?:json)?\s*|\s*```$', '', raw.strip()))
     # One retry, told exactly what to fix: words naming another engine (a K5 G2.0 owner should not hear
     # the 1.6T interval), or sentences the verifier found unsupported (often a garbled spoken summary).
+    # retry_generate (a stronger writer) writes only that retry, so its cost falls on the answers that failed:
+    # gpt-4o-mini twice dropped the exception in "빨간불에 우회전해도 돼?", gpt-4o kept it 6/6 (2026-10-26).
     feedback = None
     for _ in range(2):
         prompt, body = (system, request) if feedback is None else (system + ' ' + feedback[0], {**request, **feedback[1]})
+        write = generate if feedback is None else retry_generate or generate
         try:
-            value = parse(generate(prompt, json.dumps(body, ensure_ascii=False)))
+            value = parse(write(prompt, json.dumps(body, ensure_ascii=False)))
             if not isinstance(value, dict) or value.get('status') != 'answered' or value.get('missing_terms'):
+                if feedback is None and retry_generate and isinstance(value, dict) and value.get('cites'):
+                    # It cited evidence and still gave up ("상대방의 상태" missing from 제54조): let the stronger
+                    # writer look once more. The verifier still checks whatever it writes.
+                    feedback = ('앞선 답변은 근거가 부족하다고 했지만 evidence를 인용했다. 질문에 직접 답하는 조항이 '
+                                'evidence에 있는지 다시 확인하고, 있으면 그 조항대로 답하라.', {})
+                    continue
                 return empty
             if any(not isinstance(value.get(k), str) or not value[k].strip() for k in ('answer_text', 'speech_text')):
                 return empty
