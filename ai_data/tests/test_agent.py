@@ -155,7 +155,8 @@ class AgentTests(unittest.TestCase):
                                        question=f'이상해 무슨 불이 켜졌어\n추가 정보 — {details}', vehicle=VEHICLE)
         # The frontend asks colour, shape and blinking itself, then sends one question.
         for details, light in (('색: 빨간색; 모양: 주전자 모양; 점멸: 계속 켜져 있음', '엔진 오일 압력 경고등'),
-                               ('색: 노란색; 모양: 말발굽 모양; 점멸: 깜빡임', '저압 타이어 경고등')):
+                               ('색: 노란색; 모양: 말발굽 모양; 점멸: 깜빡임', '저압 타이어 경고등'),
+                               ('색: 빨간색; 모양: 느낌표 모양; 점멸: 깜빡임', '브레이크 경고등')):
             self.assertEqual(ask(details)['status'], 'not_found')  # searched (no hits in this fake), not asked
             self.assertIn(light, seen[-1])
         # A shape we have no entry for is searched as described, not asked for again.

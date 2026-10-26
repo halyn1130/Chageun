@@ -155,8 +155,13 @@ def lights_in(question):
     if not WARNING_QUESTION.search(question):  # "타이어 교체" or "배터리 방전" is not about a lit icon
         return []
     flat = question.replace(' ', '')
-    return [name for name, shapes in WARNING_LIGHTS.items()
-            if name.replace(' ', '') in flat or any(shape.upper() in flat.upper() for shape in shapes)]
+    named = [name for name, shapes in WARNING_LIGHTS.items()
+             if name.replace(' ', '') in flat or any(shape.upper() in flat.upper() for shape in shapes)]
+    # The frontend offers a bare "느낌표 모양" for red lights. The tyre light's 느낌표 sits in a horseshoe and is
+    # yellow by law, so a red one is the brake light; a yellow one stays unidentified.
+    if not named and '느낌표' in flat and color_in(question) == '적색':
+        named = ['브레이크 경고등']
+    return named
 
 
 def described_shape(question):
@@ -344,8 +349,10 @@ def rag_query(request, choose, retrieve, generate):
         query = f'{question} {query}'
     glossary = {**TERMS, **(LAW_TERMS if name == 'search_law' else {})}
     known = {word: term for word, term in glossary.items() if word in question.replace(' ', '')}
-    known.update({shape: light for light in lights_in(question) for shape in WARNING_LIGHTS[light]
+    known.update({shape: light for light in named for shape in WARNING_LIGHTS[light]
                   if shape.upper() in question.replace(' ', '').upper()})
+    if by_shape and named[0] not in known.values():  # told by colour, not by a listed shape ("빨간 느낌표")
+        known['느낌표'] = named[0]
     query += ''.join(f' {term}' for term in known.values())
     query += ''.join(f' {hint}' for word, hint in QUERY_HINTS.items() if name == 'search_law' and word in question)
     hits = retrieve(query, filters)
