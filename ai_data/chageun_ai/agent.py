@@ -17,6 +17,9 @@ MAINTENANCE_ITEMS = ['engine_oil', 'oil_filter', 'air_filter', 'cabin_filter', '
 TERMS = {'주유등': '연료 부족 경고등', '기름불': '연료 부족 경고등', '기름경고등': '연료 부족 경고등', '오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸', '버스정류장': '버스여객자동차의 정류지', '교환': '교체',
          '소화전': '소방용수시설 비상소화장치', '멈춰': '일시정지', '멈추': '일시정지', '엉따': '열선 시트',
          '앞차와거리': '앞차와의 충돌을 피할 수 있는 필요한 거리', '안전거리': '앞차와의 충돌을 피할 수 있는 필요한 거리'}
+# "깜빡이" is also the turn signal, which '깜빡' → '점멸' sent to blinking warning lights ("깜빡이 어떻게 켜?" found
+# nothing). Only the noun is: "경고등이 깜빡이고 있어" / "깜빡이는데" still mean blinking.
+TURN_SIGNAL = re.compile(r'깜빡이(?:를|가|\s?(?:켜|키|어떻게|넣|레버|소리|안\s?(?:켜|꺼|돼)|어디|좀|자동))|깜빡이\s*[?？]?$')
 # Signal colours as drivers say them; law only (a "빨간 불" on the dashboard is a warning light).
 LAW_TERMS = {'빨간불': '적색의 등화', '적색신호': '적색의 등화', '빨간신호': '적색의 등화',
              '노란불': '황색의 등화', '황색신호': '황색의 등화', '노란신호': '황색의 등화',
@@ -41,12 +44,19 @@ ACCIDENT_QUERY = '사고발생 시의 조치 즉시 정차 사상자 구호 신�
 BREAKDOWN = re.compile(r'차가\s?(?:갑자기\s?)?(?:멈췄|멈춰|섰어|안\s?가|안\s?움직)|시동이\s?(?:꺼졌|꺼져|꺼짐|갑자기\s?꺼)|'
                        r'(?:엑셀|액셀|가속\s?페달)을?\s?(?:밟아도|밟는데)|차가\s?퍼졌')
 BREAKDOWN_QUERY = '주행 중 고장이 나면 주행 중 시동이 꺼졌을 때 비상 경고등 안전한 곳으로 이동'
+# Driving into a one-way street the wrong way has no article of its own; asked as it was, the answer model gave up
+# (and its discarded draft said to back out, which 제18조 forbids when it obstructs others). Asked for the rules
+# that apply instead, it answers from the one-way signs (별표 6) and 제18조's limits on U-turns and reversing.
+WRONG_WAY = re.compile(r'일방통행.{0,15}(?:들어왔|들어갔|들어와|진입했|잘못|모르고|역주행|반대로)|'
+                       r'(?:내가|제가)\s?역주행|역주행\s?(?:하고\s?있|중이|했)')
+WRONG_WAY_QUERY = '일방통행 지시표지 도로의 횡단 유턴 후진 금지'
 # What to do first, said before anything we look up and even when the lookup fails. Fixed text: it must be instant
 # and must not depend on a model. 119 is not in 제54조 (it names the police), but an injured person comes first.
 URGENT = (
     (re.compile(r'사고가?\s?(?:났|나서|났는데)|사람을\s?(?:쳤|치었|친)|(?:차|사람|보행자|자전거|오토바이)(?:를|을|랑|와|하고)?\s?(?:박았|들이받|부딪)'),
      '먼저 차를 안전하게 세우고 비상등을 켜세요. 다친 사람이 있으면 바로 119에 신고하세요.'),
     (BREAKDOWN, '먼저 비상등을 켜고, 할 수 있으면 차를 안전한 곳으로 옮기세요.'),
+    (WRONG_WAY, '더 들어가지 말고 비상등을 켠 뒤 속도를 줄여 도로 가장자리에 멈추세요. 마주 오는 차와 보행자를 먼저 살피세요.'),
 )
 # Manual icons are images, so the text only has each light's name. Drivers describe the icon instead.
 # Shapes were read off the K5 icon table; 아반떼 uses the same icons (icons compared side by side).
@@ -377,6 +387,8 @@ def answer_request(request, choose, retrieve, generate, retry_generate=None):
         name, args = 'search_law', {**args, 'query': ACCIDENT_QUERY}
     elif BREAKDOWN.search(question) and name in ('ask_missing_detail', 'decline', 'search_law'):
         name, args = 'search_manual', {**args, 'query': BREAKDOWN_QUERY}
+    elif WRONG_WAY.search(question) and name in ('ask_missing_detail', 'decline', 'search_manual', 'search_law'):
+        name, args = 'search_law', {**args, 'query': WRONG_WAY_QUERY}
     # One clarification, then answer from what we have: the router kept asking "어떤 증상이 있었나요?" after every
     # reply. The frontend sends our earlier questions as "확인 질문:" lines; voice keeps them in the history.
     asked_before = '확인 질문:' in question or bool(history) and history[-1]['role'] == 'assistant' and \
@@ -449,6 +461,9 @@ def answer_request(request, choose, retrieve, generate, retry_generate=None):
         query = f'{question} {query}'
     glossary = {**TERMS, **(LAW_TERMS if name == 'search_law' else {})}
     known = {word: term for word, term in glossary.items() if word in question.replace(' ', '')}
+    if TURN_SIGNAL.search(question):
+        known.pop('깜빡', None)
+        known['깜빡이'] = '방향지시등'
     known.update({shape: light for light in named for shape in WARNING_LIGHTS[light]
                   if shape.upper() in question.replace(' ', '').upper()})
     if by_shape and named[0] not in known.values():  # told by colour, not by a listed shape ("빨간 느낌표")
@@ -467,6 +482,9 @@ def answer_request(request, choose, retrieve, generate, retry_generate=None):
         # check are not thrown by "무슨 불 … 주전자 모양이야", which no manual sentence says.
         seen = f'{COLOR_WORDS[color]}으로 ' if color else ''
         asked = f'{named[0]}이 {seen}켜졌어요. 무슨 뜻이고 어떻게 해야 하나요? (사용자 표현: {question})'
+    elif name == 'search_law' and WRONG_WAY.search(question):
+        asked = ('일방통행 도로에 진행 방향과 반대로 들어왔을 때 지켜야 할 법 규정은 무엇인가요? 통행할 수 있는 방향과, '
+                 f'돌아 나가려고 유턴하거나 후진할 때 금지되는 경우를 알려 주세요. (사용자 표현: {question})')
     elif name == 'search_manual' and BREAKDOWN.search(question):
         # "차가 멈췄어" is no manual heading; asked as it was, the model would not tie it to the emergency section.
         asked = f'주행 중 차가 멈추거나 시동이 꺼지는 등 고장이 났을 때 어떻게 해야 하나요? (사용자 표현: {question})'
