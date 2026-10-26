@@ -231,6 +231,29 @@ class AgentTests(unittest.TestCase):
         crash = self.ask(picks('search_law', query='사고'), lambda s, u: '{}', lambda q, f: [], question='교통사고가 났어')
         self.assertIn('119', crash['answer'].split('\n')[0])  # said even though the lookup found nothing
 
+    def test_the_turn_signal_slang_is_searched_as_the_turn_signal_not_blinking(self):
+        seen = []
+        for question in ('깜빡이 어떻게 켜?', '깜빡이를 켜는 법 알려줘', '깜빡이 안 꺼져'):
+            self.ask(picks('search_manual', query='깜빡이 켜는 방법'), lambda s, u: '{}', lambda q, f: seen.append(q) or [],
+                     question=question, vehicle=VEHICLE)
+            self.assertIn('방향지시등', seen[-1], question)
+            self.assertNotIn('점멸', seen[-1], question)
+        from chageun_ai.agent import TURN_SIGNAL
+        for blinking in ('경고등이 깜빡이고 있어', '노란 불이 깜빡이는데 뭐야?', '빨간색으로 깜빡여'):
+            self.assertIsNone(TURN_SIGNAL.search(blinking), blinking)  # still '깜빡' → '점멸'
+
+    def test_a_wrong_way_entry_gets_the_first_step_and_the_rules_that_apply(self):
+        seen = []
+        r = self.ask(picks('search_law', query='일방통행 도로에서의 통행 방법'), lambda s, u: seen.append(('gen', u)) or '{}',
+                     lambda q, f: seen.append((q, f)) or [{'chunk': {'chunk_id': 'x', 'text': '규칙', 'metadata': {}}, 'score': 1}],
+                     question='일방통행인데 모르고 들어왔어. 어떻게 해야해?')
+        self.assertTrue(r['answer'].startswith('더 들어가지 말고 비상등을 켠 뒤'))  # said even though nothing was found
+        self.assertIn('유턴 후진 금지', seen[0][0])
+        self.assertEqual(seen[0][1], {'kind': 'law'})
+        self.assertIn('유턴하거나 후진할 때 금지되는 경우', seen[1][1])
+        crash = self.ask(picks('decline', kind='unrelated'), question='일방통행 도로 규칙 알려줘')
+        self.assertFalse(crash['answer'].startswith('더 들어가지'))  # a plain rule question is not an emergency
+
     def test_the_router_asks_back_once_then_we_answer_with_what_we_have(self):
         ask_again = picks('ask_missing_detail', missing_detail='symptom', question='어떤 소리가 나나요?')
         self.assertEqual(self.ask(ask_again, question='차에서 이상한 느낌이 나', vehicle=VEHICLE)['status'], 'need_clarification')
