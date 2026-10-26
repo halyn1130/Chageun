@@ -692,19 +692,30 @@ function switchAuthMode() {
         </p>
       </div>
       <div class="source-list">
-        <a
+        <section
           v-for="source in sourceMessage?.sources?.filter(
             (item) => !isMockSource(item),
           )"
-          :key="source.url"
-          :href="source.url"
-          target="_blank"
-          rel="noopener noreferrer"
-          ><BookOpen :size="23" /><span
-            ><strong>{{ source.title }}</strong
-            ><small>{{ source.page }}</small></span
-          ><ExternalLink :size="17"
-        /></a></div
+          :key="`${source.url}|${source.page}`"
+          class="source-item"
+          ><header
+            ><BookOpen :size="23" /><span
+              ><strong>{{ source.title }}</strong
+              ><small>{{ source.page }}</small></span
+            ></header
+          ><blockquote
+            v-for="quote in source.quotes || []"
+            :key="quote"
+            class="source-quote"
+            >{{ quote }}</blockquote
+          ><a
+            :href="source.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-link"
+            >공식 원문 열기<ExternalLink :size="15"
+          /></a></section
+        ></div
     ></DialogSheet>
 
     <DialogSheet

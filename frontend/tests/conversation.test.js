@@ -96,6 +96,13 @@ test('plain replies stay in the flow, while a new topic starts over', () => {
   assert.equal(isNewQuestion('엔진오일 언제 갈아?', flow), true)
 })
 
+test('a plain reply to the server question stays in that conversation', () => {
+  const flow = { ...startQuestion('사람을 쳤는데 어떡해', 3), awaiting: 'server', serverFollowup: true }
+  assert.equal(isNewQuestion('빨간불인데 그냥 갔어', flow), false)
+  assert.equal(isNewQuestion('횡단보도였어', flow), false)
+  assert.equal(isNewQuestion('엉따 어떻게 켜?', flow), true)
+})
+
 test('a reply to the server question stays in the flow even when it looks like another topic', () => {
   const flow = { ...startQuestion('지금 우회전해도 괜찮아?', 3), awaiting: 'server', serverFollowup: true }
   assert.equal(isNewQuestion('지금 빨간불이고, 보행자는 파란불이야', flow), false)

@@ -269,7 +269,8 @@ class AgentTests(unittest.TestCase):
         r = self.ask(picks('search_law', query='교차로 일시정지'), good, retrieve)
         self.assertEqual(seen, [('가상 질문입니다 교차로 일시정지', {'kind': 'law'})])
         self.assertEqual(r['status'], 'answered')
-        self.assertEqual(r['sources'], [{'title': '가상법', 'page': '제5조', 'url': LAW['source_url']}])
+        self.assertEqual(r['sources'], [{'title': '가상법', 'page': '제5조', 'url': LAW['source_url'],
+                                         'quotes': ['① 모든 운전자는 가상 교차로에서 일시정지하여야 한다.']}])
         refused = self.ask(picks('search_law', query='x'), lambda s, u: '{}', retrieve)
         self.assertEqual((refused['status'], refused['needs_review'], refused['sources']), ('not_found', True, []))
 

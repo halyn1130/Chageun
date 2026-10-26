@@ -729,6 +729,47 @@ def missing_conditions(quotes, question, answer):
     return missing
 
 
+ARTICLE_HEADING = re.compile(r'^제\d+조(?:의\d+)?\([^)]*\)\s*')
+PASSAGE_BREAK = re.compile(r'\n(?=[·•\-]|\d+\.|[①-⑳]|[가-하]\.\s)')
+
+
+def strip_chunk_label(text):
+    """Drop the "[title] 제5조(제목)" label every chunk starts with; the citation already shows it."""
+    if text.startswith('['):
+        depth = 0
+        for i, ch in enumerate(text):
+            depth += (ch == '[') - (ch == ']')
+            if depth == 0:
+                rest = text[i + 1:].lstrip(' ')
+                # A table label runs to the end of its line ("… 노면표시 508 진로변경제한선표시").
+                if not ARTICLE_HEADING.match(rest) and '\n' in rest:
+                    rest = rest.split('\n', 1)[1]
+                text = rest.lstrip()
+                break
+    return ARTICLE_HEADING.sub('', text)
+
+
+def evidence_passage(text, quote, limit=300):
+    """The readable passage a cited line belongs to. Table cells and PDF wraps cut one sentence into many
+    lines ("변경 할 수 있으" / "나, 실선이 있는"), so the cited line alone means little to a reader: show its
+    whole item (a · bullet, ① paragraph or numbered line) with the wraps joined, clipped around the quote."""
+    body = strip_chunk_label(text)
+    key = re.sub(r'\s', '', quote)
+    for item in PASSAGE_BREAK.split(body):
+        flat = re.sub(r'\s*\n\s*', ' ', item).strip()
+        if key and key in re.sub(r'\s', '', flat):
+            if len(flat) <= limit:
+                return flat
+            # A long prose item (a manual section): keep only the sentences the cited line spans.
+            sentences = re.split(r'(?<=[.!?])\s+', flat)
+            bare = [re.sub(r'\s', '', x) for x in sentences]
+            first = next((i for i, b in enumerate(bare) if key[:8] in b), 0)
+            last = next((i for i in range(len(bare) - 1, first - 1, -1) if key[-8:] in bare[i]), first)
+            passage = ' '.join(sentences[first:last + 1])
+            return passage if len(passage) <= limit else passage[:limit] + '…'
+    return quote
+
+
 def answer_from_hits(question, hits, generate, vehicle=None, style=None, history=None, retry_generate=None):
     empty = {'status': 'insufficient_evidence', 'answer_text': '확인할 문서 근거가 부족해요. 차량 정보나 질문 상황을 더 알려주세요.',
              'speech_text': '확인할 근거가 부족해요. 정보를 조금 더 알려주세요.', 'sources': []}
@@ -868,7 +909,11 @@ def answer_from_hits(question, hits, generate, vehicle=None, style=None, history
                             {'remove_claims': unsupported if isinstance(unsupported, list) else []})
                 continue
             return {'status': 'answered', 'answer_text': value['answer_text'], 'speech_text': value['speech_text'],
-                    'sources': [{'chunk_id': i, **lookup[i]['metadata']} for i in ids]}
+                    # The verified sentences travel with their chunk, so the app can show what the answer rests on.
+                    'sources': [{'chunk_id': i, **lookup[i]['metadata'],
+                                 'quotes': list(dict.fromkeys(evidence_passage(lookup[i]['text'], q['quote'])
+                                                              for q in quotes if q['chunk_id'] == i))}
+                                for i in ids]}
         except (ValueError, TypeError):
             return empty
     return empty

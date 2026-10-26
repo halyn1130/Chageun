@@ -527,7 +527,11 @@ export function useChageun() {
       await continueOrSend({ ...continueQuestion(pending, clean),
         preparedEligible: keepPreparedEligibility(pending, prompt, clean) })
     } else {
+      // A typed new question mid-flow keeps the server conversation, so the recent turns still give context.
+      // Menu shortcuts (options.newQuestion) deliberately start a fresh conversation.
+      const keptConversation = options.newQuestion ? null : conversationId.value
       if (pending || options.newQuestion) cancelQuestion()
+      if (keptConversation) conversationId.value = keptConversation
       await continueOrSend({
         ...startQuestion(clean, chatVehicleId.value),
         preparedEligible: options.preparedMenu === true,

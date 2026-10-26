@@ -303,7 +303,21 @@ def cite(source):
     page = source.get('article') or (printed and f'p.{printed}') or source.get('section') or f"PDF p.{source['pdf_page']}"
     if page.startswith('별표') and source.get('article_title'):
         page += f" ({source['article_title']})"
-    return {'title': source['title'], 'page': page, 'url': source['source_url']}
+    # quotes: the sentences the answer cited and the verifier accepted, so the driver reads the evidence itself.
+    quotes = [q[:300] for q in source.get('quotes') or [] if isinstance(q, str) and q.strip()][:4]
+    return {'title': source['title'], 'page': page, 'url': source['source_url'], 'quotes': quotes}
+
+
+def merge_citations(citations):
+    """Parts of one long article share a citation: show it once, with every quoted sentence."""
+    merged = {}
+    for c in citations:
+        key = (c['title'], c['page'], c['url'])
+        if key in merged:
+            merged[key]['quotes'] += [q for q in c['quotes'] if q not in merged[key]['quotes']]
+        else:
+            merged[key] = {**c, 'quotes': list(c['quotes'])}
+    return list(merged.values())
 
 
 def rag_query(request, choose, retrieve, generate, retry_generate=None):
@@ -481,8 +495,7 @@ def answer_request(request, choose, retrieve, generate, retry_generate=None):
         if name == 'search_manual':
             return reply('not_found', *MESSAGES['manual_not_found'], handoff=True)
         return reply('not_found', *MESSAGES['law_not_found'], needs_review=True)
-    # Parts of one long article share a citation, so show it once.
-    sources = list({tuple(c.items()): c for c in map(cite, result['sources'])}.values())
+    sources = merge_citations(map(cite, result['sources']))
     note = color_mismatch(named[0], color) if by_shape else None
     if note:
         sources.append({k: LEGAL_SOURCE[k] for k in ('title', 'page', 'url')})
