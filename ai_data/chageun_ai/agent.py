@@ -58,6 +58,12 @@ RULE_SITUATION = re.compile(r'점선|실선|황색|백색|중앙선|차선|차�
 VAGUE = re.compile(r'(?:빨간|빨강|노란|노랑|주황|초록|녹색|파란|하얀|흰|적|황|청)색?|계기판|클러스터|무슨|어떤|이상한|웬|이|그|저|이런|저런')
 
 
+# Whether a question leans on the previous turns is the router's call: drivers leave the subject out without any
+# pointing word ("가혹 조건은?", "아반떼는?"), and a new question must not inherit the last topic.
+FOLLOW_UP = {'type': 'boolean', 'description': '최근 대화의 대상을 이어받아야 뜻이 통하는 질문이면 true. '
+             '예: "그럼 끄려면?", "가혹 조건은?", "아반떼는?", "노란색이야". 그 자체로 뜻이 완결된 새 질문이면 false.'}
+
+
 def tool(name, description, **properties):
     return {'type': 'function', 'function': {
         'name': name, 'description': description,
@@ -70,11 +76,13 @@ TOOLS = [
          item={'type': 'string', 'enum': MAINTENANCE_ITEMS},
          condition={'type': 'string', 'enum': ['normal', 'severe'], 'description': '사용자가 가혹 조건(짧은 거리 반복·잦은 정체 등)을 명시하면 severe. 미확인이면 normal이며 답변에 조건을 명시한다.'}),
     tool('search_law', '도로교통법·시행령·시행규칙에서 교통 규칙, 통행 방법, 금지 행위, 범칙 기준을 찾는다.',
-         query={'type': 'string', 'description': '질문을 법령 용어로 바꾼 검색어. 예: 주정차 → 정차 및 주차의 금지 장소'}),
+         query={'type': 'string', 'description': '질문을 법령 용어로 바꾼 검색어. 예: 주정차 → 정차 및 주차의 금지 장소'},
+         follow_up=FOLLOW_UP),
     tool('search_manual', '선택한 차량의 취급설명서에서 기능 사용법, 계기판 경고등·표시등의 의미와 조치, 점검·교환 주기와 방법을 찾는다. '
          '"지금 계기판에 불이 들어왔어"처럼 경고등을 묻는 질문과 "이 차에 ○○ 기능 있어?"처럼 기능 유무를 묻는 질문도 여기다.',
          query={'type': 'string', 'description': '질문의 상황과 목적을 모두 담은 검색어. 기능 이름은 설명서 표기를 함께 쓴다. '
-                                  '예: 스마트키 배터리 방전 시 시동 거는 방법, 오토홀드 → 오토 홀드 AUTO HOLD'}),
+                                  '예: 스마트키 배터리 방전 시 시동 거는 방법, 오토홀드 → 오토 홀드 AUTO HOLD'},
+         follow_up=FOLLOW_UP),
     tool('open_maintenance', '내 차의 정비 기록에서 "마지막으로 언제 갈았지?"처럼 실제로 교환·점검한 시점을 확인한다. '
          '일반적인 교환 주기나 방법은 search_manual이다.',
          item={'type': 'string', 'enum': MAINTENANCE_ITEMS}),
@@ -122,10 +130,14 @@ MESSAGES = {
     'out_of_scope': ('주변 상황은 제가 볼 수 없어요. 차선이 점선인지 실선인지, 신호가 무슨 색인지처럼 지금 보이는 상황을 '
                      '말해 주시면 그 상황의 규칙을 알려 드릴게요.',
                      '주변은 제가 볼 수 없어요. 차선 모양이나 신호 색처럼 보이는 상황을 말해 주세요.'),
+    'manual_not_found': ('설명서에서 근거를 찾지 못했어요. 정비소나 고객센터에 문의해 주세요.', '설명서에서 찾지 못했어요.'),
+    'law_not_found': ('법령에서 근거를 찾지 못했어요. 공식 자료로 한 번 더 확인해 주세요.', '법령에서 찾지 못했어요.'),
     'navigation': ('차근은 길 안내와 주변 장소 찾기는 하지 않아요. 내비게이션 앱을 이용해 주세요.', '길 안내는 내비게이션 앱을 이용해 주세요.'),
     'unrelated': ('차근은 교통 법규, 내 차 설명서, 정비 기록을 도와드려요. 그와 관련된 질문을 해 주세요.', '운전과 관련된 질문을 해 주세요.'),
     'open_my_car': ('정비 이력을 열어 드릴게요.', '정비 이력을 확인해 볼게요.'),
 }
+# Fixed replies that carry nothing to follow up on; in the history they only taught the model to give up again.
+EMPTY_REPLIES = {MESSAGES[k][0] for k in ('navigation', 'unrelated', 'manual_not_found', 'law_not_found')}
 
 
 def focus_fuel_evidence(hits):
@@ -241,7 +253,8 @@ def session_history(request):
     return [{'role': message['role'], 'content': message['content'][:2000]}
             for message in (request.get('history') or [])[-6:]
             if isinstance(message, dict) and message.get('role') in ('user', 'assistant')
-            and isinstance(message.get('content'), str) and message['content'].strip()]
+            and isinstance(message.get('content'), str) and message['content'].strip()
+            and not (message['role'] == 'assistant' and message['content'] in EMPTY_REPLIES)]
 
 
 def respond(request_id, conversation_id, status, answer, speech, sources=(), action=None, needs_review=False,
@@ -340,12 +353,14 @@ def rag_query(request, choose, retrieve, generate):
             return reply('need_vehicle')
         filters = {'kind': 'manual', **{k: vehicle[k] for k in VEHICLE_KEYS}}
         car = ' '.join(vehicle[k] for k in VEHICLE_KEYS)
-    # A follow-up needs the standalone query: embedding "그럼 끄려면?" alongside it can
-    # swamp the recovered subject. The original words and history still ground the answer.
+    # The router's rewrite recovers a follow-up's subject ("끄는 건?" → "오토홀드 끄는 방법"), but the question's own
+    # words stay in the query: the router also calls new questions follow-ups, and its rewrite of
+    # "우회전은 언제 할 수 있어?" ("우회전 시기") alone missed 제25조.
+    follow_up = bool(history) and args.get('follow_up') is True
     query = args.get('query', '').strip()
     if not query:
         query = question
-    elif not history and query != question:
+    elif query != question:
         query = f'{question} {query}'
     glossary = {**TERMS, **(LAW_TERMS if name == 'search_law' else {})}
     known = {word: term for word, term in glossary.items() if word in question.replace(' ', '')}
@@ -377,13 +392,14 @@ def rag_query(request, choose, retrieve, generate):
         hits = focus_signal_rows(f'{question} {" ".join(known.values())}', hits)
     if name == 'search_manual' and '연료 부족 경고등' in asked and not re.search(r'LPG|LPI|과충전', asked, re.I):
         hits = focus_fuel_evidence(hits)
-    result = answer_from_hits(asked, hits, generate, car, style, history=history)
+    # A new question gets no history: told to recover an omitted subject, the model picked one from earlier
+    # turns ("우회전은 언제 할 수 있어?" after a warning-light talk) and called the evidence insufficient.
+    # The router still saw the history, so it is the one that says whether the subject was left out.
+    result = answer_from_hits(asked, hits, generate, car, style, history=history if follow_up else None)
     if result['status'] != 'answered':
         if name == 'search_manual':
-            return reply('not_found', '설명서에서 근거를 찾지 못했어요. 정비소나 고객센터에 문의해 주세요.',
-                         '설명서에서 찾지 못했어요.', handoff=True)
-        return reply('not_found', '법령에서 근거를 찾지 못했어요. 공식 자료로 한 번 더 확인해 주세요.',
-                     '법령에서 찾지 못했어요.', needs_review=True)
+            return reply('not_found', *MESSAGES['manual_not_found'], handoff=True)
+        return reply('not_found', *MESSAGES['law_not_found'], needs_review=True)
     # Parts of one long article share a citation, so show it once.
     sources = list({tuple(c.items()): c for c in map(cite, result['sources'])}.values())
     note = color_mismatch(named[0], color) if by_shape else None

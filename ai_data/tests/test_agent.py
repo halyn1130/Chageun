@@ -242,7 +242,7 @@ class AgentTests(unittest.TestCase):
         routed, retrieved, generated = [], [], []
         def choose(system, question, tools):
             routed.append(json.loads(question))
-            return 'search_law', {'query': '가상 교차로 일시정지'}
+            return 'search_law', {'query': '가상 교차로 일시정지', 'follow_up': True}
         def generate(system, question):
             if system == VERIFY_SYSTEM:
                 return json.dumps({'supported': True})
@@ -259,9 +259,30 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(routed[0]['question'], '그럼 뭘 해야 해?')
         self.assertEqual(routed[0]['history'], history[-6:])
         self.assertEqual(routed[0]['selected_vehicle'], '기아 K5')
-        self.assertEqual(retrieved, ['가상 교차로 일시정지'])
+        self.assertEqual(retrieved, ['그럼 뭘 해야 해? 가상 교차로 일시정지'])  # the question's own words stay
         self.assertEqual(generated[0]['history'], history[-6:])
         self.assertEqual(generated[0]['question'], '그럼 뭘 해야 해?')
+
+    def test_new_question_after_history_keeps_its_own_words_in_the_query(self):
+        # The router shortened "우회전은 언제 할 수 있어?" to "우회전 시기", which missed 제25조.
+        seen = []
+        self.ask(picks('search_law', query='우회전 시기'), lambda s, u: '{}', lambda q, f: seen.append(q) or [],
+                 question='우회전은 언제 할 수 있어?', history=[{'role': 'user', 'content': '오늘 점심은 뭐야?'}])
+        self.assertTrue(seen[0].startswith('우회전은 언제 할 수 있어? 우회전 시기'))
+
+    def test_new_question_is_answered_without_history_and_empty_replies_are_dropped(self):
+        from unittest.mock import patch
+        from chageun_ai.agent import MESSAGES
+        history = [{'role': 'user', 'content': '비보호 좌회전 해도 돼?'},
+                   {'role': 'assistant', 'content': MESSAGES['law_not_found'][0]}]
+        routed = []
+        choose = lambda system, question, tools: routed.append(json.loads(question)) or ('search_law', {'query': '우회전', 'follow_up': False})
+        with patch('chageun_ai.agent.answer_from_hits', return_value={
+            'status': 'answered', 'answer_text': '안내', 'speech_text': '안내', 'sources': []}) as answer:
+            self.ask(choose, retrieve=lambda q, f: [{'chunk': {'metadata': {}}, 'score': 1}],
+                     question='우회전은 언제 할 수 있어?', history=history)
+        self.assertEqual(routed[0]['history'], history[:1])  # "근거를 찾지 못했어요" carries nothing
+        self.assertIsNone(answer.call_args.kwargs['history'])
 
     def test_session_history_cannot_supply_a_citation_or_override_selected_vehicle(self):
         history = [{'role': 'assistant', 'content': '예전 답변의 내용은 근거가 아니다.'}]
