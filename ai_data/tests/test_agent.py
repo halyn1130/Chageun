@@ -59,6 +59,27 @@ class AgentTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.ask(picks('decline'), question='가')
 
+    def test_described_road_scene_is_answered_from_the_law_not_declined(self):
+        """Planned behaviour: the driver describes the scene and gets the rule for it (router chose decline)."""
+        from unittest.mock import patch
+        hit = {'chunk': {'chunk_id': 'lane', 'text': '점선이 있는 쪽에서는 진로를 변경할 수 있다', 'metadata': {'article': '별표 6'}},
+               'score': 1}
+        searched = []
+        with patch('chageun_ai.agent.answer_from_hits', return_value={
+                'status': 'answered', 'answer_text': '점선이면 바꿀 수 있어요.', 'speech_text': '점선이면 바꿀 수 있어요.',
+                'sources': [{'chunk_id': 'lane', 'article': '별표 6', 'title': '가상법', 'source_url': 'https://example.invalid/law'}]}):
+            for question in ('차선이 점선인데 변경해도 돼?', '신호등이 노란불로 바뀌었는데 지나가도 돼?',
+                             '터널 안에서 차선 바꿔도 돼?', '교차로가 막혀 있는데 들어가도 돼?'):
+                r = self.ask(picks('decline', kind='realtime'), question=question,
+                             retrieve=lambda q, f: searched.append(f) or [hit])
+                self.assertEqual(r['status'], 'answered', question)
+        self.assertTrue(all(f == {'kind': 'law'} for f in searched))
+
+    def test_scene_without_description_asks_the_driver_to_describe_it(self):
+        r = self.ask(picks('decline', kind='realtime'), question='지금 가도 돼?')
+        self.assertEqual(r['status'], 'out_of_scope')
+        self.assertIn('말해 주시면', r['answer'])
+
     def test_navigation_is_declined_and_maintenance_opens_my_car(self):
         r = self.ask(picks('decline', kind='navigation'))
         self.assertEqual((r['status'], r['action']), ('out_of_scope', None))
