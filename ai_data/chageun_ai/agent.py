@@ -33,6 +33,21 @@ QUERY_HINTS = {'차이': '정의 용어의 뜻', '달라': '정의 용어의 뜻
                # "소방차가 사이렌 켜고 오면" retrieved 제20조(slow vehicles yielding) instead of 제29조.
                '사이렌': '긴급자동차의 우선 통행 진로 양보', '소방차': '긴급자동차의 우선 통행 진로 양보',
                '구급차': '긴급자동차의 우선 통행 진로 양보'}
+# A crash is answered at once with what the driver must do now (제54조: stop, aid the injured, report); asking for
+# details first left "교통사고가 났어" waiting, and "사람을 쳤어" was searched as pedestrian protection (제27조).
+ACCIDENT = re.compile(r'사고|사람을\s?(?:쳤|치었|친)|(?:차|사람|보행자|자전거|오토바이)(?:를|을|랑|와|하고)?\s?(?:박았|들이받|부딪)')
+ACCIDENT_QUERY = '사고발생 시의 조치 즉시 정차 사상자 구호 신고'
+# A car that stopped or stalled is answered from the manual's emergency section, not asked about again and again.
+BREAKDOWN = re.compile(r'차가\s?(?:갑자기\s?)?(?:멈췄|멈춰|섰어|안\s?가|안\s?움직)|시동이\s?(?:꺼졌|꺼져|꺼짐|갑자기\s?꺼)|'
+                       r'(?:엑셀|액셀|가속\s?페달)을?\s?(?:밟아도|밟는데)|차가\s?퍼졌')
+BREAKDOWN_QUERY = '주행 중 고장이 나면 주행 중 시동이 꺼졌을 때 비상 경고등 안전한 곳으로 이동'
+# What to do first, said before anything we look up and even when the lookup fails. Fixed text: it must be instant
+# and must not depend on a model. 119 is not in 제54조 (it names the police), but an injured person comes first.
+URGENT = (
+    (re.compile(r'사고가?\s?(?:났|나서|났는데)|사람을\s?(?:쳤|치었|친)|(?:차|사람|보행자|자전거|오토바이)(?:를|을|랑|와|하고)?\s?(?:박았|들이받|부딪)'),
+     '먼저 차를 안전하게 세우고 비상등을 켜세요. 다친 사람이 있으면 바로 119에 신고하세요.'),
+    (BREAKDOWN, '먼저 비상등을 켜고, 할 수 있으면 차를 안전한 곳으로 옮기세요.'),
+)
 # Manual icons are images, so the text only has each light's name. Drivers describe the icon instead.
 # Shapes were read off the K5 icon table; 아반떼 uses the same icons (icons compared side by side).
 # The list lives in data/warning_lights.json together with every manual's spelling of each light.
@@ -292,6 +307,15 @@ def cite(source):
 
 
 def rag_query(request, choose, retrieve, generate):
+    """Answers one request (see answer_request), with the first safety step in front for a crash or breakdown."""
+    result = answer_request(request, choose, retrieve, generate)
+    first = next((step for pattern, step in URGENT if pattern.search(request.get('question') or '')), None)
+    if first and result['status'] != 'out_of_scope':
+        result = {**result, 'answer': f"{first}\n{result['answer']}", 'speech_text': f"{first} {result['speech_text']}"}
+    return result
+
+
+def answer_request(request, choose, retrieve, generate):
     """request: the api-server body {request_id, conversation_id, question, vehicle, maintenance, history,
     location, destination}; vehicle is already ownership-checked by the api-server. location and
     destination are accepted for compatibility but unused since navigation was dropped.
@@ -334,6 +358,16 @@ def rag_query(request, choose, retrieve, generate):
                         else f'{question} [선택한 차량: {car_note}]' if car_note else question)
     picked = choose(SYSTEM + (HISTORY_CONTEXT if history else ''), routing_question, TOOLS)
     name, args = picked if picked else (None, {})
+    if ACCIDENT.search(question) and name in ('ask_missing_detail', 'decline', 'search_manual'):
+        name, args = 'search_law', {**args, 'query': ACCIDENT_QUERY}
+    elif BREAKDOWN.search(question) and name in ('ask_missing_detail', 'decline', 'search_law'):
+        name, args = 'search_manual', {**args, 'query': BREAKDOWN_QUERY}
+    # One clarification, then answer from what we have: the router kept asking "어떤 증상이 있었나요?" after every
+    # reply. The frontend sends our earlier questions as "확인 질문:" lines; voice keeps them in the history.
+    asked_before = '확인 질문:' in question or bool(history) and history[-1]['role'] == 'assistant' and \
+        history[-1]['content'].rstrip().endswith('?')
+    if name == 'ask_missing_detail' and asked_before:
+        name, args = 'search_manual', {'query': question}
     if name == 'ask_missing_detail':
         clarification = args.get('question')
         if not isinstance(clarification, str) or not 2 <= len(clarification.strip()) <= 500:
@@ -406,6 +440,8 @@ def rag_query(request, choose, retrieve, generate):
         known['느낌표'] = named[0]
     query += ''.join(f' {term}' for term in known.values())
     query += ''.join(f' {hint}' for word, hint in QUERY_HINTS.items() if name == 'search_law' and word in question)
+    if name == 'search_law' and ACCIDENT.search(question) and ACCIDENT_QUERY not in query:
+        query += f' {ACCIDENT_QUERY}'
     hits = retrieve(query, filters)
     if not hits and name == 'search_manual':  # retrieval filters first, so no hits means no manual for this car
         return reply('not_found', f'{car} 설명서는 아직 등록되지 않았어요. 정비소나 고객센터에 문의해 주세요.',
@@ -416,6 +452,9 @@ def rag_query(request, choose, retrieve, generate):
         # check are not thrown by "무슨 불 … 주전자 모양이야", which no manual sentence says.
         seen = f'{COLOR_WORDS[color]}으로 ' if color else ''
         asked = f'{named[0]}이 {seen}켜졌어요. 무슨 뜻이고 어떻게 해야 하나요? (사용자 표현: {question})'
+    elif name == 'search_manual' and BREAKDOWN.search(question):
+        # "차가 멈췄어" is no manual heading; asked as it was, the model would not tie it to the emergency section.
+        asked = f'주행 중 차가 멈추거나 시동이 꺼지는 등 고장이 났을 때 어떻게 해야 하나요? (사용자 표현: {question})'
     else:
         asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
     if described_road:
@@ -427,7 +466,7 @@ def rag_query(request, choose, retrieve, generate):
     if name == 'search_manual':
         for alias in ('주유등', '기름불', '기름경고등'):
             asked = asked.replace(alias, TERMS[alias])
-    style = 'solution' if name == 'search_manual' and PROBLEM.search(question) else None
+    style = 'solution' if name == 'search_manual' and (PROBLEM.search(question) or BREAKDOWN.search(question)) else None
     if name == 'search_law':
         hits = focus_signal_rows(f'{question} {" ".join(known.values())}', hits)
     if name == 'search_manual' and '연료 부족 경고등' in asked and not re.search(r'LPG|LPI|과충전', asked, re.I):

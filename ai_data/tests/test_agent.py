@@ -181,6 +181,34 @@ class AgentTests(unittest.TestCase):
         self.assertIn('법에서 빨간색으로 정한 경고등', r['answer'])
         self.assertEqual(r['sources'][-1]['page'], '별표 2')
 
+    def test_a_crash_is_answered_with_what_to_do_now_not_asked_about(self):
+        queries = []
+        for choose, question in ((picks('ask_missing_detail', missing_detail='situation', question='어떤 사고였나요?'), '교통사고가 났어.'),
+                                 (picks('search_law', query='횡단보도에서 보행자 보호 의무'), '내가 횡단보도를 건너는 사람을 쳤어')):
+            r = self.ask(choose, lambda s, u: '{}', lambda q, f: queries.append((q, f)) or [], question=question)
+            self.assertEqual(r['status'], 'not_found', question)  # searched (no hits in this fake), not asked back
+        self.assertTrue(all('사고발생 시의 조치' in q and f == {'kind': 'law'} for q, f in queries))
+
+    def test_a_stopped_car_gets_the_first_step_and_the_manual_without_questions(self):
+        seen = []
+        ask_again = picks('ask_missing_detail', missing_detail='symptom', question='어떤 증상이 있었나요?')
+        r = self.ask(ask_again, lambda s, u: '{}', lambda q, f: seen.append((q, f)) or [], question='방금 차가 멈췄어',
+                     vehicle=VEHICLE)
+        self.assertTrue(r['answer'].startswith('먼저 비상등을 켜고'))
+        self.assertIn('주행 중 시동이 꺼졌을 때', seen[0][0])
+        self.assertEqual(seen[0][1]['kind'], 'manual')
+        crash = self.ask(picks('search_law', query='사고'), lambda s, u: '{}', lambda q, f: [], question='교통사고가 났어')
+        self.assertIn('119', crash['answer'].split('\n')[0])  # said even though the lookup found nothing
+
+    def test_the_router_asks_back_once_then_we_answer_with_what_we_have(self):
+        ask_again = picks('ask_missing_detail', missing_detail='symptom', question='어떤 소리가 나나요?')
+        self.assertEqual(self.ask(ask_again, question='차에서 이상한 느낌이 나', vehicle=VEHICLE)['status'], 'need_clarification')
+        seen = []
+        r = self.ask(ask_again, lambda s, u: '{}', lambda q, f: seen.append(q) or [], vehicle=VEHICLE,
+                     question='차에서 이상한 느낌이 나\n확인 질문: 어떤 소리가 나나요?\n사용자 답변: 소리는 없고 떨려')
+        self.assertNotEqual(r['status'], 'need_clarification')
+        self.assertIn('사용자 답변: 소리는 없고 떨려', seen[0])
+
     def test_signal_rows_not_asked_about_are_left_out(self):
         from chageun_ai.agent import focus_signal_rows
         row = lambda title: {'chunk': {'chunk_id': title, 'text': title,
