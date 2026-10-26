@@ -7,6 +7,11 @@ export default defineConfig({
       port: 5173,
       strictPort: true,
       proxy: {
+        '/voice': {
+          target: 'http://localhost:8008',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/voice/, ''),
+        },
         '/api': {
           target: 'http://localhost:8002',
           changeOrigin: true,

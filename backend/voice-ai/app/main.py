@@ -49,6 +49,7 @@ app.add_middleware(
 class TTSRequest(BaseModel):
     text: str = Field(min_length=1, max_length=500)
     request_id: str | None = None
+    voice_id: str | None = Field(default=None, max_length=64)
 
     model_config = {"json_schema_extra": {"examples": [{"text": "울산대공원까지 13분, 12시 41분 도착 예정이에요."}]}}
 
@@ -83,16 +84,18 @@ def speech_to_text(file: UploadFile = File(...), request_id: str | None = Form(N
     return {"request_id": rid, "text": text}
 
 
-@app.post("/tts", summary="텍스트 → 음성(mp3)",
-          responses={200: {"content": {"audio/mpeg": {}}, "description": "mp3 음성"}})
+@app.post("/tts", summary="텍스트 → 음성(Typecast WAV / OpenAI MP3)",
+          responses={200: {"content": {"audio/wav": {}, "audio/mpeg": {}}, "description": "생성된 음성"}})
 def text_to_speech(body: TTSRequest, user=Depends(get_current_user)):
+    if body.voice_id is not None and body.voice_id not in tts.SELECTABLE_VOICES:
+        raise HTTPException(422, "선택할 수 없는 목소리예요.")
     rid = body.request_id or str(uuid.uuid4())
     t0 = time.perf_counter()
     try:
-        mp3 = tts.synthesize(body.text)
+        audio = tts.synthesize(body.text, voice_id=body.voice_id)
     except tts.TtsError as e:
         log.warning("TTS 실패 request_id=%s: %s", rid, e)
         raise HTTPException(503, "음성을 만들지 못했어요. 잠시 후 다시 시도해 주세요.")
     log.info("TTS request_id=%s user=%s chars=%d latency=%dms",
              rid, user.id, len(body.text), (time.perf_counter() - t0) * 1000)
-    return Response(mp3, media_type="audio/mpeg", headers={"X-Request-ID": rid})
+    return Response(audio.data, media_type=audio.media_type, headers={"X-Request-ID": rid, "Cache-Control": "no-store"})

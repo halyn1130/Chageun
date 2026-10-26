@@ -1,5 +1,5 @@
 // Browser adapters are injectable so tests never activate a real microphone.
-export function createVoiceSession({ platform, onChange, onQuestion }) {
+export function createVoiceSession({ platform, onChange, onQuestion, remoteSpeech = null }) {
   const Recognition =
     platform.SpeechRecognition || platform.webkitSpeechRecognition
   let epoch = 0
@@ -28,6 +28,7 @@ export function createVoiceSession({ platform, onChange, onQuestion }) {
       previous.onstart = null
       previous.abort()
     }
+    remoteSpeech?.stop()
     platform.speechSynthesis?.cancel()
     update({ phase: 'idle', active: false, transcript: '', error: '' })
   }
@@ -37,6 +38,18 @@ export function createVoiceSession({ platform, onChange, onQuestion }) {
   }
   function speak(text, token, resume) {
     if (token !== epoch) return
+    if (remoteSpeech && text) {
+      update({ phase: 'speaking', transcript: '' })
+      remoteSpeech.speak(text, {
+        onEnd: () => {
+          if (token !== epoch) return
+          if (resume && active) listen(token)
+          else update({ phase: 'idle' })
+        },
+        onError: (message) => { if (token === epoch) fail(message) },
+      })
+      return
+    }
     if (
       !text ||
       !platform.speechSynthesis ||

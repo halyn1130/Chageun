@@ -304,3 +304,21 @@
   .voice-workspace { padding-top: 12px; padding-bottom: 18px; gap: 12px; }
   .home-guidance .guidance-categories button { min-height: 101px; padding-block: 13px; }
 }
+
+@media (max-width: 700px) {
+  .answer-content { font-size: 14px; line-height: 1.7; }
+  .answer-sections { gap: 10px; }
+  .answer-section { gap: 10px; padding: 10px 11px; }
+  .answer-section .answer-section-title { font-size: 14px; }
+  .answer-steps { gap: 8px; }
+}
+
+@media (max-width: 767px) {
+  .care-section-bar { display: flex; flex-wrap: wrap; gap: 4px 6px; padding: 3px 0; margin: 0 0 10px; border-radius: 0; background: var(--surface, #1b202a); box-shadow: none; }
+  .care-section-tabs { margin-left: auto; flex: 0 0 auto; gap: 0; }
+  .care-section-tabs button { min-height: 44px; padding: 5px 7px; font-size: 11px; }
+  .care-add-record { min-height: 44px; margin-left: 0; padding: 5px 6px; }
+  .care-sort { gap: 4px; }
+  .care-sort > span { display: none; }
+  [data-theme='light'] .care-section-bar { background: #f5f7fb; }
+}

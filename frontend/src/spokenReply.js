@@ -1,7 +1,4 @@
-const unknownChoice = /모르|확인.*못|확인하지|정보 없이|건너뛰|안 보여/
-
-// Screen labels and spoken choices share the same data. No option needs to be
-// seen or tapped to answer a clarification, including the unknown option.
+// Read the question without reciting screen choices or instructions for answering.
 export function spokenReply(message) {
   if (!message) return ''
   const question = message.followup_question?.trim()
@@ -10,24 +7,12 @@ export function spokenReply(message) {
     const facts = (message.facts || []).filter(fact => !answer.includes(fact.value)).map(fact => `${fact.label}은 ${fact.value}입니다.`)
     return [answer, ...facts].filter(Boolean).join(' ')
   }
-  const options = [...new Set((message.suggestions || []).filter(Boolean))]
-  const known = options.filter(option => !unknownChoice.test(option))
-  const unknown = options.some(option => unknownChoice.test(option))
+  if (message.clarificationField === 'color') return '불빛이 어떤 색인가요?'
+  if (message.status === 'need_vehicle') return '차의 별명이나 차종을 알려 주세요.'
+  // Keep context needed to understand “this record” and any safety conditions.
   const support = message.answer?.trim()
   const intro = support && support !== question ? support : ''
-  let prompt = question
-  if (message.status === 'need_vehicle') {
-    return [intro, question, '등록한 차의 별명이나 차종을 말씀해 주세요. 차량 정보를 모르시면 “차량 정보 없이 계속”이라고 말씀하셔도 돼요.'].filter(Boolean).join(' ')
-  }
-  if (message.clarificationField === 'color') {
-    const colors = known.filter(option => /색$/.test(option))
-    prompt = colors.length ? `불빛이 ${colors.map(color => `${color}인가요`).join(', ')}?` : question
-    if (known.some(option => /다른 색/.test(option))) prompt += ' 다른 색이면 그 색을 말씀해 주세요.'
-  } else if (known.length) {
-    prompt += ` ${known.map(option => `“${option}”`).join(', ')} 중에서 답해 주세요.`
-  }
-  if (unknown) prompt += ' 잘 모르시겠다면 “모르겠어요”라고 말씀해 주세요. 괜찮아요.'
-  return [intro, prompt].filter(Boolean).join(' ')
+  return [intro, question].filter(Boolean).join(' ')
 }
 
 const homeCommands = new Set([

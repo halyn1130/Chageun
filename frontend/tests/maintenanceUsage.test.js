@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { maintenanceUsage, maintenancePriorities, usageState, vehicleMaintenanceTones } from '../src/maintenanceUsage.js'
+import { maintenanceUsage, maintenancePriorities, sortMaintenanceUsages, usageState, vehicleMaintenanceTones } from '../src/maintenanceUsage.js'
 import { maintenanceCatalog } from '../src/guidance.js'
 import { localBoundary } from '../src/conversation.js'
 const vehicle = { manufacturer:'기아', model:'K5', model_year:'2024', powertrain:'가솔린 1.6T', mileage_km:36200 }
@@ -64,18 +64,19 @@ test('all ten demo parts have separate usage targets and sort by the first dista
   assert.equal(values[1].distanceRatio, .94)
   assert.ok(values.every((value, index) => !index || values[index - 1].priorityRatio >= value.priorityRatio))
 })
-test('the updated 2026 demo car preserves usage records without inheriting the 2024 oil interval', () => {
+test('the 2026 car uses its own reviewed manual interval', () => {
   assert.equal(fixture.vehicle.model_year, '2026')
   assert.equal(fixture.vehicle.powertrain, 'G2.0')
   const values = maintenancePriorities(fixture.vehicle, fixture.records, options)
   const oilUsage = values.find(value => value.item.id === 'oil')
   assert.equal(oilUsage.distance, 9200)
-  assert.equal(oilUsage.interval, null)
-  assert.equal(usageState(oilUsage).label, '기준 확인')
-  assert.equal(values.filter(value => value.priorityRatio >= .9).length, 3)
+  assert.deepEqual(oilUsage.interval, {km:8000, months:12})
+  assert.equal(oilUsage.intervalSource, 'user_setting')
+  assert.equal(values.filter(value => value.conditionBased).length, 4)
+  assert.ok(values.every(value => value.source))
 })
 test('car colors retain the most urgent item when multiple records share one illustrated assembly', () => {
-  const values = maintenancePriorities(fixture.vehicle, fixture.records, options)
+  const values = maintenancePriorities(vehicle, fixture.records, options)
   const tones = vehicleMaintenanceTones(values)
   assert.equal(tones.engine, 'urgent')
   assert.equal(tones.brakes, 'urgent')
@@ -123,4 +124,72 @@ test('removed workshop search cannot produce a location action, while maintenanc
     assert.equal(localBoundary(text).action, undefined)
   }
   assert.equal(localBoundary('정비소에서 엔진오일을 갈았어'), null)
+})
+
+const k5 = {manufacturer:'기아',model:'K5',model_year:'2026',powertrain:'G2.0',mileage_km:36200}
+test('2026 K5 remaining mileage and calendar use its own latest record and source', () => {
+  const value = maintenanceUsage(k5,[{item:'engine_oil',performed_at:'2026-01-24',mileage_km:25000}],oil,{now:'2026-10-24'})
+  assert.equal(value.remainingKm,-3200)
+  assert.equal(value.nextDate,'2027-01-24')
+  assert.equal(value.remainingDays,92)
+  assert.equal(value.source.chunk_id,'c899db930ecd587d2911f2c1')
+  const severe = maintenanceUsage(k5,[{item:'engine_oil',performed_at:'2026-01-24',mileage_km:25000}],oil,{now:'2026-10-24',condition:'severe'})
+  assert.equal(severe.remainingKm,-3700)
+  assert.equal(severe.needsConfirmation,true)
+})
+test('calendar-only and distance-only manual rules do not manufacture another deadline', () => {
+  const cabin=maintenanceCatalog.find(i=>i.recordId==='cabin_filter')
+  const avante={manufacturer:'현대',model:'더 뉴 아반떼',model_year:'2026',powertrain:'G1.6',mileage_km:20500}
+  const value=maintenanceUsage(avante,[{item:'cabin_filter',performed_at:'2026-05-16',mileage_km:14500}],cabin,{now:'2026-10-24'})
+  assert.equal(value.nextKm,null)
+  assert.equal(value.remainingKm,null)
+  assert.equal(value.nextDate,'2027-05-16')
+  const brake=maintenanceCatalog.find(i=>i.recordId==='brake_fluid')
+  const b=maintenanceUsage(k5,[{item:'brake_fluid',performed_at:'2026-04-18',mileage_km:29000}],brake,{now:'2026-10-24'})
+  assert.equal(b.nextDate,null)
+  assert.equal(b.remainingKm,42800)
+  assert.equal(maintenanceUsage(k5,[{item:'cabin_filter',performed_at:'2026-05-16',mileage_km:14500}],cabin,{now:'2026-10-24',condition:'severe'}).interval,null)
+})
+
+test('registered Avante alias receives engine oil and filter manual intervals', () => {
+ const car={manufacturer:'현대',model:'디 올 뉴 아반떼',model_year:'2026',powertrain:'G1.6',mileage_km:20500}
+ for(const id of ['engine_oil','oil_filter']) {
+  const part=maintenanceCatalog.find(i=>i.recordId===id)
+  const value=maintenanceUsage(car,[{item:id,performed_at:'2026-09-12',mileage_km:18500}],part,{now:'2026-10-24'})
+  assert.deepEqual(value.interval,{km:15000,months:12})
+  assert.equal(value.remainingKm,13000)
+  assert.equal(value.intervalSource,'manual')
+ }
+})
+
+
+test('condition-based items keep history without inventing a replacement deadline', () => {
+ for (const car of [k5, {manufacturer:'현대',model:'더 뉴 아반떼',model_year:'2026',powertrain:'G1.6',mileage_km:36200}]) {
+  for (const id of ['tire','brake_pad','wiper','battery']) {
+   const part=maintenanceCatalog.find(i=>i.recordId===id)
+   const value=maintenanceUsage(car,[{item:id,performed_at:'2026-01-01',mileage_km:20000,memo:'[차근 시연]'}],part,{now:'2026-10-25',demo:true})
+   assert.equal(value.interval,null)
+   assert.equal(value.priorityRatio,null)
+   assert.equal(value.distance,16200)
+   assert.equal(value.nextDate,null)
+   assert.equal(usageState(value).label,'상태 점검')
+   assert.ok(value.ruleNote && value.source)
+  }
+  const air=maintenanceCatalog.find(i=>i.recordId==='air_filter')
+  const rec=[{item:'air_filter',performed_at:'2026-01-01',mileage_km:10000}]
+  assert.equal(maintenanceUsage(car,rec,air,{now:'2026-10-25'}).nextKm,50000)
+  assert.equal(maintenanceUsage(car,rec,air,{now:'2026-10-25',condition:'severe'}).interval,null)
+  const coolant=maintenanceCatalog.find(i=>i.recordId==='coolant')
+  assert.equal(maintenanceUsage(car,[],coolant,{now:'2026-10-25'}).nextDate,undefined)
+  assert.match(maintenanceUsage(car,[],coolant,{now:'2026-10-25'}).ruleNote,/최초 교환은 200,000km/)
+ }
+})
+
+test('care list offers stable catalog order and explicit urgency order without changing the source', () => {
+ const values = maintenanceCatalog.map((item,index)=>({item,priorityRatio:index===3?1.1:index===2?null:.2})).reverse()
+ const snapshot=values.map(v=>v.item.id)
+ assert.deepEqual(sortMaintenanceUsages(values).map(v=>v.item.id),maintenanceCatalog.map(i=>i.id))
+ assert.equal(sortMaintenanceUsages(values,'urgent')[0].item.id,maintenanceCatalog[3].id)
+ assert.equal(sortMaintenanceUsages(values,'urgent').at(-1).item.id,maintenanceCatalog[2].id)
+ assert.deepEqual(values.map(v=>v.item.id),snapshot)
 })

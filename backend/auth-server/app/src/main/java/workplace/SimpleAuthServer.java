@@ -727,7 +727,7 @@ public class SimpleAuthServer {
                     .withIssuer(ISSUER)
                     .withIssuedAt(Date.from(now))
                     //  JWT가 무기한 유효하지 않도록 발급 시점 기준 1시간 만료를 지정하세요.
-                    .withExpiresAt(Date.from(now.plus(1, ChronoUnit.HOURS))).withSubject(String.valueOf(user.getId()))
+                    .withExpiresAt(Date.from(now.plus(6, ChronoUnit.HOURS))).withSubject(String.valueOf(user.getId()))
                     .withClaim("username", user.getUsername())
                     .sign(ALG);
         }

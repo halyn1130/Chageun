@@ -120,7 +120,7 @@ class PipelineTests(unittest.TestCase):
 
     def make_index(self, folder):
         a, _ = chunk_pages(document(), ['K5 fixture'], 'a')
-        b, _ = chunk_pages(document('avante', '디 올 뉴 아반떼'), ['Avante fixture'], 'b')
+        b, _ = chunk_pages(document('avante', '더 뉴 아반떼'), ['Avante fixture'], 'b')
         corpus = folder / 'chunks.jsonl'
         corpus.write_text(''.join(json.dumps(c) + '\n' for c in a+b))
         build_index(corpus, folder / 'index', lambda texts: [[0, 1], [1, 0]], 'fake-test-embedding')

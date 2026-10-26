@@ -22,7 +22,7 @@
 | 파일 | 변경과 검토 지점 |
 | --- | --- |
 | `backend/api-server/app/routers/rag.py` | 선택적 `context` 요청 모델 추가. UI에서 명시적으로 차량을 해제한 요청은 기본 차량으로 대체하지 않음. 기존 context 없는 호출은 호환 |
-| `backend/api-server/app/routers/vehicles.py` | 설명서 카탈로그를 K5 2026 G2.0 / 디 올 뉴 아반떼 2026 G1.6에 맞춤. 기존 저장 차량을 일괄 변경하지 않음 |
+| `backend/api-server/app/routers/vehicles.py` | 설명서 카탈로그를 K5 2026 G2.0 / 더 뉴 아반떼 2026 G1.6에 맞춤. 기존 저장 차량을 일괄 변경하지 않음 |
 | `ai_data/chageun_ai/agent.py` | 같은 상담의 최근 대화로 생략된 대상을 복원해 검색. 모호한 대상·증상은 내부 `ask_missing_detail`로 확인. 오일필터·에어컨 필터·브레이크액 기록 동작과 `엉따` 동의어 추가 |
 | `ai_data/chageun_ai/core.py` | 선택 인자 `history=None` 추가. 짧은 화면 답변과 화면 없이 이해할 수 있는 음성 답변의 생성 지침 보완 |
 | `backend/auth-server` | 로그인·가입 한글 문구와 공통 로고. Java 정적 파일 응답에 PNG MIME 타입 추가. 인증 로직은 동일 |

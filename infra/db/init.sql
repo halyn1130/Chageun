@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS vehicles (
   user_id       BIGINT UNSIGNED NOT NULL,              -- 소유자 (JWT sub)
   nickname      VARCHAR(50)     NULL,                  -- 예: 내 K5
   manufacturer  VARCHAR(20)     NOT NULL,              -- 기아 · 현대
-  model         VARCHAR(50)     NOT NULL,              -- K5 · 디 올 뉴 아반떼
+  model         VARCHAR(50)     NOT NULL,              -- K5 · 더 뉴 아반떼
   model_year    VARCHAR(10)     NOT NULL,              -- 예: 2026
   powertrain    VARCHAR(50)     NOT NULL,              -- 예: G2.0
   mileage_km    INT UNSIGNED    NULL,                  -- 현재 주행거리
@@ -58,3 +58,10 @@ CREATE TABLE IF NOT EXISTS conversation_messages (
   KEY idx_conversation (conversation_id, id),
   CONSTRAINT fk_conversation_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS user_voice_settings (
+ user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+ voice_id VARCHAR(64) NULL,
+ updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ CONSTRAINT fk_voice_settings_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

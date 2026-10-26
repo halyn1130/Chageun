@@ -1595,3 +1595,45 @@
 .conclusion-actions { display: flex; gap: 8px; border-top: 1px solid var(--line-strong); margin-top: 10px; padding-top: 12px; flex-shrink: 0; }
 .conclusion-actions button { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 43px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--secondary); font-size: 12px; }
 .conclusion-actions .conclusion-return { color: var(--text); border-color: #91b4ff40; background: #91b4ff1a; min-width: 180px; }
+
+/* Shared answer presentation: diagnostic panel and conversation. */
+.answer-content { margin: 0 0 14px; color: var(--secondary); font-size: 13px; line-height: 1.7; }
+.answer-prose { margin: 0; white-space: pre-line; word-break: keep-all; overflow-wrap: anywhere; }
+.answer-content > .answer-prose + .answer-sections { margin-top: 14px; }
+.answer-sections { display: grid; gap: 10px; }
+.answer-section { display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px; border-left: 3px solid var(--accent); border-radius: 2px 8px 8px 2px; }
+.answer-section-icon { width: 18px; height: 18px; flex: 0 0 auto; margin-top: 3px; color: var(--accent); }
+.answer-section-body { flex: 1; min-width: 0; }
+.answer-section .answer-section-title { margin: 0 0 4px; color: var(--accent); font-size: 14px; font-weight: 600; line-height: 1.5; }
+.answer-section--caution { background: color-mix(in srgb, #e4ac43 8%, transparent); border-left-color: #d49b32; }
+.answer-section--caution .answer-section-icon,
+.answer-section--caution .answer-section-title { color: #d49b32; }
+.answer-steps { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 8px; }
+.answer-steps li { display: flex; align-items: flex-start; gap: 10px; }
+.answer-step-number { flex: 0 0 21px; height: 21px; margin-top: 2px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--text); font-size: 12px; line-height: 1; font-variant-numeric: tabular-nums; }
+
+.voice-service-note.has-tts-credit { display: block; }
+.voice-service-note a { color: inherit; text-underline-offset: 3px; }
+
+/* Compact heading scale for the answer result. */
+.is-conclusion .conclusion-heading h2 { font-size: 19px; }
+.is-conclusion .conversation-stage h3 { font-size: 20px; margin-bottom: 10px; }
+
+.usage-remaining { margin: 9px 0 4px; color: var(--accent); font-size: 13px; line-height: 1.6; }
+
+.brand-home { display: flex; align-items: center; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; border-radius: 6px; }
+.brand-home:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+
+/* Compact care toolbar: ordering on the left, section switch on the right. */
+.care-section-bar { flex: 0 0 auto; min-height: 34px; padding: 0; gap: 10px; margin-bottom: 10px; border: 0; border-radius: 0; background: transparent; }
+[data-theme='light'] .care-section-bar { background: transparent; border: 0; }
+.care-section-tabs { margin-left: auto; align-self: center; flex: 0 0 auto; gap: 2px; }
+.care-section-tabs button { min-height: 32px; padding: 5px 9px; font-size: 12px; }
+.care-add-record { margin-left: 0; flex-shrink: 0; }
+.care-sort { display: flex; align-items: center; gap: 7px; color: var(--muted, #9eabc0); font-size: 11px; flex-shrink: 0; }
+
+.answer-blocks { display: grid; gap: 10px; }
+.answer-content > .answer-blocks + .answer-sections { margin-top: 14px; }
+.answer-step-text { white-space: pre-line; word-break: keep-all; overflow-wrap: anywhere; }
+.answer-bullets { margin: 0; padding-left: 20px; display: grid; gap: 7px; }
+.answer-bullets li { white-space: pre-line; }
