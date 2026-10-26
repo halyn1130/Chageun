@@ -306,22 +306,23 @@ def cite(source):
     return {'title': source['title'], 'page': page, 'url': source['source_url']}
 
 
-def rag_query(request, choose, retrieve, generate):
+def rag_query(request, choose, retrieve, generate, retry_generate=None):
     """Answers one request (see answer_request), with the first safety step in front for a crash or breakdown."""
-    result = answer_request(request, choose, retrieve, generate)
+    result = answer_request(request, choose, retrieve, generate, retry_generate)
     first = next((step for pattern, step in URGENT if pattern.search(request.get('question') or '')), None)
     if first and result['status'] != 'out_of_scope':
         result = {**result, 'answer': f"{first}\n{result['answer']}", 'speech_text': f"{first} {result['speech_text']}"}
     return result
 
 
-def answer_request(request, choose, retrieve, generate):
+def answer_request(request, choose, retrieve, generate, retry_generate=None):
     """request: the api-server body {request_id, conversation_id, question, vehicle, maintenance, history,
     location, destination}; vehicle is already ownership-checked by the api-server. location and
     destination are accepted for compatibility but unused since navigation was dropped.
 
     choose(system, question, tools) -> (tool name, args) or None
     retrieve(query, filters) -> hits; generate(system, user) -> raw model text
+    retry_generate(system, user): writes the one retry after a rejected answer (default: generate)
     """
     question = (request.get('question') or '').strip()
     if not 2 <= len(question) <= 500:
@@ -474,7 +475,8 @@ def answer_request(request, choose, retrieve, generate):
     # A new question gets no history: told to recover an omitted subject, the model picked one from earlier
     # turns ("우회전은 언제 할 수 있어?" after a warning-light talk) and called the evidence insufficient.
     # The router still saw the history, so it is the one that says whether the subject was left out.
-    result = answer_from_hits(asked, hits, generate, car, style, history=history if follow_up else None)
+    result = answer_from_hits(asked, hits, generate, car, style, history=history if follow_up else None,
+                              retry_generate=retry_generate)
     if result['status'] != 'answered':
         if name == 'search_manual':
             return reply('not_found', *MESSAGES['manual_not_found'], handoff=True)

@@ -181,6 +181,24 @@ class AgentTests(unittest.TestCase):
         self.assertIn('법에서 빨간색으로 정한 경고등', r['answer'])
         self.assertEqual(r['sources'][-1]['page'], '별표 2')
 
+    def test_only_the_retry_after_a_rejected_answer_uses_the_stronger_writer(self):
+        from chageun_ai.core import answer_from_hits
+        rule = '차마는 정지한 후 다른 차마의 교통을 방해하지 않고 우회전할 수 있다.'
+        hits = [{'chunk': {'chunk_id': 'x', 'text': rule, 'metadata': {'title': '법', 'source_url': 'u'}}, 'score': 1}]
+        answer = lambda text: json.dumps({'status': 'answered', 'answer_text': text, 'speech_text': text, 'missing_terms': [],
+                                          'quotes': [{'chunk_id': 'x', 'quote': rule}]})
+        writers = []
+        def generate(system, user):
+            if system == VERIFY_SYSTEM:  # the verifier stays the same model and rejects the wrong first answer
+                return json.dumps({'supported': '할 수 있어요' in json.loads(user)['answer'], 'unsupported': ['우회전할 수 없어요.']})
+            writers.append('first')
+            return answer('우회전할 수 없어요.')
+        def retry(system, user):
+            writers.append('retry')
+            return answer('정지한 뒤 방해하지 않으면 우회전할 수 있어요.')
+        result = answer_from_hits('빨간불에 우회전해도 돼?', hits, generate, retry_generate=retry)
+        self.assertEqual((result['status'], writers), ('answered', ['first', 'retry']))
+
     def test_a_crash_is_answered_with_what_to_do_now_not_asked_about(self):
         queries = []
         for choose, question in ((picks('ask_missing_detail', missing_detail='situation', question='어떤 사고였나요?'), '교통사고가 났어.'),
@@ -188,6 +206,19 @@ class AgentTests(unittest.TestCase):
             r = self.ask(choose, lambda s, u: '{}', lambda q, f: queries.append((q, f)) or [], question=question)
             self.assertEqual(r['status'], 'not_found', question)  # searched (no hits in this fake), not asked back
         self.assertTrue(all('사고발생 시의 조치' in q and f == {'kind': 'law'} for q, f in queries))
+
+    def test_a_cited_give_up_is_rechecked_only_by_the_stronger_writer(self):
+        from chageun_ai.core import answer_from_hits
+        rule = '교통사고가 난 경우 운전자는 즉시 정차하여 사상자를 구호하여야 한다.'
+        hits = [{'chunk': {'chunk_id': 'x', 'text': rule, 'metadata': {'title': '법', 'source_url': 'u'}}, 'score': 1}]
+        gave_up = json.dumps({'status': 'insufficient_evidence', 'answer_text': '', 'speech_text': '',
+                              'missing_terms': ['상대방의 상태'], 'cites': ['c1.1']})
+        fixed = json.dumps({'status': 'answered', 'answer_text': '즉시 정차하고 구호해야 해요.', 'speech_text': '정차하고 구호하세요.',
+                            'missing_terms': [], 'quotes': [{'chunk_id': 'x', 'quote': rule}]})
+        verify = lambda s, u: json.dumps({'supported': True}) if s == VERIFY_SYSTEM else gave_up
+        self.assertEqual(answer_from_hits('그냥 가도 돼?', hits, verify)['status'], 'insufficient_evidence')
+        result = answer_from_hits('그냥 가도 돼?', hits, verify, retry_generate=lambda s, u: fixed)
+        self.assertEqual(result['status'], 'answered')
 
     def test_a_stopped_car_gets_the_first_step_and_the_manual_without_questions(self):
         seen = []

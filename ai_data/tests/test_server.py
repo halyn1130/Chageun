@@ -2,7 +2,7 @@ import time
 import unittest
 import jwt
 from fastapi.testclient import TestClient
-from chageun_ai.server import create_app
+from chageun_ai.server import create_app, price_of, usage_summary
 
 SECRET = 'test-secret-that-is-at-least-32-characters'
 BODY = {'request_id': 'req_1', 'conversation_id': 'c_1', 'question': '가상 질문입니다', 'vehicle': None,
@@ -54,6 +54,17 @@ class ServerTests(unittest.TestCase):
             self.assertEqual(c.post('/rag-query', json=BODY, headers=token()).status_code, 503)
         with self.client(lambda request: time.sleep(.3), timeout_s=.05) as c:
             self.assertEqual(c.post('/rag-query', json=BODY, headers=token()).status_code, 503)
+
+    def test_usage_summary_prices_each_call_by_its_dated_model_name(self):
+        prices = {'gpt-4o-mini': (0.15, 0.60), 'gpt-4o': (2.50, 10.00)}
+        self.assertEqual(price_of('gpt-4o-mini-2024-07-18', prices), (0.15, 0.60))  # not gpt-4o's price
+        calls = [{'step': 'answer', 'model': 'gpt-4o-mini-2024-07-18', 'in': 4000, 'out': 100, 'ms': 2000},
+                 {'step': 'verify', 'model': 'gpt-4o-2024-08-06', 'in': 2000, 'out': 10, 'ms': 900}]
+        summary = usage_summary('req_1', 'answered', calls, 3456.7, prices)
+        self.assertEqual((summary['tokens_in'], summary['tokens_out'], summary['total_ms']), (6000, 110, 3457))
+        self.assertAlmostEqual(summary['cost_usd'], 0.00066 + 0.0051)
+        summary = usage_summary('req_1', 'answered', [{**calls[0], 'model': 'unknown-model'}], 1, prices)
+        self.assertIsNone(summary['cost_usd'])  # an unpriced model is not silently counted as free
 
 
 if __name__ == '__main__':
