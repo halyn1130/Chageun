@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, useId, watch, onMounted, onBeforeUnmount } from 'vue'
 const props = defineProps({
   focus: String,
   contextual: Boolean,
@@ -9,6 +9,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['introduced'])
 const artwork = ref(null)
+const groundId = useId()
 const revealing = ref(false)
 const introPending = ref(props.intro)
 const scanDuration = 950
@@ -102,6 +103,26 @@ function stateSource(name) {
           : '반투명 차량 내부 구조'
       "
     >
+      <!-- Ground shares the image coordinates: front wheel (758, 850), rear wheel (1548, 641).
+           The near edge follows their contact line, while the far edge narrows toward the rear. -->
+      <svg v-if="maintenanceTones" class="car-ground-light" viewBox="0 0 1774 887" aria-hidden="true" focusable="false">
+        <defs>
+          <radialGradient :id="`${groundId}-glow`" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(900 697) rotate(-15) scale(840 154)">
+            <stop stop-color="#b3c9e8" stop-opacity=".18" />
+            <stop offset=".5" stop-color="#90add4" stop-opacity=".1" />
+            <stop offset=".8" stop-color="#7797bf" stop-opacity=".035" />
+            <stop offset="1" stop-color="#7797bf" stop-opacity="0" />
+          </radialGradient>
+          <filter :id="`${groundId}-soft`" x="-10%" y="-20%" width="120%" height="140%" color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation="10" />
+          </filter>
+        </defs>
+        <path d="M68 704C190 658 1080 485 1308 474C1415 467 1650 546 1704 599C1740 635 1575 692 1338 756L813 894C733 915 608 883 457 845L152 751C98 734 62 716 68 704Z" :fill="`url(#${groundId}-glow)`" :filter="`url(#${groundId}-soft)`" />
+        <g fill="#05080d" fill-opacity=".42" :filter="`url(#${groundId}-soft)`">
+          <ellipse cx="758" cy="850" rx="101" ry="16" transform="rotate(-15 758 850)" />
+          <ellipse cx="1548" cy="641" rx="75" ry="12" transform="rotate(-15 1548 641)" />
+        </g>
+      </svg>
       <img class="car-base" src="/images/vehicle-cutaway.png" alt="" />
       <svg width="0" height="0" aria-hidden="true">
         <defs>

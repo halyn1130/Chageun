@@ -58,6 +58,10 @@ class Vehicle(BaseModel):
     is_primary: bool   # DB에는 0/1로 저장돼 있어 응답할 때 true/false로 바꾼다
 
 
+class VehicleMileageUpdate(BaseModel):
+    mileage_km: int = Field(ge=0, le=4294967295, strict=True)
+
+
 def get_owned_vehicle(db, user: CurrentUser, vehicle_id: int) -> dict:
     """내 차량이면 돌려주고, 없거나 남의 차량이면 404."""
     with db.cursor() as cur:
@@ -72,7 +76,7 @@ def get_owned_vehicle(db, user: CurrentUser, vehicle_id: int) -> dict:
 class MaintenanceCreate(BaseModel):
     item: MaintenanceItem
     performed_at: date
-    mileage_km: int = Field(ge=0)
+    mileage_km: int = Field(ge=0, le=4294967295, strict=True)
     memo: str | None = Field(None, max_length=255)
 
     model_config = {"json_schema_extra": {"examples": [{
@@ -141,6 +145,16 @@ def create_vehicle(body: VehicleCreate, user: CurrentUser = Depends(get_current_
     return get_owned_vehicle(db, user, vehicle_id)
 
 
+@router.patch("/{vehicle_id}/mileage", response_model=Vehicle, summary="현재 주행거리 수정")
+def update_vehicle_mileage(vehicle_id: int, body: VehicleMileageUpdate,
+                           user: CurrentUser = Depends(get_current_user), db=Depends(get_db)):
+    get_owned_vehicle(db, user, vehicle_id)
+    with db.cursor() as cur:
+        cur.execute("UPDATE vehicles SET mileage_km = %s WHERE id = %s AND user_id = %s",
+                    (body.mileage_km, vehicle_id, user.id))
+    return get_owned_vehicle(db, user, vehicle_id)
+
+
 @router.delete("/{vehicle_id}", status_code=204, summary="차량 삭제")
 def delete_vehicle(vehicle_id: int, user: CurrentUser = Depends(get_current_user), db=Depends(get_db)):
     vehicle = get_owned_vehicle(db, user, vehicle_id)
@@ -182,8 +196,6 @@ def create_maintenance(vehicle_id: int, body: MaintenanceCreate,
                     " VALUES (%s, %s, %s, %s, %s)",
                     (vehicle_id, body.item, body.performed_at, body.mileage_km, body.memo))
         record_id = cur.lastrowid
-        # 정비 당시 주행거리가 차량의 현재 주행거리보다 크면 차량 주행거리도 올린다
-        cur.execute("UPDATE vehicles SET mileage_km = %s WHERE id = %s AND (mileage_km IS NULL OR mileage_km < %s)",
-                    (body.mileage_km, vehicle_id, body.mileage_km))
+        # 교환 시점의 거리만 기록한다. 차량의 현재 주행거리는 개인 설정에서 별도로 관리한다.
         cur.execute(f"SELECT {MAINTENANCE_COLUMNS} FROM maintenance_records WHERE id = %s", (record_id,))
         return with_label(cur.fetchone())
