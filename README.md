@@ -12,7 +12,7 @@ cd Chageun
 cp .env.example .env          # 값 채우기 (OPENAI_API_KEY, DB_PASSWORD, JWT_SECRET 등)
 ```
 
-RAG 검색 인덱스는 Git에 없습니다. 팀이 공유한 인덱스를 `ai_data/data/indexes/` 아래에 둡니다. 현재 쓰는 버전은 `infra/docker-compose.yml`의 `RAG_INDEX`(`v13c-headings`)입니다.
+RAG 검색 인덱스와 PDF 원본은 Git에 없습니다. 팀이 공유한 인덱스를 `ai_data/data/indexes/` 아래에, PDF를 `ai_data/data/raw/` 아래에 둡니다. 현재 쓰는 버전은 `infra/docker-compose.yml`의 `RAG_INDEX`(`v14-figures`)입니다. 자세한 내용은 [ai_data README](ai_data/README.md)를 봅니다.
 
 ### 2. 전체 실행
 
@@ -22,7 +22,7 @@ docker compose up -d --build  # 처음엔 빌드 때문에 몇 분 걸림
 
 DB · 서버 · 프론트가 모두 뜹니다. 브라우저에서 **http://localhost:5174** 를 엽니다.
 
-코드를 받은 뒤에는 같은 명령을 다시 실행하면 바뀐 서비스만 새로 빌드됩니다.
+코드를 받은 뒤에는 같은 명령을 다시 실행하면 바뀐 서비스만 새로 빌드됩니다. 모든 `docker compose` 명령은 **저장소 루트**에서 실행합니다. `infra` 폴더에서 실행하면 별도 프로젝트로 컨테이너가 하나 더 생깁니다.
 
 ### 확인할 주소
 
