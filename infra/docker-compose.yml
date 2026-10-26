@@ -73,6 +73,7 @@ services:
       RAG_INDEX: ${RAG_INDEX:-data/indexes/v13c-headings}   # 실제 생성된 인덱스 사용. v13c는 생성 후 RAG_INDEX로 지정
       RAG_RERANK: "1"      # 검색 후보 15개를 LLM이 재정렬해 상위 8개 사용 (끄려면 "0", 질문당 약 +1초)
       RAG_VERIFY_MODEL: gpt-4o   # 답변 검증만 gpt-4o (gpt-4o-mini는 근거 있는 답변도 탈락시킴, experiments/README 6절)
+      RAG_RETRY_MODEL: gpt-4o    # 검증에서 떨어진 답변의 재시도만 gpt-4o (mini는 빨간불 우회전의 예외를 놓침, 통과하는 질문은 비용 그대로)
     volumes:
       - ../ai_data/data/indexes:/app/data/indexes:ro
     # 외부 포트 없음 — api-server만 compose 내부에서 http://rag:8001 로 호출한다
