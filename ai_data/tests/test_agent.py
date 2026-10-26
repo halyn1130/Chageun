@@ -231,6 +231,17 @@ class AgentTests(unittest.TestCase):
         crash = self.ask(picks('search_law', query='사고'), lambda s, u: '{}', lambda q, f: [], question='교통사고가 났어')
         self.assertIn('119', crash['answer'].split('\n')[0])  # said even though the lookup found nothing
 
+    def test_the_turn_signal_slang_is_searched_as_the_turn_signal_not_blinking(self):
+        seen = []
+        for question in ('깜빡이 어떻게 켜?', '깜빡이를 켜는 법 알려줘', '깜빡이 안 꺼져'):
+            self.ask(picks('search_manual', query='깜빡이 켜는 방법'), lambda s, u: '{}', lambda q, f: seen.append(q) or [],
+                     question=question, vehicle=VEHICLE)
+            self.assertIn('방향지시등', seen[-1], question)
+            self.assertNotIn('점멸', seen[-1], question)
+        from chageun_ai.agent import TURN_SIGNAL
+        for blinking in ('경고등이 깜빡이고 있어', '노란 불이 깜빡이는데 뭐야?', '빨간색으로 깜빡여'):
+            self.assertIsNone(TURN_SIGNAL.search(blinking), blinking)  # still '깜빡' → '점멸'
+
     def test_a_wrong_way_entry_gets_the_first_step_and_the_rules_that_apply(self):
         seen = []
         r = self.ask(picks('search_law', query='일방통행 도로에서의 통행 방법'), lambda s, u: seen.append(('gen', u)) or '{}',

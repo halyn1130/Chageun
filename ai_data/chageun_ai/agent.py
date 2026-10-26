@@ -17,6 +17,9 @@ MAINTENANCE_ITEMS = ['engine_oil', 'oil_filter', 'air_filter', 'cabin_filter', '
 TERMS = {'주유등': '연료 부족 경고등', '기름불': '연료 부족 경고등', '기름경고등': '연료 부족 경고등', '오토홀드': '자동 정차 기능 AUTO HOLD', '깜빡': '점멸', '버스정류장': '버스여객자동차의 정류지', '교환': '교체',
          '소화전': '소방용수시설 비상소화장치', '멈춰': '일시정지', '멈추': '일시정지', '엉따': '열선 시트',
          '앞차와거리': '앞차와의 충돌을 피할 수 있는 필요한 거리', '안전거리': '앞차와의 충돌을 피할 수 있는 필요한 거리'}
+# "깜빡이" is also the turn signal, which '깜빡' → '점멸' sent to blinking warning lights ("깜빡이 어떻게 켜?" found
+# nothing). Only the noun is: "경고등이 깜빡이고 있어" / "깜빡이는데" still mean blinking.
+TURN_SIGNAL = re.compile(r'깜빡이(?:를|가|\s?(?:켜|키|어떻게|넣|레버|소리|안\s?(?:켜|꺼|돼)|어디|좀|자동))|깜빡이\s*[?？]?$')
 # Signal colours as drivers say them; law only (a "빨간 불" on the dashboard is a warning light).
 LAW_TERMS = {'빨간불': '적색의 등화', '적색신호': '적색의 등화', '빨간신호': '적색의 등화',
              '노란불': '황색의 등화', '황색신호': '황색의 등화', '노란신호': '황색의 등화',
@@ -458,6 +461,9 @@ def answer_request(request, choose, retrieve, generate, retry_generate=None):
         query = f'{question} {query}'
     glossary = {**TERMS, **(LAW_TERMS if name == 'search_law' else {})}
     known = {word: term for word, term in glossary.items() if word in question.replace(' ', '')}
+    if TURN_SIGNAL.search(question):
+        known.pop('깜빡', None)
+        known['깜빡이'] = '방향지시등'
     known.update({shape: light for light in named for shape in WARNING_LIGHTS[light]
                   if shape.upper() in question.replace(' ', '').upper()})
     if by_shape and named[0] not in known.values():  # told by colour, not by a listed shape ("빨간 느낌표")
