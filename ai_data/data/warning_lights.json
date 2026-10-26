@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "description": "계기판 경고등·표시등 사전. name은 대표 이름, aliases는 K5(DL3 2026)·더 뉴 아반떼(CN7 2026) 설명서에 실린 다른 표기, shapes는 운전자가 아이콘을 묘사하는 말. 청크 메타데이터(lights)와 질문 분류(agent.WARNING_LIGHTS)가 함께 쓴다. legal은 자동차규칙 [별표 2]의 해당 항목과 법정 식별색상(실제 차량은 제작사 사양에 따라 다를 수 있어 후보를 좁힐 때만 쓴다), shape_label은 되물을 때 보여 줄 모양 설명.",
+  "lights": [
+    {
+      "id": "engine_oil_pressure",
+      "name": "엔진 오일 압력 경고등",
+      "aliases": [],
+      "shapes": [
+        "주전자",
+        "오일캔",
+        "오일경고등",
+        "엔진오일경고등",
+        "오일모양"
+      ],
+      "legal": {
+        "item": "오일압력자동표시기",
+        "colors": [
+          "적색"
+        ]
+      },
+      "shape_label": "주전자 모양"
+    },
+    {
+      "id": "charging",
+      "name": "충전 경고등",
+      "aliases": [],
+      "shapes": [
+        "배터리",
+        "충전경고등"
+      ],
+      "legal": {
+        "item": "충전자동표시기",
+        "colors": [
+          "적색"
+        ]
+      },
+      "shape_label": "배터리 모양"
+    },
+    {
+      "id": "engine",
+      "name": "엔진 경고등",
+      "aliases": [],
+      "shapes": [
+        "엔진모양",
+        "엔진경고등"
+      ],
+      "legal": {
+        "item": "고장자동표시기(engine malfunction)",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "엔진 모양"
+    },
+    {
+      "id": "brake",
+      "name": "브레이크 경고등",
+      "aliases": [],
+      "shapes": [
+        "원안에느낌표",
+        "동그라미안에느낌표",
+        "BRAKE",
+        "브레이크경고등"
+      ],
+      "legal": {
+        "item": "제동장치고장자동표시기·주차제동장치자동표시기",
+        "colors": [
+          "적색",
+          "황색"
+        ]
+      },
+      "shape_label": "원 안에 느낌표나 BRAKE 글자"
+    },
+    {
+      "id": "abs",
+      "name": "ABS 경고등",
+      "aliases": [],
+      "shapes": [
+        "ABS"
+      ],
+      "legal": {
+        "item": "ABS고장자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "원 안에 ABS 글자"
+    },
+    {
+      "id": "airbag",
+      "name": "에어백 경고등",
+      "aliases": [],
+      "shapes": [
+        "에어백"
+      ],
+      "legal": {
+        "item": "에어백고장자동표시기",
+        "colors": [
+          "적색",
+          "황색"
+        ]
+      },
+      "shape_label": "앉은 사람 앞 에어백 모양"
+    },
+    {
+      "id": "seatbelt",
+      "name": "안전벨트 미착용 경고등",
+      "aliases": [
+        "안전벨트 미착용 경고등 및 경고음",
+        "안전벨트 경고등"
+      ],
+      "shapes": [
+        "안전벨트",
+        "벨트"
+      ],
+      "legal": {
+        "item": "안전띠자동표시기",
+        "colors": [
+          "적색"
+        ]
+      },
+      "shape_label": "안전벨트 맨 사람 모양"
+    },
+    {
+      "id": "power_steering",
+      "name": "전동식 파워스티어링 경고등",
+      "aliases": [
+        "전동 파워 스티어링 경고등"
+      ],
+      "shapes": [
+        "핸들",
+        "스티어링"
+      ]
+    },
+    {
+      "id": "low_tire_pressure",
+      "name": "저압 타이어 경고등",
+      "aliases": [
+        "저압 타이어 경고등/TPMS 경고등",
+        "TPMS 경고등"
+      ],
+      "shapes": [
+        "말굽",
+        "타이어",
+        "TPMS",
+        "말발굽"
+      ],
+      "legal": {
+        "item": "타이어공기압경고장치 자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "말굽 안에 느낌표"
+    },
+    {
+      "id": "master_warning",
+      "name": "통합 경고등",
+      "aliases": [],
+      "shapes": [
+        "삼각형"
+      ]
+    },
+    {
+      "id": "low_fuel",
+      "name": "연료 부족 경고등",
+      "aliases": [],
+      "shapes": [
+        "주유기",
+        "연료",
+        "기름"
+      ],
+      "legal": {
+        "item": "연료량자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "주유기 모양"
+    },
+    {
+      "id": "epb",
+      "name": "전자식 파킹 브레이크 (EPB) 경고등",
+      "aliases": [
+        "전자식 파킹 브레이크 경고등",
+        "EPB 경고등",
+        "(EPB) 경고등"
+      ],
+      "shapes": [
+        "EPB",
+        "파킹브레이크"
+      ]
+    },
+    {
+      "id": "forward_safety",
+      "name": "전방 안전 경고등",
+      "aliases": [],
+      "shapes": [
+        "차두대",
+        "충돌"
+      ]
+    },
+    {
+      "id": "door_open",
+      "name": "도어 열림 경고등",
+      "aliases": [],
+      "shapes": [
+        "도어",
+        "문열림",
+        "문이열"
+      ]
+    },
+    {
+      "id": "driver_attention",
+      "name": "부주의 운전 경고등",
+      "aliases": [],
+      "shapes": [
+        "커피",
+        "찻잔"
+      ]
+    },
+    {
+      "id": "led_headlamp_fault",
+      "name": "LED 전조등 고장 표시등",
+      "aliases": [],
+      "shapes": [
+        "전구"
+      ]
+    },
+    {
+      "id": "esc_active",
+      "name": "차체자세제어장치(ESC) 작동 표시등",
+      "aliases": [
+        "ESC 작동 표시등"
+      ],
+      "shapes": [
+        "ESC",
+        "미끄러지",
+        "구불구불"
+      ],
+      "legal": {
+        "item": "자동차안정성제어장치 기능고장 자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "미끄러지는 차 모양"
+    },
+    {
+      "id": "esc_off",
+      "name": "차체자세제어장치(ESC) 작동 정지 표시등",
+      "aliases": [
+        "ESC 작동 정지 표시등"
+      ],
+      "shapes": [],
+      "legal": {
+        "item": "자동차안정성제어장치 기능정지 자동표시기",
+        "colors": [
+          "황색"
+        ]
+      },
+      "shape_label": "미끄러지는 차와 OFF 글자"
+    },
+    {
+      "id": "ebd",
+      "name": "EBD 경고등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "lpg_overfill",
+      "name": "LPG 과충전 경고등",
+      "aliases": [
+        "과충전 경고등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "auto_hold",
+      "name": "자동 정차 기능(AUTO HOLD) 표시등",
+      "aliases": [
+        "AUTO HOLD 표시등",
+        "(AUTO HOLD) 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "immobilizer",
+      "name": "이모빌라이저 경고등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "isg",
+      "name": "공회전 제한 시스템(ISG) 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "key_check",
+      "name": "키 확인 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "hazard_turn",
+      "name": "비상 경고등/방향지시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "high_beam",
+      "name": "전조등 상향 표시등",
+      "aliases": [
+        "주행빔 전조등 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "low_beam",
+      "name": "전조등 하향 표시등",
+      "aliases": [
+        "변환빔 전조등 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "high_beam_assist",
+      "name": "하이빔 보조 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "position_lamp",
+      "name": "미등 표시등",
+      "aliases": [
+        "조명 켜짐 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "front_fog",
+      "name": "전방 안개등 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "lane_safety",
+      "name": "차로 안전 경고등",
+      "aliases": [
+        "차로 이탈방지 보조 표시등"
+      ],
+      "shapes": []
+    },
+    {
+      "id": "lpi_ready",
+      "name": "시동 대기 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "road_icing",
+      "name": "도로 결빙 경고등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "exterior_lamp_fault",
+      "name": "외장램프 단선 표시등",
+      "aliases": [],
+      "shapes": []
+    },
+    {
+      "id": "eco_mode",
+      "name": "ECO(에코) 모드 표시등",
+      "aliases": [
+        "ECO 모드 표시등"
+      ],
+      "shapes": []
+    }
+  ],
+  "legal_source": {
+    "doc_id": "vehicle-standards-rule-appendix-2",
+    "title": "자동차 및 자동차부품의 성능과 기준에 관한 규칙 [별표 2]",
+    "page": "별표 2",
+    "url": "https://www.law.go.kr/법령/자동차및자동차부품의성능과기준에관한규칙"
+  }
+}

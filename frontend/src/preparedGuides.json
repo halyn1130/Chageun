@@ -1,0 +1,3199 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "category": "controls",
+      "topicId": "defrost",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "window": "앞유리"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "실내 쪽 앞유리에 낀 김서림을 제거하는 방법이에요.\n\n1. 풍량을 높여 주세요.\n2. 원하는 온도를 설정해 주세요.\n3. 앞유리 서리 제거 버튼을 눌러 주세요.\n4. 외기 유입과 에어컨이 켜졌는지 확인하고, 자동으로 켜지지 않으면 해당 버튼을 눌러 주세요.",
+      "speech_text": "앞유리 서리 제거 버튼을 누르고 풍량을 높여 주세요. 외기 유입과 에어컨이 켜졌는지도 확인해 주세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 유리창 습기/성에 제거 방법 > 수동 조절식",
+          "chunk_id": "f9c5be351282e487abbef043",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 유리창 습기/성에 제거 방법 > 자동 조절식",
+          "chunk_id": "f254da435e045ae1bc116783",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "defrost",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "window": "뒷유리"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 엔진에 시동이 걸린 상태에서 뒷유리 열선 버튼을 눌러 주세요.\n2. 버튼의 표시등이 켜졌는지 확인해 주세요.\n3. 서리가 제거되면 버튼을 다시 눌러 꺼 주세요.\n\n작동 조건에서 약 20분이 지나면 자동으로 꺼집니다.",
+      "speech_text": "시동이 걸린 상태에서 뒷유리 열선 버튼을 눌러 주세요. 서리가 제거되면 다시 눌러 꺼 주세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 서리 제거 > 뒷유리 서리 제거(열선)",
+          "chunk_id": "1f5dae71cc0e4da7aa1f2c9d",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "lights",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "전조등 켜기"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 시동을 ON 상태로 두세요.\n2. 조명 스위치 끝부분을 전조등 위치로 돌려 주세요.\n3. 전조등이 켜졌는지 확인해 주세요.\n\n엔진이 꺼진 상태에서 오래 켜 두면 배터리가 방전될 수 있어요.",
+      "speech_text": "시동 ON 상태에서 조명 스위치 끝부분을 전조등 위치로 돌려 주세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 조명 > 조명 위치",
+          "chunk_id": "3cb55fd4b61bb640c276ba94",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "lights",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "상향등 전환"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 마주 오는 차나 앞차가 없는지 확인해 주세요.\n2. 조명 스위치를 계기판 방향으로 밀어 상향등을 켜세요.\n3. 계기판의 상향등 표시를 확인해 주세요.\n\n다른 차량이 있을 때는 상향등을 사용하지 마세요.",
+      "speech_text": "마주 오는 차나 앞차가 없을 때 조명 스위치를 계기판 방향으로 밀어 주세요. 다른 차량이 있으면 상향등을 사용하지 마세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "사용 설명서(요약본) > 편의장치 > 조명",
+          "chunk_id": "cdc2f3c1daa0d127f99fa9cf",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "lights",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "자동 모드"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "AUTO 기능이 적용된 차량 기준이에요.\n\n1. 시동 ON 상태에서 조명 스위치를 AUTO에 맞춰 주세요.\n2. 주변 밝기에 따라 조명이 켜지고 꺼집니다.\n\n안개·눈·비 등으로 시야가 나쁘면 자동 점등에만 의존하지 말고 전조등을 직접 켜 주세요.",
+      "speech_text": "AUTO 기능이 있으면 시동 ON 상태에서 스위치를 AUTO에 맞춰 주세요. 시야가 나쁘면 전조등을 직접 켜 주세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 조명 > 조명 위치",
+          "chunk_id": "3cb55fd4b61bb640c276ba94",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "wipers",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "와이퍼 속도 조절"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 시동을 ON 상태로 두세요.\n2. LO는 저속, HI는 고속으로 작동해요.\n3. 간헐 작동은 INT에서 조절하고, 멈추려면 OFF로 두세요.",
+      "speech_text": "와이퍼는 LO가 저속, HI가 고속이에요. 간헐 작동은 INT, 멈추려면 OFF로 두세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 와이퍼/워셔 > 와이퍼 작동",
+          "chunk_id": "2026b482305c6c1e7b40cd4f",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "defrost",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "window": "앞유리"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "실내 쪽 앞유리에 낀 김서림을 제거하는 방법이에요.\n\n1. 풍량을 높여 주세요.\n2. 원하는 온도를 설정해 주세요.\n3. 앞유리 서리 제거 버튼을 눌러 주세요.\n4. 외기 유입과 에어컨이 켜졌는지 확인하고, 자동으로 켜지지 않으면 해당 버튼을 눌러 주세요.",
+      "speech_text": "앞유리 서리 제거 버튼을 누르고 풍량을 높여 주세요. 외기 유입과 에어컨이 켜졌는지도 확인해 주세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-86",
+          "chunk_id": "c8289d6b9f6ce8ac983d6444",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-87",
+          "chunk_id": "b444977c0d78a8b4b3c0d9fe",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "defrost",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "window": "뒷유리"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 엔진에 시동이 걸린 상태에서 뒷유리 열선 버튼을 눌러 주세요.\n2. 버튼의 표시등이 켜졌는지 확인해 주세요.\n3. 서리가 제거되면 버튼을 다시 눌러 꺼 주세요.\n\n작동 조건에서 약 20분이 지나면 자동으로 꺼집니다.",
+      "speech_text": "시동이 걸린 상태에서 뒷유리 열선 버튼을 눌러 주세요. 서리가 제거되면 다시 눌러 꺼 주세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-88",
+          "chunk_id": "5580e52dda7ba3e349b1085e",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "lights",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "전조등 켜기"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 시동을 ON 상태로 두세요.\n2. 조명 스위치 끝부분을 전조등 위치로 돌려 주세요.\n3. 전조등이 켜졌는지 확인해 주세요.\n\n엔진이 꺼진 상태에서 오래 켜 두면 배터리가 방전될 수 있어요.",
+      "speech_text": "시동 ON 상태에서 조명 스위치 끝부분을 전조등 위치로 돌려 주세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-62",
+          "chunk_id": "31742c0eae8ea2df80589ed8",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "lights",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "상향등 전환"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 마주 오는 차나 앞차가 없는지 확인해 주세요.\n2. 조명 스위치를 계기판 방향으로 밀어 상향등을 켜세요.\n3. 계기판의 상향등 표시를 확인해 주세요.\n\n다른 차량이 있을 때는 상향등을 사용하지 마세요. 아반떼는 상시 상향등을 끄려면 스위치를 운전자 방향으로 당기세요.",
+      "speech_text": "마주 오는 차나 앞차가 없을 때 조명 스위치를 계기판 방향으로 밀어 주세요. 다른 차량이 있으면 상향등을 사용하지 마세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-63",
+          "chunk_id": "56ecdb9c9707bf29ccd27e6f",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "lights",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "자동 모드"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "AUTO 기능이 적용된 차량 기준이에요.\n\n1. 시동 ON 상태에서 조명 스위치를 AUTO에 맞춰 주세요.\n2. 주변 밝기에 따라 조명이 켜지고 꺼집니다.\n\n안개·눈·비 등으로 시야가 나쁘면 자동 점등에만 의존하지 말고 전조등을 직접 켜 주세요.",
+      "speech_text": "AUTO 기능이 있으면 시동 ON 상태에서 스위치를 AUTO에 맞춰 주세요. 시야가 나쁘면 전조등을 직접 켜 주세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-62",
+          "chunk_id": "31742c0eae8ea2df80589ed8",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "wipers",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "와이퍼 속도 조절"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 시동을 ON 상태로 두세요.\n2. LO는 저속, HI는 고속으로 작동해요.\n3. 간헐 작동은 INT에서 조절하고, 멈추려면 OFF로 두세요.",
+      "speech_text": "와이퍼는 LO가 저속, HI가 고속이에요. 간헐 작동은 INT, 멈추려면 OFF로 두세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-66",
+          "chunk_id": "243d37d2a6c78063148f998f",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "wipers",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "워셔액 뿌리기"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "1. 와이퍼 스위치를 운전자 방향으로 당겨 주세요.\n2. 워셔액이 분사되면서 와이퍼가 작동합니다.\n3. 스위치에서 손을 떼면 원위치로 돌아갑니다.",
+      "speech_text": "와이퍼 스위치를 운전자 방향으로 당기면 워셔액이 나와요. 손을 떼면 스위치가 원위치로 돌아갑니다.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "사용 설명서(요약본) > 편의장치 > 와이퍼/워셔",
+          "chunk_id": "dacce3a63aa675fd9c8c2bf4",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "roundabout",
+      "vehicle": null,
+      "match": {},
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "1. 회전교차로에 진입할 때는 서행하거나 일시정지하세요.\n2. 이미 회전 중인 차량에 진로를 양보하세요.\n3. 교차로 안에서는 반시계방향으로 통행하세요.\n\n진행 신호를 하는 앞차의 진행을 방해하지 마세요.",
+      "speech_text": "진입할 때 서행하거나 일시정지하고, 이미 회전 중인 차량에 양보하세요. 회전 방향은 반시계방향이에요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제25조의2",
+          "chunk_id": "e22e4f2e0e8daef0064c34ef",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "crosswalk",
+      "vehicle": null,
+      "match": {
+        "scenario": "보행자가 건너는 경우"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "1. 횡단보도를 건너고 있거나 건너려는 사람이 있는지 확인하세요.\n2. 보행자가 있으면 횡단보도 앞에서 일시정지하세요. 정지선이 있으면 정지선 앞에서 멈추세요.\n3. 보행자의 횡단을 방해하거나 위험을 주지 마세요.\n\n어린이보호구역의 신호등 없는 횡단보도는 보행자가 없어도 일시정지해야 해요.",
+      "speech_text": "건너거나 건너려는 사람이 있으면 정지선 앞에서 일시정지하세요. 어린이보호구역의 신호등 없는 횡단보도는 사람이 없어도 멈춰야 해요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "ef2ee239a022de51a6fea932",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "crosswalk",
+      "vehicle": null,
+      "match": {
+        "scenario": "건너려는 사람이 있는 경우"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "1. 횡단보도를 건너고 있거나 건너려는 사람이 있는지 확인하세요.\n2. 보행자가 있으면 횡단보도 앞에서 일시정지하세요. 정지선이 있으면 정지선 앞에서 멈추세요.\n3. 보행자의 횡단을 방해하거나 위험을 주지 마세요.\n\n어린이보호구역의 신호등 없는 횡단보도는 보행자가 없어도 일시정지해야 해요.",
+      "speech_text": "건너거나 건너려는 사람이 있으면 정지선 앞에서 일시정지하세요. 어린이보호구역의 신호등 없는 횡단보도는 사람이 없어도 멈춰야 해요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "ef2ee239a022de51a6fea932",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "crosswalk",
+      "vehicle": null,
+      "match": {
+        "scenario": "신호등이 없는 횡단보도"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "1. 횡단보도를 건너고 있거나 건너려는 사람이 있는지 확인하세요.\n2. 보행자가 있으면 횡단보도 앞에서 일시정지하세요. 정지선이 있으면 정지선 앞에서 멈추세요.\n3. 보행자의 횡단을 방해하거나 위험을 주지 마세요.\n\n어린이보호구역의 신호등 없는 횡단보도는 보행자가 없어도 일시정지해야 해요.",
+      "speech_text": "건너거나 건너려는 사람이 있으면 정지선 앞에서 일시정지하세요. 어린이보호구역의 신호등 없는 횡단보도는 사람이 없어도 멈춰야 해요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "ef2ee239a022de51a6fea932",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "parking",
+      "vehicle": null,
+      "match": {
+        "scenario": "교차로 주변"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "교차로 안과 교차로 가장자리·도로 모퉁이에서 5m 이내는 정차·주차 금지 구역이에요.\n\n법령·경찰공무원의 지시에 따르거나 위험을 피하기 위한 일시정지는 예외예요. 다른 금지 조건도 있을 수 있으므로 현장 표지와 함께 확인하세요.",
+      "speech_text": "교차로 안과 교차로 가장자리·도로 모퉁이에서 5m 이내는 정차·주차 금지 구역이에요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제32조",
+          "chunk_id": "cb7a57454a1f5d7adfdc155b",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "parking",
+      "vehicle": null,
+      "match": {
+        "scenario": "소화전 주변"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "소방용수시설 또는 비상소화장치에서 5m 이내는 정차·주차가 금지돼요.\n\n법령·경찰공무원의 지시에 따르거나 위험을 피하기 위한 일시정지는 예외예요. 다른 금지 조건도 있을 수 있으므로 현장 표지와 함께 확인하세요.",
+      "speech_text": "소방용수시설 또는 비상소화장치에서 5m 이내는 정차·주차가 금지돼요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제32조",
+          "chunk_id": "cb7a57454a1f5d7adfdc155b",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "parking",
+      "vehicle": null,
+      "match": {
+        "scenario": "버스 정류장 주변"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "버스 정류장 표시 기둥·표지판·선에서 10m 이내는 정차·주차가 금지돼요. 노선버스가 운행 중 승객을 태우거나 내리는 경우에는 예외가 있어요.\n\n법령·경찰공무원의 지시에 따르거나 위험을 피하기 위한 일시정지는 예외예요. 다른 금지 조건도 있을 수 있으므로 현장 표지와 함께 확인하세요.",
+      "speech_text": "버스 정류장 표시 기둥·표지판·선에서 10m 이내는 정차·주차가 금지돼요. 노선버스가 운행 중 승객을 태우거나 내리는 경우에는 예외가 있어요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제32조",
+          "chunk_id": "cb7a57454a1f5d7adfdc155b",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "defrost",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "window": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "위치를 구분하기 어려우면 두 방법을 확인해 주세요.\n\n앞유리: 풍량과 온도를 설정하고 앞유리 서리 제거 버튼을 누르세요. 외기 유입과 에어컨이 켜졌는지 확인해 주세요.\n\n뒷유리: 시동이 걸린 상태에서 뒷유리 열선 버튼을 누르세요. 서리가 제거되면 다시 눌러 꺼 주세요.",
+      "speech_text": "앞유리는 서리 제거 버튼을 누르고 외기 유입과 에어컨을 확인해 주세요. 뒷유리는 시동이 걸린 상태에서 열선 버튼을 누르고, 서리가 제거되면 꺼 주세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 유리창 습기/성에 제거 방법 > 수동 조절식",
+          "chunk_id": "f9c5be351282e487abbef043",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 유리창 습기/성에 제거 방법 > 자동 조절식",
+          "chunk_id": "f254da435e045ae1bc116783",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 서리 제거 > 뒷유리 서리 제거(열선)",
+          "chunk_id": "1f5dae71cc0e4da7aa1f2c9d",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "defrost",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "window": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "위치를 구분하기 어려우면 두 방법을 확인해 주세요.\n\n앞유리: 풍량과 온도를 설정하고 앞유리 서리 제거 버튼을 누르세요. 외기 유입과 에어컨이 켜졌는지 확인해 주세요.\n\n뒷유리: 시동이 걸린 상태에서 뒷유리 열선 버튼을 누르세요. 서리가 제거되면 다시 눌러 꺼 주세요.",
+      "speech_text": "앞유리는 서리 제거 버튼을 누르고 외기 유입과 에어컨을 확인해 주세요. 뒷유리는 시동이 걸린 상태에서 열선 버튼을 누르고, 서리가 제거되면 꺼 주세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-86",
+          "chunk_id": "c8289d6b9f6ce8ac983d6444",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-87",
+          "chunk_id": "b444977c0d78a8b4b3c0d9fe",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-88",
+          "chunk_id": "5580e52dda7ba3e349b1085e",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "right-turn",
+      "vehicle": null,
+      "match": {
+        "scenario": "차량 신호가 빨간 상황"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "정지선이 있으면 그 앞에서 먼저 정지하세요. 우회전 전용 신호등이 없다면, 신호에 따라 진행하는 다른 차량의 통행을 방해하지 않는 범위에서 우회전할 수 있어요. 횡단보도를 건너거나 건너려는 사람이 있으면 일시정지하세요.",
+      "speech_text": "정지선이 있으면 그 앞에서 먼저 정지하세요. 우회전 전용 신호등이 없다면, 신호에 따라 진행하는 다른 차량의 통행을 방해하지 않는 범위에서 우회전할 수 있어요. 횡단보도를 건너거나 건너려는 사람이 있으면 일시정지하세요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b28af8ea9817a982b824167a",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "right-turn",
+      "vehicle": null,
+      "match": {
+        "scenario": "차량 신호가 초록인 상황"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "우측 가장자리를 따라 서행하며 우회전하세요. 초록 신호여도 횡단보도를 건너거나 건너려는 사람이 있으면 일시정지해야 해요. 우회전 전용 신호등이 있으면 그 신호를 따르세요.",
+      "speech_text": "우측 가장자리를 따라 서행하며 우회전하세요. 초록 신호여도 횡단보도를 건너거나 건너려는 사람이 있으면 일시정지해야 해요. 우회전 전용 신호등이 있으면 그 신호를 따르세요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "50a33f45b156bd9eeddaa1ab",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제25조",
+          "chunk_id": "0d771c3caa639573efa8596b",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b28af8ea9817a982b824167a",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "right-turn",
+      "vehicle": null,
+      "match": {
+        "scenario": "우회전 신호등이 있는 곳"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "우회전 전용 신호등이 빨간색이면 우회전할 수 없어요. 녹색 우회전 화살표에 따라 진행하되, 횡단보도의 보행자를 방해하지 마세요.",
+      "speech_text": "우회전 전용 신호등이 빨간색이면 우회전할 수 없어요. 녹색 우회전 화살표에 따라 진행하되, 횡단보도의 보행자를 방해하지 마세요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b28af8ea9817a982b824167a",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b67d29dcb420a03cd364f58d",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "right-turn",
+      "vehicle": null,
+      "match": {
+        "scenario": "전반적인 조건"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "1. 우회전 전용 신호등이 있으면 그 신호를 따르세요.\n2. 전용 신호등이 없고 차량 신호가 빨간색이면 정지선 앞에서 먼저 정지하세요.\n3. 우측 가장자리에서 서행하며 다른 차량과 보행자의 통행을 방해하지 마세요.\n4. 횡단보도를 건너거나 건너려는 사람이 있으면 일시정지하세요.",
+      "speech_text": "1. 우회전 전용 신호등이 있으면 그 신호를 따르세요.\n2. 전용 신호등이 없고 차량 신호가 빨간색이면 정지선 앞에서 먼저 정지하세요.\n3. 우측 가장자리에서 서행하며 다른 차량과 보행자의 통행을 방해하지 마세요.\n4. 횡단보도를 건너거나 건너려는 사람이 있으면 일시정지하세요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b28af8ea9817a982b824167a",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "50a33f45b156bd9eeddaa1ab",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제25조",
+          "chunk_id": "0d771c3caa639573efa8596b",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "unprotected",
+      "vehicle": null,
+      "match": {
+        "scenario": "신호 색과 진행 조건"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "비보호 좌회전 표지나 표시가 있는 곳에서 녹색 진행 신호에 따라 좌회전할 수 있어요. 맞은편 차량의 통행을 방해하면 안 되며, 보행자의 횡단도 방해해서는 안 돼요. 비보호 표지가 있어도 빨간 신호에서 좌회전할 수는 없어요.",
+      "speech_text": "비보호 좌회전 표지나 표시가 있는 곳에서 녹색 진행 신호에 따라 좌회전할 수 있어요. 맞은편 차량의 통행을 방해하면 안 되며, 보행자의 횡단도 방해해서는 안 돼요. 비보호 표지가 있어도 빨간 신호에서 좌회전할 수는 없어요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "50a33f45b156bd9eeddaa1ab",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "beed0a4341476fcd7157981e",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b28af8ea9817a982b824167a",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "unprotected",
+      "vehicle": null,
+      "match": {
+        "scenario": "맞은편 차량과 우선순위"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "비보호 좌회전 표지나 표시가 있는 곳에서 녹색 진행 신호에 따라 좌회전할 수 있어요. 맞은편 차량의 통행을 방해하면 안 되며, 보행자의 횡단도 방해해서는 안 돼요. 비보호 표지가 있어도 빨간 신호에서 좌회전할 수는 없어요.",
+      "speech_text": "비보호 좌회전 표지나 표시가 있는 곳에서 녹색 진행 신호에 따라 좌회전할 수 있어요. 맞은편 차량의 통행을 방해하면 안 되며, 보행자의 횡단도 방해해서는 안 돼요. 비보호 표지가 있어도 빨간 신호에서 좌회전할 수는 없어요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "50a33f45b156bd9eeddaa1ab",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "beed0a4341476fcd7157981e",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b28af8ea9817a982b824167a",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "unprotected",
+      "vehicle": null,
+      "match": {
+        "scenario": "보행자가 있는 경우"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "비보호 좌회전 표지나 표시가 있는 곳에서 녹색 진행 신호에 따라 좌회전할 수 있어요. 맞은편 차량의 통행을 방해하면 안 되며, 보행자의 횡단도 방해해서는 안 돼요. 비보호 표지가 있어도 빨간 신호에서 좌회전할 수는 없어요.",
+      "speech_text": "비보호 좌회전 표지나 표시가 있는 곳에서 녹색 진행 신호에 따라 좌회전할 수 있어요. 맞은편 차량의 통행을 방해하면 안 되며, 보행자의 횡단도 방해해서는 안 돼요. 비보호 표지가 있어도 빨간 신호에서 좌회전할 수는 없어요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "50a33f45b156bd9eeddaa1ab",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "beed0a4341476fcd7157981e",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "c57ea6baa8f7a937e42da68e",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 2] 신호기가 표시하는 신호의 종류 및 신호의 뜻",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 2",
+          "chunk_id": "b28af8ea9817a982b824167a",
+          "revision": "행정안전부령 제636호 시행본의 별표 2 (2022-01-21 개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "lane",
+      "vehicle": null,
+      "match": {
+        "scenario": "흰색 실선"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "진로 변경을 제한하는 흰색 실선 구간에서는 차선을 바꾸지 마세요. 도로 파손·공사 등 장애물이 있는 법정 예외는 별도 조건을 확인해야 해요.",
+      "speech_text": "진로 변경을 제한하는 흰색 실선 구간에서는 차선을 바꾸지 마세요. 도로 파손·공사 등 장애물이 있는 법정 예외는 별도 조건을 확인해야 해요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "595af02d0794ffa6197b8fb5",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제14조",
+          "chunk_id": "b85b48738b07676499c834fd",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "lane",
+      "vehicle": null,
+      "match": {
+        "scenario": "흰색 점선"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "점선이라고 바로 차선을 바꿀 수 있는 것은 아니에요. 진로 변경 금지 표지가 없는지 확인하고, 바꾸려는 방향의 다른 차량 통행에 장애를 줄 우려가 있으면 변경하지 마세요. 실선과 점선이 함께 있으면 점선 쪽에서만 변경할 수 있어요.",
+      "speech_text": "점선이라고 바로 차선을 바꿀 수 있는 것은 아니에요. 진로 변경 금지 표지가 없는지 확인하고, 바꾸려는 방향의 다른 차량 통행에 장애를 줄 우려가 있으면 변경하지 마세요. 실선과 점선이 함께 있으면 점선 쪽에서만 변경할 수 있어요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "35aa75d329d6900b3cbe7838",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제19조",
+          "chunk_id": "6f62f44ae30ac00e7e67bdaa",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제14조",
+          "chunk_id": "b85b48738b07676499c834fd",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "lane",
+      "vehicle": null,
+      "match": {
+        "scenario": "황색선"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "색만으로 차선 변경 가능 여부를 정할 수 없어요. 중앙선인지 도로 가장자리 표시인지, 실선인지 점선인지 먼저 구분하세요. 표시가 불명확하면 차선 변경 가능으로 판단하지 마세요.",
+      "speech_text": "색만으로 차선 변경 가능 여부를 정할 수 없어요. 중앙선인지 도로 가장자리 표시인지, 실선인지 점선인지 먼저 구분하세요. 표시가 불명확하면 차선 변경 가능으로 판단하지 마세요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "a1239941b06ef6a86c6e59ae",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제14조",
+          "chunk_id": "b85b48738b07676499c834fd",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "lane",
+      "vehicle": null,
+      "match": {
+        "scenario": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "색만으로 차선 변경 가능 여부를 정할 수 없어요. 중앙선인지 도로 가장자리 표시인지, 실선인지 점선인지 먼저 구분하세요. 표시가 불명확하면 차선 변경 가능으로 판단하지 마세요.",
+      "speech_text": "색만으로 차선 변경 가능 여부를 정할 수 없어요. 중앙선인지 도로 가장자리 표시인지, 실선인지 점선인지 먼저 구분하세요. 표시가 불명확하면 차선 변경 가능으로 판단하지 마세요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "a1239941b06ef6a86c6e59ae",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제14조",
+          "chunk_id": "b85b48738b07676499c834fd",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "road-markings",
+      "vehicle": null,
+      "match": {},
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "노란색은 중앙선이나 주정차 금지 표시 등에, 파란색은 전용차로 등에 사용돼요. 진로 변경 제한을 나타내는 흰색 실선에서는 차선을 바꾸지 마세요. 점선도 주변 차량 통행을 방해하지 않는 조건에서 확인해야 해요. 색과 선의 모양, 설치 위치, 표지판을 함께 확인하세요.",
+      "speech_text": "노란색은 중앙선이나 주정차 금지 표시 등에, 파란색은 전용차로 등에 사용돼요. 진로 변경 제한을 나타내는 흰색 실선에서는 차선을 바꾸지 마세요. 점선도 주변 차량 통행을 방해하지 않는 조건에서 확인해야 해요. 색과 선의 모양, 설치 위치, 표지판을 함께 확인하세요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "a1239941b06ef6a86c6e59ae",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "595af02d0794ffa6197b8fb5",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제19조",
+          "chunk_id": "6f62f44ae30ac00e7e67bdaa",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "curb",
+      "vehicle": null,
+      "match": {},
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "도로 가장자리에는 주차금지 표시와 정차·주차금지 표시가 구분돼 있어요. 허용 시간이나 차종 등 예외를 정한 보조표지도 함께 확인하세요. 선의 색만 보고 주차할 수 있다고 판단하면 안 돼요.",
+      "speech_text": "도로 가장자리에는 주차금지 표시와 정차·주차금지 표시가 구분돼 있어요. 허용 시간이나 차종 등 예외를 정한 보조표지도 함께 확인하세요. 선의 색만 보고 주차할 수 있다고 판단하면 안 돼요.",
+      "sources": [
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "8230f1fcba891d56768fff92",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법 시행규칙 [별표 6] 안전표지의 종류, 만드는 방식 및 설치ㆍ관리기준",
+          "url": "https://www.law.go.kr/법령/도로교통법시행규칙/(636,20260824)",
+          "page": "별표 6",
+          "chunk_id": "261c43ca420082b399ed1105",
+          "revision": "행정안전부령 제636호 시행본의 별표 6 (2024-11-14 개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "parking",
+      "vehicle": null,
+      "match": {
+        "scenario": "일반적인 금지 구역"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "교차로·횡단보도·보도 등은 원칙적으로 정차·주차 금지 구역이에요. 교차로 모퉁이와 소방용수시설 주변 5m, 버스 정류장 표시와 횡단보도 주변 10m도 확인하세요. 어린이보호구역 역시 금지 대상이에요. 법령·경찰 지시나 위험 방지를 위한 일시정지 등의 예외는 별도 확인이 필요해요.",
+      "speech_text": "교차로·횡단보도·보도 등은 원칙적으로 정차·주차 금지 구역이에요. 교차로 모퉁이와 소방용수시설 주변 5m, 버스 정류장 표시와 횡단보도 주변 10m도 확인하세요. 어린이보호구역 역시 금지 대상이에요. 법령·경찰 지시나 위험 방지를 위한 일시정지 등의 예외는 별도 확인이 필요해요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제32조",
+          "chunk_id": "cb7a57454a1f5d7adfdc155b",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제32조",
+          "chunk_id": "d0e367f62f183735c6a0d2fa",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "rules",
+      "topicId": "school",
+      "vehicle": null,
+      "match": {},
+      "reviewed_at": "2026-10-25",
+      "review_after": "2026-11-24",
+      "answer": "1. 현장에 표시된 제한속도와 시간 조건을 확인하고 어린이 안전에 주의하세요.\n2. 어린이보호구역의 신호등 없는 횡단보도에서는 보행자가 없어도 일시정지하세요.\n3. 어린이보호구역은 원칙적으로 정차·주차가 금지되므로 예외가 있는지 현장 표지를 확인하세요.",
+      "speech_text": "1. 현장에 표시된 제한속도와 시간 조건을 확인하고 어린이 안전에 주의하세요.\n2. 어린이보호구역의 신호등 없는 횡단보도에서는 보행자가 없어도 일시정지하세요.\n3. 어린이보호구역은 원칙적으로 정차·주차가 금지되므로 예외가 있는지 현장 표지를 확인하세요.",
+      "sources": [
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제12조",
+          "chunk_id": "0be414f7e272af57ec103f3d",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제12조",
+          "chunk_id": "db9724e92f290dd6d595cbf7",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제27조",
+          "chunk_id": "ef2ee239a022de51a6fea932",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "도로교통법",
+          "url": "https://www.law.go.kr/법령/도로교통법/(22067,20261013)",
+          "page": "제32조",
+          "chunk_id": "d0e367f62f183735c6a0d2fa",
+          "revision": "법률 제22067호 (2026-10-13 공포, 일부개정)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "warning",
+      "topicId": "fuel",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {},
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "연료 부족 경고등은 연료가 적다는 신호예요. 연료를 신속히 보충하고 주유할 때는 엔진을 꺼 주세요. 경고등만으로 남은 주행거리를 확정할 수는 없어요.",
+      "speech_text": "연료를 신속히 보충해 주세요. 주유할 때는 엔진을 꺼 주세요. 경고등만으로 남은 주행거리를 정할 수는 없어요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 계측기",
+          "chunk_id": "c9527f0d8d1ac84b55d4dec2",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "color": "빨간색",
+        "shape": "주전자 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 엔진 오일 압력 경고등과 비슷해요.\n\n1. 주행 중 켜졌다면 안전한 곳에 정차하세요.\n2. 엔진 오일양 점검과 필요한 보충을 받으세요.\n3. 보충 후에도 꺼지지 않으면 서비스센터에서 점검받으세요.\n\n이 경고등이 켜진 채 계속 주행하면 엔진이 손상될 수 있어요.",
+      "speech_text": "엔진 오일 압력 경고등과 비슷해요. 주행 중이면 안전한 곳에 정차하고 점검을 받으세요. 계속 주행하면 엔진이 손상될 수 있어요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "a566e677210fd16fdc4ea467",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "엔진 오일 압력 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "color": "빨간색",
+        "shape": "배터리 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 충전 경고등과 비슷해요. 충전 장치나 벨트 등의 이상일 수 있어요. 배터리만 교환하면 된다고 단정할 수 없으며, 켜진 채 주행하면 과열이나 방전이 생길 수 있어요. 안전한 곳에 정차한 뒤 충전 계통 점검을 요청하세요.",
+      "speech_text": "충전 경고등과 비슷해요. 과열이나 방전 위험이 있으니 안전한 곳에 정차한 뒤 충전 계통 점검을 요청하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "ebf48e4f679a5c065765b24a",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "충전 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "color": "노란색",
+        "shape": "말발굽 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 저압 타이어 경고등과 비슷해요. 타이어 공기압이 낮으면 켜질 수 있으므로 공기압을 점검받으세요. 약 1분 깜빡인 뒤 계속 켜지는 경우는 감지 시스템 이상일 수 있어요. 공기압이 매우 낮으면 주행이 불안정해지고 제동거리가 길어질 수 있어요.",
+      "speech_text": "저압 타이어 경고등과 비슷해요. 공기압을 점검받으세요. 약 1분 깜빡인 뒤 켜졌다면 감지 시스템 점검도 필요해요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "a566e677210fd16fdc4ea467",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "저압 타이어 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "color": "노란색",
+        "shape": "ABS 글자",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "시동 직후 잠깐 켜졌다 꺼지는 것은 점검 과정일 수 있어요. 주행 중에도 계속 켜져 있다면 ABS 점검이 필요해요. 안전한 곳에 정차한 뒤 서비스센터에 문의하세요. 브레이크 경고등도 함께 켜지면 제동 기능 이상 가능성이 있으므로 고속 주행이나 급제동을 피하고 즉시 점검을 요청하세요.",
+      "speech_text": "주행 중 ABS 표시가 계속 켜져 있으면 안전한 곳에 정차한 뒤 점검을 요청하세요. 브레이크 경고등도 함께 켜지면 고속 주행과 급제동을 피하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "c234cc7d0b6b5d9e4cf51161",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "ABS 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "color": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "색이나 모양만으로 경고등을 확정하기 어려워요. 안전하게 정차한 상태에서 계기판의 문자 메시지나 표시 이름을 확인해 주세요. 확인이 어렵거나 차량의 움직임이 평소와 다르면 무리해서 계속 운전하지 말고 서비스센터나 긴급출동에 도움을 요청하세요.",
+      "speech_text": "경고등을 확정하기 어려워요. 안전하게 정차한 뒤 계기판 문구를 확인해 주세요. 확인이 어렵거나 이상 증상이 있으면 도움을 요청하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "a566e677210fd16fdc4ea467",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "c234cc7d0b6b5d9e4cf51161",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "status": "need_review",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "shape": [
+          "확인하지 못함",
+          "느낌표 모양"
+        ]
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "색이나 모양만으로 경고등을 확정하기 어려워요. 안전하게 정차한 상태에서 계기판의 문자 메시지나 표시 이름을 확인해 주세요. 확인이 어렵거나 차량의 움직임이 평소와 다르면 무리해서 계속 운전하지 말고 서비스센터나 긴급출동에 도움을 요청하세요.",
+      "speech_text": "경고등을 확정하기 어려워요. 안전하게 정차한 뒤 계기판 문구를 확인해 주세요. 확인이 어렵거나 이상 증상이 있으면 도움을 요청하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "a566e677210fd16fdc4ea467",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "c234cc7d0b6b5d9e4cf51161",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "status": "need_review",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "blink": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "색이나 모양만으로 경고등을 확정하기 어려워요. 안전하게 정차한 상태에서 계기판의 문자 메시지나 표시 이름을 확인해 주세요. 확인이 어렵거나 차량의 움직임이 평소와 다르면 무리해서 계속 운전하지 말고 서비스센터나 긴급출동에 도움을 요청하세요.",
+      "speech_text": "경고등을 확정하기 어려워요. 안전하게 정차한 뒤 계기판 문구를 확인해 주세요. 확인이 어렵거나 이상 증상이 있으면 도움을 요청하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "a566e677210fd16fdc4ea467",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "c234cc7d0b6b5d9e4cf51161",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "status": "need_review",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "fuel",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {},
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "연료 부족 경고등은 연료가 적다는 신호예요. 연료를 신속히 보충하고 주유할 때는 엔진을 꺼 주세요. 경고등만으로 남은 주행거리를 확정할 수는 없어요.",
+      "speech_text": "연료를 신속히 보충해 주세요. 주유할 때는 엔진을 꺼 주세요. 경고등만으로 남은 주행거리를 정할 수는 없어요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-6",
+          "chunk_id": "902749259ffa6d35f43ea51f",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "color": "빨간색",
+        "shape": "주전자 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 엔진 오일 압력 경고등과 비슷해요.\n\n1. 주행 중 켜졌다면 안전한 곳에 정차하세요.\n2. 엔진 오일양 점검과 필요한 보충을 받으세요.\n3. 보충 후에도 꺼지지 않으면 서비스센터에서 점검받으세요.\n\n이 경고등이 켜진 채 계속 주행하면 엔진이 손상될 수 있어요.",
+      "speech_text": "엔진 오일 압력 경고등과 비슷해요. 주행 중이면 안전한 곳에 정차하고 점검을 받으세요. 계속 주행하면 엔진이 손상될 수 있어요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-11",
+          "chunk_id": "799d3832a0aaf7abe3db7418",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "엔진 오일 압력 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "color": "빨간색",
+        "shape": "배터리 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 충전 경고등과 비슷해요. 충전 장치나 벨트 등의 이상일 수 있어요. 배터리만 교환하면 된다고 단정할 수 없으며, 켜진 채 주행하면 과열이나 방전이 생길 수 있어요. 안전한 곳에 정차한 뒤 충전 계통 점검을 요청하세요.",
+      "speech_text": "충전 경고등과 비슷해요. 과열이나 방전 위험이 있으니 안전한 곳에 정차한 뒤 충전 계통 점검을 요청하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-11",
+          "chunk_id": "799d3832a0aaf7abe3db7418",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "충전 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "color": "노란색",
+        "shape": "말발굽 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 저압 타이어 경고등과 비슷해요. 타이어 공기압이 낮으면 켜질 수 있으므로 공기압을 점검받으세요. 약 1분 깜빡인 뒤 계속 켜지는 경우는 감지 시스템 이상일 수 있어요. 공기압이 매우 낮으면 주행이 불안정해지고 제동거리가 길어질 수 있어요.",
+      "speech_text": "저압 타이어 경고등과 비슷해요. 공기압을 점검받으세요. 약 1분 깜빡인 뒤 켜졌다면 감지 시스템 점검도 필요해요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-11",
+          "chunk_id": "d24719973e8956aa3ef0bda0",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "저압 타이어 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "color": "노란색",
+        "shape": "ABS 글자",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "시동 직후 잠깐 켜졌다 꺼지는 것은 점검 과정일 수 있어요. 주행 중에도 계속 켜져 있다면 ABS 점검이 필요해요. 안전한 곳에 정차한 뒤 서비스센터에 문의하세요. 브레이크 경고등도 함께 켜지면 제동 기능 이상 가능성이 있으므로 고속 주행이나 급제동을 피하고 즉시 점검을 요청하세요.",
+      "speech_text": "주행 중 ABS 표시가 계속 켜져 있으면 안전한 곳에 정차한 뒤 점검을 요청하세요. 브레이크 경고등도 함께 켜지면 고속 주행과 급제동을 피하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-10",
+          "chunk_id": "0ef8c6c913fc6159c65a3840",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "ABS 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "color": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "색이나 모양만으로 경고등을 확정하기 어려워요. 안전하게 정차한 상태에서 계기판의 문자 메시지나 표시 이름을 확인해 주세요. 확인이 어렵거나 차량의 움직임이 평소와 다르면 무리해서 계속 운전하지 말고 서비스센터나 긴급출동에 도움을 요청하세요.",
+      "speech_text": "경고등을 확정하기 어려워요. 안전하게 정차한 뒤 계기판 문구를 확인해 주세요. 확인이 어렵거나 이상 증상이 있으면 도움을 요청하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-11",
+          "chunk_id": "799d3832a0aaf7abe3db7418",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-10",
+          "chunk_id": "0ef8c6c913fc6159c65a3840",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "status": "need_review",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "shape": [
+          "확인하지 못함",
+          "느낌표 모양"
+        ]
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "색이나 모양만으로 경고등을 확정하기 어려워요. 안전하게 정차한 상태에서 계기판의 문자 메시지나 표시 이름을 확인해 주세요. 확인이 어렵거나 차량의 움직임이 평소와 다르면 무리해서 계속 운전하지 말고 서비스센터나 긴급출동에 도움을 요청하세요.",
+      "speech_text": "경고등을 확정하기 어려워요. 안전하게 정차한 뒤 계기판 문구를 확인해 주세요. 확인이 어렵거나 이상 증상이 있으면 도움을 요청하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-11",
+          "chunk_id": "799d3832a0aaf7abe3db7418",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-10",
+          "chunk_id": "0ef8c6c913fc6159c65a3840",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "status": "need_review",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "blink": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "색이나 모양만으로 경고등을 확정하기 어려워요. 안전하게 정차한 상태에서 계기판의 문자 메시지나 표시 이름을 확인해 주세요. 확인이 어렵거나 차량의 움직임이 평소와 다르면 무리해서 계속 운전하지 말고 서비스센터나 긴급출동에 도움을 요청하세요.",
+      "speech_text": "경고등을 확정하기 어려워요. 안전하게 정차한 뒤 계기판 문구를 확인해 주세요. 확인이 어렵거나 이상 증상이 있으면 도움을 요청하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-11",
+          "chunk_id": "799d3832a0aaf7abe3db7418",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-10",
+          "chunk_id": "0ef8c6c913fc6159c65a3840",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "status": "need_review",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "color": "노란색",
+        "shape": "엔진 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 엔진 경고등과 비슷해요. 시동 직후 잠깐 켜졌다 꺼지는 것은 점검 과정일 수 있지만, 계속 켜져 있으면 엔진 제어·연료 공급 등의 점검이 필요해요. 경고등만으로 고장 부품을 확정할 수 없으니 가능한 빨리 서비스센터에 점검을 요청하세요. 켜지거나 깜빡이는 상태로 계속 주행하면 손상이 생길 수 있어요.",
+      "speech_text": "엔진 경고등과 비슷해요. 계속 켜져 있으면 가능한 빨리 서비스센터에 점검을 요청하세요. 경고등만으로 고장 부품을 정할 수는 없어요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 클러스터 > 경고등 및 표시등",
+          "chunk_id": "ebf48e4f679a5c065765b24a",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "엔진 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "warning",
+      "topicId": "light",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "color": "노란색",
+        "shape": "엔진 모양",
+        "blink": "계속 켜져 있음"
+      },
+      "reviewed_at": "2026-10-25",
+      "review_after": null,
+      "answer": "설명한 표시가 엔진 경고등과 비슷해요. 시동 직후 잠깐 켜졌다 꺼지는 것은 점검 과정일 수 있지만, 계속 켜져 있으면 엔진 제어·연료 공급 등의 점검이 필요해요. 경고등만으로 고장 부품을 확정할 수 없으니 가능한 빨리 서비스센터에 점검을 요청하세요. 켜지거나 깜빡이는 상태로 계속 주행하면 손상이 생길 수 있어요.",
+      "speech_text": "엔진 경고등과 비슷해요. 계속 켜져 있으면 가능한 빨리 서비스센터에 점검을 요청하세요. 경고등만으로 고장 부품을 정할 수는 없어요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "4-11",
+          "chunk_id": "799d3832a0aaf7abe3db7418",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ],
+      "title": "엔진 경고등 확인",
+      "needs_review": true
+    },
+    {
+      "category": "controls",
+      "topicId": "ac",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "시원하게 하고 싶어요"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "1. 엔진 시동 상태에서 풍량을 설정하세요.\n2. A/C 버튼을 눌러 에어컨을 켜세요.\n3. 온도를 낮추고 바람 방향을 얼굴 쪽으로 맞추세요.\n\n실내 순환을 오래 유지하지 말고 외기 유입으로 환기해 주세요.",
+      "speech_text": "1. 엔진 시동 상태에서 풍량을 설정하세요.\n2. A/C 버튼을 눌러 에어컨을 켜세요.\n3. 온도를 낮추고 바람 방향을 얼굴 쪽으로 맞추세요.\n\n실내 순환을 오래 유지하지 말고 외기 유입으로 환기해 주세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 히터 및 에어컨(수동 조절식) > 히터 및 에어컨 조절 방법",
+          "chunk_id": "9602585d051362df5f7dcbc2",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 히터 및 에어컨(수동 조절식) > 히터 및 에어컨 조절 방법",
+          "chunk_id": "b15b5f4b62a04c4d7d3cfeb9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "ac",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "따뜻하게 하고 싶어요"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "1. 엔진 시동 상태에서 온도를 높이세요.\n2. 바람 방향을 발 쪽으로 맞추세요.\n3. 원하는 풍량으로 조절하세요.\n\n평소에는 외기 유입을 사용하세요. 김이 서리면 앞유리 서리 제거 기능을 사용하세요.",
+      "speech_text": "1. 엔진 시동 상태에서 온도를 높이세요.\n2. 바람 방향을 발 쪽으로 맞추세요.\n3. 원하는 풍량으로 조절하세요.\n\n평소에는 외기 유입을 사용하세요. 김이 서리면 앞유리 서리 제거 기능을 사용하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 히터 및 에어컨(수동 조절식) > 히터 및 에어컨 조절 방법",
+          "chunk_id": "9602585d051362df5f7dcbc2",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 히터 및 에어컨(수동 조절식) > 히터 및 에어컨 조절 방법",
+          "chunk_id": "b15b5f4b62a04c4d7d3cfeb9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "ac",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "자동 온도 조절이 궁금해요"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "자동 공조 장치가 장착된 차량 기준이에요.\n\n1. 엔진 시동 상태에서 AUTO 버튼을 누르세요.\n2. 원하는 온도를 설정하세요.\n3. AUTO 버튼으로 자동 풍량의 세기를 선택하세요.\n\nAUTO 버튼이 없는 수동 공조 사양은 온도·풍량·바람 방향을 직접 조절하세요.",
+      "speech_text": "자동 공조 장치가 장착된 차량 기준이에요.\n\n1. 엔진 시동 상태에서 AUTO 버튼을 누르세요.\n2. 원하는 온도를 설정하세요.\n3. AUTO 버튼으로 자동 풍량의 세기를 선택하세요.\n\nAUTO 버튼이 없는 수동 공조 사양은 온도·풍량·바람 방향을 직접 조절하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 히터 및 에어컨(자동 조절식) > 전자동 조절 방법",
+          "chunk_id": "91067a1501020da3ac67d8ff",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 히터 및 에어컨(수동 조절식) > 히터 및 에어컨 조절 방법",
+          "chunk_id": "9602585d051362df5f7dcbc2",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "air-mode",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {},
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "1. 실내 순환은 바깥 공기를 차단하고 차 안의 공기를 순환시켜요. 바깥 공기가 오염됐을 때 잠시 사용하세요.\n2. 외기 유입은 바깥 공기를 들여와 환기해요.\n3. 내기·외기 선택 버튼으로 전환하세요.\n\n실내 순환을 오래 사용하면 김서림이나 졸음이 생길 수 있어 평소에는 외기 유입을 사용하세요.",
+      "speech_text": "1. 실내 순환은 바깥 공기를 차단하고 차 안의 공기를 순환시켜요. 바깥 공기가 오염됐을 때 잠시 사용하세요.\n2. 외기 유입은 바깥 공기를 들여와 환기해요.\n3. 내기·외기 선택 버튼으로 전환하세요.\n\n실내 순환을 오래 사용하면 김서림이나 졸음이 생길 수 있어 평소에는 외기 유입을 사용하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 히터 및 에어컨(수동 조절식) > 히터 및 에어컨 조절 방법",
+          "chunk_id": "b15b5f4b62a04c4d7d3cfeb9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "seat": "운전석"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 앞으로 밀어 주세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 앞으로 밀어 주세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 실내 편의 장치 > 열선 시트",
+          "chunk_id": "e83c9c7147c7adc0796f9740",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "seat": "조수석"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 앞으로 밀어 주세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 앞으로 밀어 주세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 실내 편의 장치 > 열선 시트",
+          "chunk_id": "e83c9c7147c7adc0796f9740",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "seat": "뒷좌석"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 실내 편의 장치 > 열선 시트",
+          "chunk_id": "e83c9c7147c7adc0796f9740",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "seat": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 앞으로 밀어 주세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 앞으로 밀어 주세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 실내 편의 장치 > 열선 시트",
+          "chunk_id": "e83c9c7147c7adc0796f9740",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "ventilation",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "seat": [
+          "운전석",
+          "조수석",
+          "확인하지 못함"
+        ]
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "통풍 기능이 장착된 앞좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 뒤로 당기세요.\n2. 표시등을 보며 세기를 조절하세요.\n3. 끄려면 레버를 뒤로 1.5초 이상 당기세요.\n\n차량 사양에 따라 통풍 기능이 없을 수 있어요.",
+      "speech_text": "통풍 기능이 장착된 앞좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선·통풍 레버를 뒤로 당기세요.\n2. 표시등을 보며 세기를 조절하세요.\n3. 끄려면 레버를 뒤로 1.5초 이상 당기세요.\n\n차량 사양에 따라 통풍 기능이 없을 수 있어요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 실내 편의 장치 > 통풍 시트",
+          "chunk_id": "8464125a59f82fedd7041e66",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "mirrors",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "각도 조절하기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "안전한 곳에 정차한 뒤 조절하세요.\n\n1. 미러 선택 스위치에서 L(운전석) 또는 R(조수석)을 선택하세요.\n2. 방향 조절 스위치를 눌러 각도를 맞추세요.\n3. 필요한 만큼 조절하면 손을 떼세요.\n\n미러가 끝까지 움직였을 때 스위치를 계속 누르지 마세요.",
+      "speech_text": "안전한 곳에 정차한 뒤 조절하세요.\n\n1. 미러 선택 스위치에서 L(운전석) 또는 R(조수석)을 선택하세요.\n2. 방향 조절 스위치를 눌러 각도를 맞추세요.\n3. 필요한 만큼 조절하면 손을 떼세요.\n\n미러가 끝까지 움직였을 때 스위치를 계속 누르지 마세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "사용 설명서(요약본) > 주행 전 준비 > 실외 미러",
+          "chunk_id": "48242ddeb220746c570d22e9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 미러 > 실외 미러",
+          "chunk_id": "11a312a8cde97df5518f9e7a",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "mirrors",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "접거나 펼치기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "전동 접이식 미러가 장착된 차량 기준이에요.\n\n1. 안전한 곳에 정차하세요.\n2. 미러 접이 스위치로 접거나 펼치세요.\n3. 출발 전에는 미러가 펼쳐졌는지 확인하세요.\n\n주행 중에는 조절하거나 접지 마세요. 얼어 움직이지 않으면 억지로 작동시키지 마세요.",
+      "speech_text": "전동 접이식 미러가 장착된 차량 기준이에요.\n\n1. 안전한 곳에 정차하세요.\n2. 미러 접이 스위치로 접거나 펼치세요.\n3. 출발 전에는 미러가 펼쳐졌는지 확인하세요.\n\n주행 중에는 조절하거나 접지 마세요. 얼어 움직이지 않으면 억지로 작동시키지 마세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "사용 설명서(요약본) > 주행 전 준비 > 실외 미러",
+          "chunk_id": "48242ddeb220746c570d22e9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "편의 장치 > 미러 > 실외 미러",
+          "chunk_id": "11a312a8cde97df5518f9e7a",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "cruise",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "사용 조건"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 기어는 D, ESC와 ABS는 켜진 상태여야 해요.\n2. 전방 차량이 없으면 10~200 km/h, 있으면 0~200 km/h가 작동 범위예요. 이는 허용 주행속도가 아니에요.\n3. 운전석 문이 열렸거나 주차 브레이크가 걸려 있으면 켤 수 없어요.\n\n일반 크루즈(CC)는 조건이 달라요. 실제 장착 기능을 확인하고 운전자가 항상 주변 상황을 살펴야 해요.",
+      "speech_text": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 기어는 D, ESC와 ABS는 켜진 상태여야 해요.\n2. 전방 차량이 없으면 10~200 km/h, 있으면 0~200 km/h가 작동 범위예요. 이는 허용 주행속도가 아니에요.\n3. 운전석 문이 열렸거나 주차 브레이크가 걸려 있으면 켤 수 없어요.\n\n일반 크루즈(CC)는 조건이 달라요. 실제 장착 기능을 확인하고 운전자가 항상 주변 상황을 살펴야 해요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "운전자 보조 시스템 > 스마트 크루즈 컨트롤(SCC) > 스마트 크루즈 컨트롤 작동",
+          "chunk_id": "3880745a3b2c703ea3e6fae9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "cruise",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "켜고 속도 설정하기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 작동 조건을 만족한 상태에서 주행 보조 버튼을 짧게 누르세요.\n2. 계기판의 설정 속도를 확인하세요. 30 km/h 이하에서는 30 km/h로 설정돼요.\n3. + 또는 − 스위치를 짧게 조작해 속도를 바꾸고, 차간거리 버튼으로 거리를 설정하세요.\n\n일반 크루즈(CC)와 조작이 다를 수 있어요. 제한속도를 지키고 가감속에 대비하세요.",
+      "speech_text": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 작동 조건을 만족한 상태에서 주행 보조 버튼을 짧게 누르세요.\n2. 계기판의 설정 속도를 확인하세요. 30 km/h 이하에서는 30 km/h로 설정돼요.\n3. + 또는 − 스위치를 짧게 조작해 속도를 바꾸고, 차간거리 버튼으로 거리를 설정하세요.\n\n일반 크루즈(CC)와 조작이 다를 수 있어요. 제한속도를 지키고 가감속에 대비하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "운전자 보조 시스템 > 스마트 크루즈 컨트롤(SCC) > 스마트 크루즈 컨트롤 작동",
+          "chunk_id": "3880745a3b2c703ea3e6fae9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "운전자 보조 시스템 > 스마트 크루즈 컨트롤(SCC) > 스마트 크루즈 컨트롤 작동",
+          "chunk_id": "0376f5ec4d476529ca746a04",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "cruise",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "해제하는 방법"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "스마트 크루즈(SCC) 기준이에요.\n\n1. 브레이크 페달을 밟으면 속도 제어가 일시 해제돼요.\n2. 계기판에서 해제 상태를 확인하세요.\n3. 이후에는 직접 속도와 차간거리를 유지하세요.\n\n일시 해제는 기능을 완전히 끈 상태와 달라요. 재개 조작 시 다시 가속할 수 있으니 설정 속도를 확인하세요.",
+      "speech_text": "스마트 크루즈(SCC) 기준이에요.\n\n1. 브레이크 페달을 밟으면 속도 제어가 일시 해제돼요.\n2. 계기판에서 해제 상태를 확인하세요.\n3. 이후에는 직접 속도와 차간거리를 유지하세요.\n\n일시 해제는 기능을 완전히 끈 상태와 달라요. 재개 조작 시 다시 가속할 수 있으니 설정 속도를 확인하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "운전자 보조 시스템 > 스마트 크루즈 컨트롤(SCC) > 스마트 크루즈 컨트롤 작동",
+          "chunk_id": "3880745a3b2c703ea3e6fae9",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "운전자 보조 시스템 > 스마트 크루즈 컨트롤(SCC) > 스마트 크루즈 컨트롤 작동",
+          "chunk_id": "0376f5ec4d476529ca746a04",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "autohold",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "켜고 끄는 방법"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 브레이크를 밟은 채 AUTO HOLD 버튼을 누르세요.\n2. 흰색은 대기 상태, 브레이크로 완전히 멈춘 뒤 녹색은 정지 유지 상태예요.\n3. 수동 해제는 정차 상태에서 브레이크를 밟고 AUTO HOLD 버튼을 누르세요.\n\n표시등이 꺼졌는지 확인하세요.",
+      "speech_text": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 브레이크를 밟은 채 AUTO HOLD 버튼을 누르세요.\n2. 흰색은 대기 상태, 브레이크로 완전히 멈춘 뒤 녹색은 정지 유지 상태예요.\n3. 수동 해제는 정차 상태에서 브레이크를 밟고 AUTO HOLD 버튼을 누르세요.\n\n표시등이 꺼졌는지 확인하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "시동 및 주행 > 제동 장치 > 주차 브레이크",
+          "chunk_id": "fe839e6a04b11be77682d396",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "autohold",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "작동하는 조건"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 기능을 켜세요.\n2. 브레이크로 완전히 멈춘 뒤 녹색 표시등을 확인하세요.\n3. D·R·N 또는 스포츠 모드에서 정지 유지가 가능해요.\n\n전자식 주차 브레이크가 걸려 있으면 작동하지 않아요. 자동 정차 기능을 주차 브레이크 대신 사용하지 마세요.",
+      "speech_text": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 기능을 켜세요.\n2. 브레이크로 완전히 멈춘 뒤 녹색 표시등을 확인하세요.\n3. D·R·N 또는 스포츠 모드에서 정지 유지가 가능해요.\n\n전자식 주차 브레이크가 걸려 있으면 작동하지 않아요. 자동 정차 기능을 주차 브레이크 대신 사용하지 마세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "시동 및 주행 > 제동 장치 > 주차 브레이크",
+          "chunk_id": "fe839e6a04b11be77682d396",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "parking-brake",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "주차 브레이크 걸기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 차량을 완전히 멈추고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 위로 당기세요.\n3. 계기판에 브레이크 경고등이 켜졌는지 확인하세요.\n\n일반적인 주행 중에는 이 스위치를 작동하지 마세요.",
+      "speech_text": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 차량을 완전히 멈추고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 위로 당기세요.\n3. 계기판에 브레이크 경고등이 켜졌는지 확인하세요.\n\n일반적인 주행 중에는 이 스위치를 작동하지 마세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "사용 설명서(요약본) > 시동 및 주행 보조 장치 > 시동 버튼",
+          "chunk_id": "64f4bc2e45bc9e227551bbad",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "parking-brake",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "주차 브레이크 해제"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 시동을 걸고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 누르세요.\n3. 계기판의 브레이크 경고등이 꺼졌는지 확인한 뒤 출발하세요.\n\n해제되지 않거나 경고등이 계속 켜지면 무리하게 출발하지 말고 점검을 받으세요.",
+      "speech_text": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 시동을 걸고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 누르세요.\n3. 계기판의 브레이크 경고등이 꺼졌는지 확인한 뒤 출발하세요.\n\n해제되지 않거나 경고등이 계속 켜지면 무리하게 출발하지 말고 점검을 받으세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "사용 설명서(요약본) > 시동 및 주행 보조 장치 > 시동 버튼",
+          "chunk_id": "7f85f3ee5017160f22f9cfc5",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "ac",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "시원하게 하고 싶어요"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "1. 엔진 시동 상태에서 풍량을 설정하세요.\n2. A/C 버튼을 눌러 에어컨을 켜세요.\n3. 온도를 낮추고 바람 방향을 얼굴 쪽으로 맞추세요.\n\n실내 순환을 오래 유지하지 말고 외기 유입으로 환기해 주세요.",
+      "speech_text": "1. 엔진 시동 상태에서 풍량을 설정하세요.\n2. A/C 버튼을 눌러 에어컨을 켜세요.\n3. 온도를 낮추고 바람 방향을 얼굴 쪽으로 맞추세요.\n\n실내 순환을 오래 유지하지 말고 외기 유입으로 환기해 주세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-71",
+          "chunk_id": "f80d592613e5ab1936b444ab",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-74",
+          "chunk_id": "806e4a1c8f652ce8b956dba8",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "ac",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "따뜻하게 하고 싶어요"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "1. 엔진 시동 상태에서 온도를 높이세요.\n2. 바람 방향을 발 쪽으로 맞추세요.\n3. 원하는 풍량으로 조절하세요.\n\n평소에는 외기 유입을 사용하세요. 김이 서리면 앞유리 서리 제거 기능을 사용하세요.",
+      "speech_text": "1. 엔진 시동 상태에서 온도를 높이세요.\n2. 바람 방향을 발 쪽으로 맞추세요.\n3. 원하는 풍량으로 조절하세요.\n\n평소에는 외기 유입을 사용하세요. 김이 서리면 앞유리 서리 제거 기능을 사용하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-71",
+          "chunk_id": "f80d592613e5ab1936b444ab",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-74",
+          "chunk_id": "806e4a1c8f652ce8b956dba8",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "ac",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "자동 온도 조절이 궁금해요"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "자동 공조 장치가 장착된 차량 기준이에요.\n\n1. 엔진 시동 상태에서 AUTO 버튼을 누르세요.\n2. 원하는 온도를 설정하세요.\n3. AUTO 버튼으로 자동 풍량의 세기를 선택하세요.\n\nAUTO 버튼이 없는 수동 공조 사양은 온도·풍량·바람 방향을 직접 조절하세요.",
+      "speech_text": "자동 공조 장치가 장착된 차량 기준이에요.\n\n1. 엔진 시동 상태에서 AUTO 버튼을 누르세요.\n2. 원하는 온도를 설정하세요.\n3. AUTO 버튼으로 자동 풍량의 세기를 선택하세요.\n\nAUTO 버튼이 없는 수동 공조 사양은 온도·풍량·바람 방향을 직접 조절하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-78",
+          "chunk_id": "8345958dfcf434032c631bb2",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-71",
+          "chunk_id": "f80d592613e5ab1936b444ab",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "air-mode",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {},
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "1. 실내 순환은 바깥 공기를 차단하고 차 안의 공기를 순환시켜요. 바깥 공기가 오염됐을 때 잠시 사용하세요.\n2. 외기 유입은 바깥 공기를 들여와 환기해요.\n3. 내기·외기 선택 버튼으로 전환하세요.\n\n실내 순환을 오래 사용하면 김서림이나 졸음이 생길 수 있어 평소에는 외기 유입을 사용하세요.",
+      "speech_text": "1. 실내 순환은 바깥 공기를 차단하고 차 안의 공기를 순환시켜요. 바깥 공기가 오염됐을 때 잠시 사용하세요.\n2. 외기 유입은 바깥 공기를 들여와 환기해요.\n3. 내기·외기 선택 버튼으로 전환하세요.\n\n실내 순환을 오래 사용하면 김서림이나 졸음이 생길 수 있어 평소에는 외기 유입을 사용하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-74",
+          "chunk_id": "806e4a1c8f652ce8b956dba8",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "seat": "운전석"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-10",
+          "chunk_id": "84d0d6a045f204ff1c205c47",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-11",
+          "chunk_id": "be2326419548d477607bef72",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "seat": "조수석"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-10",
+          "chunk_id": "84d0d6a045f204ff1c205c47",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-11",
+          "chunk_id": "be2326419548d477607bef72",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "seat": "뒷좌석"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-10",
+          "chunk_id": "84d0d6a045f204ff1c205c47",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-11",
+          "chunk_id": "be2326419548d477607bef72",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "seat",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "seat": "확인하지 못함"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "speech_text": "열선이 장착된 좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 열선 스위치를 조작하세요.\n2. 표시등을 보며 원하는 세기로 조절하세요.\n3. 너무 뜨겁게 느껴지면 세기를 낮추거나 꺼 주세요.\n\n뒷좌석 열선은 사양에 따라 없을 수 있어요. 장시간 사용에 따른 저온화상에 주의하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-10",
+          "chunk_id": "84d0d6a045f204ff1c205c47",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-11",
+          "chunk_id": "be2326419548d477607bef72",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "ventilation",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "seat": [
+          "운전석",
+          "조수석",
+          "확인하지 못함"
+        ]
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "통풍 기능이 장착된 앞좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 통풍 스위치를 조작하세요.\n2. 표시등을 보며 세기를 조절하세요.\n3. 끄려면 통풍 버튼을 1.5초 이상 누르세요(해당 사양).\n\n차량 사양에 따라 통풍 기능이 없을 수 있어요.",
+      "speech_text": "통풍 기능이 장착된 앞좌석 기준이에요.\n\n1. 시동이 걸린 상태에서 해당 좌석의 통풍 스위치를 조작하세요.\n2. 표시등을 보며 세기를 조절하세요.\n3. 끄려면 통풍 버튼을 1.5초 이상 누르세요(해당 사양).\n\n차량 사양에 따라 통풍 기능이 없을 수 있어요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "3-11",
+          "chunk_id": "be2326419548d477607bef72",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "mirrors",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "각도 조절하기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "안전한 곳에 정차한 뒤 조절하세요.\n\n1. 시동을 ACC 이상으로 두고, 미러 선택 레버에서 L(운전석) 또는 R(조수석)을 선택하세요.\n2. 방향 조절 스위치를 눌러 각도를 맞추세요.\n3. 필요한 만큼 조절하면 손을 떼세요.\n\n미러가 끝까지 움직였을 때 스위치를 계속 누르지 마세요.",
+      "speech_text": "안전한 곳에 정차한 뒤 조절하세요.\n\n1. 시동을 ACC 이상으로 두고, 미러 선택 레버에서 L(운전석) 또는 R(조수석)을 선택하세요.\n2. 방향 조절 스위치를 눌러 각도를 맞추세요.\n3. 필요한 만큼 조절하면 손을 떼세요.\n\n미러가 끝까지 움직였을 때 스위치를 계속 누르지 마세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-31",
+          "chunk_id": "9d624bcbef072ce631d20844",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-30",
+          "chunk_id": "3cd4115ea4f422a83f37c440",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "mirrors",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "접거나 펼치기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "전동 접이식 미러가 장착된 차량 기준이에요.\n\n1. 안전한 곳에 정차하세요.\n2. 미러 접이 스위치로 접거나 펼치세요.\n3. 출발 전에는 미러가 펼쳐졌는지 확인하세요.\n\n주행 중에는 조절하거나 접지 마세요. 얼어 움직이지 않으면 억지로 작동시키지 마세요.",
+      "speech_text": "전동 접이식 미러가 장착된 차량 기준이에요.\n\n1. 안전한 곳에 정차하세요.\n2. 미러 접이 스위치로 접거나 펼치세요.\n3. 출발 전에는 미러가 펼쳐졌는지 확인하세요.\n\n주행 중에는 조절하거나 접지 마세요. 얼어 움직이지 않으면 억지로 작동시키지 마세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-31",
+          "chunk_id": "9d624bcbef072ce631d20844",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-30",
+          "chunk_id": "3cd4115ea4f422a83f37c440",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "cruise",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "사용 조건"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 기어는 D, ESC와 ABS는 켜진 상태여야 해요.\n2. 전방 차량이 없으면 10~180 km/h, 있으면 0~180 km/h가 작동 범위예요. 이는 허용 주행속도가 아니에요.\n3. 운전석 문이 열렸거나 주차 브레이크가 걸려 있으면 켤 수 없어요.\n\n일반 크루즈(CC)는 조건이 달라요. 실제 장착 기능을 확인하고 운전자가 항상 주변 상황을 살펴야 해요.",
+      "speech_text": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 기어는 D, ESC와 ABS는 켜진 상태여야 해요.\n2. 전방 차량이 없으면 10~180 km/h, 있으면 0~180 km/h가 작동 범위예요. 이는 허용 주행속도가 아니에요.\n3. 운전석 문이 열렸거나 주차 브레이크가 걸려 있으면 켤 수 없어요.\n\n일반 크루즈(CC)는 조건이 달라요. 실제 장착 기능을 확인하고 운전자가 항상 주변 상황을 살펴야 해요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "7-50",
+          "chunk_id": "c3f08785f16e66f419b0828e",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "cruise",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "켜고 속도 설정하기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 작동 조건을 만족한 상태에서 주행 보조 버튼을 짧게 누르세요.\n2. 계기판의 설정 속도를 확인하세요. 30 km/h 이하에서는 30 km/h로 설정돼요.\n3. + 또는 − 스위치를 짧게 조작해 속도를 바꾸고, 차간거리 버튼으로 거리를 설정하세요.\n\n일반 크루즈(CC)와 조작이 다를 수 있어요. 제한속도를 지키고 가감속에 대비하세요.",
+      "speech_text": "스마트 크루즈(SCC) 장착 사양 기준이에요.\n\n1. 작동 조건을 만족한 상태에서 주행 보조 버튼을 짧게 누르세요.\n2. 계기판의 설정 속도를 확인하세요. 30 km/h 이하에서는 30 km/h로 설정돼요.\n3. + 또는 − 스위치를 짧게 조작해 속도를 바꾸고, 차간거리 버튼으로 거리를 설정하세요.\n\n일반 크루즈(CC)와 조작이 다를 수 있어요. 제한속도를 지키고 가감속에 대비하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "7-50",
+          "chunk_id": "c3f08785f16e66f419b0828e",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "7-51",
+          "chunk_id": "57bba6484da137beaddf67c8",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "7-52",
+          "chunk_id": "2d22447c007c63ec2239bd8a",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "cruise",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "해제하는 방법"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "스마트 크루즈(SCC) 기준이에요.\n\n1. 브레이크 페달을 밟으면 속도 제어가 일시 해제돼요.\n2. 계기판에서 해제 상태를 확인하세요.\n3. 이후에는 직접 속도와 차간거리를 유지하세요.\n\n일시 해제는 기능을 완전히 끈 상태와 달라요. 재개 조작 시 다시 가속할 수 있으니 설정 속도를 확인하세요.",
+      "speech_text": "스마트 크루즈(SCC) 기준이에요.\n\n1. 브레이크 페달을 밟으면 속도 제어가 일시 해제돼요.\n2. 계기판에서 해제 상태를 확인하세요.\n3. 이후에는 직접 속도와 차간거리를 유지하세요.\n\n일시 해제는 기능을 완전히 끈 상태와 달라요. 재개 조작 시 다시 가속할 수 있으니 설정 속도를 확인하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "7-50",
+          "chunk_id": "c3f08785f16e66f419b0828e",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "7-51",
+          "chunk_id": "57bba6484da137beaddf67c8",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "7-52",
+          "chunk_id": "2d22447c007c63ec2239bd8a",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "autohold",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "켜고 끄는 방법"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 브레이크를 밟은 채 AUTO HOLD 버튼을 누르세요.\n2. 흰색은 대기 상태, 브레이크로 완전히 멈춘 뒤 녹색은 정지 유지 상태예요.\n3. 수동 해제는 정차 상태에서 브레이크를 밟고 AUTO HOLD 버튼을 누르세요.\n\n표시등이 꺼졌는지 확인하세요.",
+      "speech_text": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 브레이크를 밟은 채 AUTO HOLD 버튼을 누르세요.\n2. 흰색은 대기 상태, 브레이크로 완전히 멈춘 뒤 녹색은 정지 유지 상태예요.\n3. 수동 해제는 정차 상태에서 브레이크를 밟고 AUTO HOLD 버튼을 누르세요.\n\n표시등이 꺼졌는지 확인하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "6-29",
+          "chunk_id": "136b51aca7e9827098ec3ba4",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "autohold",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "작동하는 조건"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 기능을 켜세요.\n2. 브레이크로 완전히 멈춘 뒤 녹색 표시등을 확인하세요.\n3. D·N 또는 수동 변속 모드에서 정지 유지가 가능하며, P·R에서는 작동하지 않아요.\n\n전자식 주차 브레이크가 걸려 있으면 작동하지 않아요. 자동 정차 기능을 주차 브레이크 대신 사용하지 마세요.",
+      "speech_text": "오토홀드 장착 사양 기준이에요.\n\n1. 운전석 문·후드·트렁크를 닫고 기능을 켜세요.\n2. 브레이크로 완전히 멈춘 뒤 녹색 표시등을 확인하세요.\n3. D·N 또는 수동 변속 모드에서 정지 유지가 가능하며, P·R에서는 작동하지 않아요.\n\n전자식 주차 브레이크가 걸려 있으면 작동하지 않아요. 자동 정차 기능을 주차 브레이크 대신 사용하지 마세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "6-29",
+          "chunk_id": "136b51aca7e9827098ec3ba4",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "6-28",
+          "chunk_id": "7bdb318705fe1daef7b8f60f",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "parking-brake",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "주차 브레이크 걸기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 차량을 완전히 멈추고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 위로 당기세요.\n3. 계기판에 브레이크 경고등이 켜졌는지 확인하세요.\n\n일반적인 주행 중에는 이 스위치를 작동하지 마세요.",
+      "speech_text": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 차량을 완전히 멈추고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 위로 당기세요.\n3. 계기판에 브레이크 경고등이 켜졌는지 확인하세요.\n\n일반적인 주행 중에는 이 스위치를 작동하지 마세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "6-25",
+          "chunk_id": "c8b4cf5d92f4589a56211cae",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "parking-brake",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "주차 브레이크 해제"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 시동을 걸고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 누르세요.\n3. 계기판의 브레이크 경고등이 꺼졌는지 확인한 뒤 출발하세요.\n\n해제되지 않거나 경고등이 계속 켜지면 무리하게 출발하지 말고 점검을 받으세요.",
+      "speech_text": "전자식 주차 브레이크(EPB) 장착 사양 기준이에요.\n\n1. 시동을 걸고 브레이크 페달을 밟으세요.\n2. EPB 스위치를 누르세요.\n3. 계기판의 브레이크 경고등이 꺼졌는지 확인한 뒤 출발하세요.\n\n해제되지 않거나 경고등이 계속 켜지면 무리하게 출발하지 말고 점검을 받으세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "6-26",
+          "chunk_id": "7b5f5f469aee19426ac5ade4",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        },
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "6-26",
+          "chunk_id": "0892f11de694d71d00c4ee0f",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "wipers",
+      "vehicle": {
+        "manufacturer": "기아",
+        "models": [
+          "K5"
+        ],
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "match": {
+        "operation": "자동 와이퍼 모드"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "AUTO가 장착된 차량 기준이에요.\n\n1. 와이퍼 스위치를 AUTO에 맞추세요.\n2. 센서가 비의 양에 따라 속도를 조절해요.\n3. 속도 기준은 조절 노브로 바꾸고, 필요 없을 때는 OFF로 두세요.\n\nAUTO가 없는 사양은 INT 간헐 모드를 사용하세요.",
+      "speech_text": "AUTO가 장착된 차량 기준이에요.\n\n1. 와이퍼 스위치를 AUTO에 맞추세요.\n2. 센서가 비의 양에 따라 속도를 조절해요.\n3. 속도 기준은 조절 노브로 바꾸고, 필요 없을 때는 OFF로 두세요.\n\nAUTO가 없는 사양은 INT 간헐 모드를 사용하세요.",
+      "sources": [
+        {
+          "title": "기아 K5 (DL3) 2026 사용 설명서",
+          "url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+          "page": "사용 설명서(요약본) > 편의장치 > 와이퍼/워셔",
+          "chunk_id": "dacce3a63aa675fd9c8c2bf4",
+          "revision": "문서 ID D202507030002 (최종 게시 2026-08-20)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "wipers",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "자동 와이퍼 모드"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "이 설명서에서는 INT 간헐 작동 방법을 안내하고 있어요.\n\n1. 와이퍼 스위치를 INT에 맞추세요.\n2. 조절 노브를 돌려 작동 간격을 바꾸세요.\n3. 멈추려면 OFF로 두세요.\n\nINT를 빗물 감지 AUTO 기능과 같은 것으로 보지 마세요. 실제 스위치 표시와 차량 옵션을 확인해 주세요.",
+      "speech_text": "이 설명서에서는 INT 간헐 작동 방법을 안내하고 있어요.\n\n1. 와이퍼 스위치를 INT에 맞추세요.\n2. 조절 노브를 돌려 작동 간격을 바꾸세요.\n3. 멈추려면 OFF로 두세요.\n\nINT를 빗물 감지 AUTO 기능과 같은 것으로 보지 마세요. 실제 스위치 표시와 차량 옵션을 확인해 주세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-66",
+          "chunk_id": "243d37d2a6c78063148f998f",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    },
+    {
+      "category": "controls",
+      "topicId": "wipers",
+      "vehicle": {
+        "manufacturer": "현대",
+        "models": [
+          "더 뉴 아반떼",
+          "디 올 뉴 아반떼"
+        ],
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "match": {
+        "operation": "워셔액 뿌리기"
+      },
+      "reviewed_at": "2026-10-26",
+      "review_after": null,
+      "answer": "1. 와이퍼 레버를 운전자 방향으로 당기세요.\n2. 워셔액이 나오면서 와이퍼가 작동해요.\n3. 손을 떼면 레버가 원위치로 돌아가요.\n\n워셔액이 비었거나 와이퍼가 얼어붙었을 때는 작동하지 마세요. 겨울에는 유리를 따뜻하게 한 뒤 사용하세요.",
+      "speech_text": "1. 와이퍼 레버를 운전자 방향으로 당기세요.\n2. 워셔액이 나오면서 와이퍼가 작동해요.\n3. 손을 떼면 레버가 원위치로 돌아가요.\n\n워셔액이 비었거나 와이퍼가 얼어붙었을 때는 작동하지 마세요. 겨울에는 유리를 따뜻하게 한 뒤 사용하세요.",
+      "sources": [
+        {
+          "title": "현대 아반떼 (CN7) 2026 취급설명서",
+          "url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+          "page": "5-67",
+          "chunk_id": "53aa8988b1459e2311d34234",
+          "revision": "문서 ID D202504290008 (최종 게시 2026-07-21)",
+          "retrieved_at": "2026-10-23"
+        }
+      ]
+    }
+  ]
+}

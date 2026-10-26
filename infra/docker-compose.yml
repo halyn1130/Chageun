@@ -1,5 +1,8 @@
 # 차근 로컬 실행 구성 — 루트에서 `docker compose up -d --build`
-# 값은 루트 .env에서 읽는다 (DB_PASSWORD, JWT_SECRET)
+# 비밀값은 루트 .env에서 읽는다 (DB_PASSWORD, JWT_SECRET 등). 팀 공통 설정값은 여기에 둔다
+
+# CORS 허용 출처 (쉼표 구분) — Vue 개발 서버 5173 · 프론트 컨테이너 5174. auth-server · api-server 공통
+x-frontend-origins: &frontend-origins http://localhost:5173,http://localhost:5174,http://localhost:5500   # 5500: 팀 확인용 테스트 페이지
 
 services:
   db:
@@ -26,6 +29,7 @@ services:
       DB_URL: jdbc:mariadb://db:3306/chageun   # 컨테이너끼리는 서비스 이름으로 접속
       DB_USER: root
       DB_PASSWORD: ${DB_PASSWORD}
+      FRONTEND_ORIGINS: *frontend-origins
     ports:
       - "8080:8080"
     depends_on:
@@ -34,8 +38,65 @@ services:
 
   api-server:
     build: ../backend/api-server
+    env_file: ../.env
+    environment:
+      DB_HOST: db               # 컨테이너끼리는 서비스 이름으로 접속
+      DB_PORT: 3306
+      DB_NAME: chageun
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      FRONTEND_ORIGINS: *frontend-origins
+      RAG_URL: http://rag:8001  # 대화 질문을 넘길 rag 서버 (compose 내부)
     ports:
       - "8002:8002"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  voice-ai:
+    build: ../backend/voice-ai
+    env_file: ../.env           # JWT_SECRET · OPENAI_API_KEY
+    environment:
+      WHISPER_MODEL: small      # 느리면 base로
+      FRONTEND_ORIGINS: *frontend-origins
+    ports:
+      - "8008:8008"             # 브라우저가 직접 호출
+    volumes:
+      - whisper-cache:/root/.cache/huggingface   # Whisper 모델을 한 번만 내려받는다
+
+  rag:
+    build:
+      context: ../ai_data
+      dockerfile: ../infra/rag/Dockerfile
+    env_file: ../.env           # JWT_SECRET · OPENAI_API_KEY
+    environment:
+      RAG_INDEX: ${RAG_INDEX:-data/indexes/v14-figures}   # v13c-headings + 설명서 그림 설명 PDF 2종(scripts/add_documents_index.py). 폴더는 git 밖이라 따로 공유
+      RAG_RERANK: "1"      # 검색 후보 15개를 LLM이 재정렬해 상위 8개 사용 (끄려면 "0", 질문당 약 +1초)
+      RAG_VERIFY_MODEL: gpt-4o   # 답변 검증만 gpt-4o (gpt-4o-mini는 근거 있는 답변도 탈락시킴, experiments/README 6절)
+      RAG_RETRY_MODEL: gpt-4o    # 검증에서 떨어진 답변의 재시도만 gpt-4o (mini는 빨간불 우회전의 예외를 놓침, 통과하는 질문은 비용 그대로)
+    volumes:
+      - ../ai_data/data/indexes:/app/data/indexes:ro
+    # 외부 포트 없음 — api-server만 compose 내부에서 http://rag:8001 로 호출한다
+
+  frontend:                     # Vue 빌드본 + nginx 프록시 (/auth · /api · /voice → 각 서버, frontend/nginx.conf)
+    build:
+      context: ../frontend
+      additional_contexts:
+        chageun_ai: ../ai_data/chageun_ai   # 정비 규칙 JSON을 프론트 빌드에 포함
+    ports:
+      - "5174:80"               # 개발 서버(npm run dev)는 5173 그대로 쓸 수 있다
+    depends_on:
+      - auth-server
+      - api-server
+      - voice-ai
+
+  test-page:                    # 팀 확인용 테스트 페이지 (tools/test-page) — 로그인 · 내 차 · 대화 · 음성
+    image: nginx:1.27-alpine
+    volumes:
+      - ../tools/test-page:/usr/share/nginx/html:ro
+    ports:
+      - "5500:80"
 
 volumes:
   db-data:
+  whisper-cache:

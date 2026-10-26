@@ -1,368 +1,1664 @@
 {
   "schema_version": 1,
+  "index": "data/indexes/v13-dialog-spacing",
+  "note": "서준영 초안. 정답 근거(expected_chunk_ids)는 위 인덱스 기준이며 인덱스를 다시 만들면 ID를 다시 확인한다. 검토 후 reviewer와 status=reviewed를 기록한다.",
   "cases": [
     {
       "id": "CG-01",
       "question": "우회전할 때 언제 일시정지해야 해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "c57ea6baa8f7a937e42da68e",
+        "0d771c3caa639573efa8596b",
+        "b28af8ea9817a982b824167a"
+      ],
+      "expected_sources": [
+        "제27조",
+        "별표 2 (차량신호등 적색의등화)"
+      ],
+      "required_facts": [
+        "일시정지"
+      ],
+      "reference_answer": "보행자가 횡단보도를 통행하고 있거나 통행하려고 하면 횡단보도 앞(정지선이 있으면 정지선)에서 일시정지해야 한다(도로교통법 제27조①). 차량 신호가 적색이면 정지선·횡단보도·교차로 직전에서 정지한 뒤 다른 차의 교통을 방해하지 않고 우회전할 수 있고, 우회전 삼색등이 적색이면 우회전할 수 없다(시행규칙 별표 2).",
       "expected_behavior": "신호·보행자 등 조건을 구분하고 근거 조항을 제시",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": "현재 제27조가 검색되지 않는 알려진 실패 문항",
       "top_k": 5
     },
     {
       "id": "CG-02",
       "question": "적색 신호에서 우회전할 수 있어?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "b28af8ea9817a982b824167a"
+      ],
+      "expected_sources": [
+        "별표 2 (차량신호등 적색의등화)"
+      ],
+      "required_facts": [
+        "정지",
+        "삼색등"
+      ],
+      "reference_answer": "정지선·횡단보도·교차로 직전에서 정지한 뒤, 신호에 따라 진행하는 다른 차마의 교통을 방해하지 않고 우회전할 수 있다. 다만 우회전 삼색등이 적색이면 우회전할 수 없다(시행규칙 별표 2 차량신호등 적색의 등화).",
       "expected_behavior": "조건을 확인하며 무조건 가능하다고 답하지 않음",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-03",
       "question": "횡단보도 앞에서는 언제 멈춰야 해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "c57ea6baa8f7a937e42da68e"
+      ],
+      "expected_sources": [
+        "제27조"
+      ],
+      "required_facts": [
+        "일시정지"
+      ],
+      "reference_answer": "보행자(자전거등을 끌거나 들고 가는 사람 포함)가 횡단보도를 통행하고 있거나 통행하려고 할 때 횡단보도 앞(정지선이 있으면 정지선)에서 일시정지해야 한다(제27조①).",
       "expected_behavior": "적용 상황과 문서 근거 확인",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-04",
       "question": "어린이보호구역에서 주의할 점은?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "0be414f7e272af57ec103f3d",
+        "db9724e92f290dd6d595cbf7",
+        "7f9527d96d2a62c3e9efc0b0",
+        "52cdc47dc56182ac93df2106"
+      ],
+      "expected_sources": [
+        "제12조"
+      ],
+      "required_facts": [
+        "30"
+      ],
+      "reference_answer": "어린이 보호구역에서는 자동차등과 노면전차의 통행속도가 시속 30킬로미터 이내로 제한될 수 있다(제12조①). 검색된 조항 범위만 설명하고 처벌 기준 등은 단정하지 않는다.",
       "expected_behavior": "검색된 조항 범위만 설명",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-05",
       "question": "정차와 주차는 어떻게 달라?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "79c7c34741439204a592dc02"
+      ],
+      "expected_sources": [
+        "제2조"
+      ],
+      "required_facts": [
+        "5분"
+      ],
+      "reference_answer": "주차는 승객을 기다리거나 화물을 싣거나 고장 등으로 차를 계속 정지 상태에 두는 것, 또는 운전자가 차에서 떠나 즉시 운전할 수 없는 상태에 두는 것이다. 정차는 5분을 초과하지 않고 차를 정지시키는 것으로서 주차 외의 정지 상태다(제2조 제24호·제25호).",
       "expected_behavior": "정의와 근거 제시",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": "서버 시험에서 제2조 대신 시행령 제11조를 인용한 적 있음",
       "top_k": 5
     },
     {
       "id": "CG-06",
       "question": "소화전 주변 주차 규정 알려줘",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "cb7a57454a1f5d7adfdc155b"
+      ],
+      "expected_sources": [
+        "제32조",
+        "별표 6 (515 주차금지표시)"
+      ],
+      "required_facts": [
+        "5미터"
+      ],
+      "reference_answer": "소방용수시설 또는 비상소화장치가 설치된 곳으로부터 5미터 이내인 곳에서는 정차와 주차가 금지된다(제32조 제6호).",
       "expected_behavior": "확인한 법령에서 거리·조건 검증",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-07",
       "question": "버스정류장 주변에는 주차해도 돼?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "cb7a57454a1f5d7adfdc155b"
+      ],
+      "expected_sources": [
+        "제32조"
+      ],
+      "required_facts": [
+        "10미터"
+      ],
+      "reference_answer": "버스여객자동차의 정류지임을 표시하는 기둥·표지판·선이 설치된 곳으로부터 10미터 이내에서는 정차와 주차가 금지된다. 운행 중인 버스가 승객을 태우거나 내리기 위해 정차·주차하는 경우는 예외다(제32조 제4호). 지금 그 자리에 세워도 되는지는 판단하지 않는다.",
       "expected_behavior": "일반 규정과 실시간 허용 판단을 구분",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-08",
       "question": "긴급자동차가 뒤에서 오면 어떻게 해야 해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "law"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "704765a65587002ced43f202"
+      ],
+      "expected_sources": [
+        "제29조"
+      ],
+      "required_facts": [
+        "양보"
+      ],
+      "reference_answer": "교차로나 그 부근에서는 교차로를 피하여 일시정지하고, 그 밖의 곳에서는 긴급자동차가 우선 통행할 수 있도록 진로를 양보해야 한다(제29조④⑤).",
       "expected_behavior": "상황별 근거 안내",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-09",
-      "question": "K5 엔진오일 점검 방법 알려줘",
+      "question": "엔진오일 점검은 어떻게 해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "기아",
         "model": "K5",
-        "model_year": null,
-        "powertrain": null
+        "model_year": "2026",
+        "powertrain": "G2.0"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "023b99600fd80b900534a0c9"
+      ],
+      "expected_sources": [
+        "정기 점검 > 엔진 오일 점검 > 엔진 오일양 점검 및 보충"
+      ],
+      "required_facts": [
+        "레벨 게이지"
+      ],
+      "reference_answer": "평지에 주차하고 엔진을 정상 온도까지 예열한 뒤 시동을 끈다. 레벨 게이지를 뽑아 약 15분 기다린 후 닦고 다시 꽂았다 뽑아 오일양이 F-L선 사이인지 확인한다. L선 이하이면 F선까지 보충한다.",
       "expected_behavior": "연식·동력계통 일치 설명서 검색",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-10",
-      "question": "K5 엔진오일 교환 주기는?",
+      "question": "엔진오일 교환 주기가 어떻게 돼?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "기아",
         "model": "K5",
-        "model_year": null,
-        "powertrain": null
+        "model_year": "2026",
+        "powertrain": "G2.0"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "c899db930ecd587d2911f2c1",
+        "d8f76e07676318831ffd6574"
+      ],
+      "expected_sources": [
+        "정기 점검 > 정기 점검"
+      ],
+      "required_facts": [
+        "15,000",
+        "12개월"
+      ],
+      "reference_answer": "스마트스트림 G2.0 CVVL 기준 통상 조건은 매 15,000km 또는 12개월마다, 가혹 조건은 매 7,500km 또는 6개월마다 엔진 오일과 필터를 교체한다. 다른 엔진(G1.6 T-GDi 10,000km 등)의 값을 섞지 않는다.",
       "expected_behavior": "일반·가혹조건 및 기간·거리 기준 구분",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-11",
-      "question": "K5 타이어 공기압은 어디서 확인해?",
+      "question": "타이어 공기압은 어디서 확인해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "기아",
         "model": "K5",
-        "model_year": null,
-        "powertrain": null
+        "model_year": "2026",
+        "powertrain": "G2.0"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "b7b02113f0570c5961e2a3b6",
+        "48a286f1452d2e564ca4c899"
+      ],
+      "expected_sources": [
+        "차량 정보 > 타이어 공기압 라벨",
+        "비상시 응급 조치 > 타이어 공기압 경보 시스템(TPMS) > 타이어 공기압 확인"
+      ],
+      "required_facts": [],
+      "reference_answer": "권장 공기압은 운전석 옆 센터 필러에 붙은 라벨에 있다. 현재 개별 타이어 공기압은 클러스터 LCD 인포메이션 모드에서 확인하며, 출발 후 1~2분이 지나야 표시된다.",
       "expected_behavior": "차량별 설명서 근거 제시",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": "\"권장 공기압\"과 \"현재 공기압\" 중 무엇을 묻는지 모호함. 둘 중 하나만 답해도 통과로 볼지 검토",
       "top_k": 5
     },
     {
       "id": "CG-12",
-      "question": "K5 냉각수 경고등이 켜지면?",
+      "question": "냉각수 경고등이 켜지면 어떻게 해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "기아",
         "model": "K5",
-        "model_year": null,
-        "powertrain": null
+        "model_year": "2026",
+        "powertrain": "G2.0"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered",
+        "not_found"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "c019aa56a489a2d87fdd88d2"
+      ],
+      "expected_sources": [
+        "편의 장치 > LCD 표시창 경고 메시지 > 엔진이 과열되었습니다"
+      ],
+      "required_facts": [],
+      "reference_answer": "K5 설명서에서는 \"냉각수 경고등\" 대신 냉각수 온도 120±3°C 이상일 때 \"엔진이 과열되었습니다\" 메시지가 표시된다. 운전을 중지하고 서비스센터에 문의한다.",
       "expected_behavior": "문서의 경고와 조치 범위만 안내",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": "설명서에 \"냉각수 경고등\"이라는 이름이 없음. 과열 메시지로 답하는 것과 근거 없음 중 어느 쪽을 정답으로 할지 검토 필요",
       "top_k": 5
     },
     {
       "id": "CG-13",
-      "question": "K5 와이퍼는 어떻게 교체해?",
+      "question": "와이퍼는 어떻게 갈아?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "기아",
         "model": "K5",
-        "model_year": null,
-        "powertrain": null
+        "model_year": "2026",
+        "powertrain": "G2.0"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "1c50dac9a9767ed2c5dbc7f8"
+      ],
+      "expected_sources": [
+        "정기 점검 > 와이퍼 블레이드 점검 > 와이퍼 블레이드 교체 방법"
+      ],
+      "required_facts": [
+        "MIST"
+      ],
+      "reference_answer": "시동을 끈 뒤 20초 이내에 와이퍼 스위치를 2초 이상 MIST로 내려 와이퍼를 최상단으로 올린다. 와이퍼 암을 세우고 잠금쇠를 세워 블레이드를 아래로 내려 분리한 뒤 새 블레이드를 장착한다. 이후 시동을 걸어 1회 작동을 확인한다.",
       "expected_behavior": "적용 모델과 작업 순서 근거",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": "\"갈아\"는 교체 방법 질문. 정비 기록(open_maintenance)으로 가면 실패",
       "top_k": 5
     },
     {
       "id": "CG-14",
-      "question": "아반떼 엔진오일 점검 방법 알려줘",
+      "question": "엔진오일 양은 어떻게 확인해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "현대",
-        "model": "디 올 뉴 아반떼",
-        "model_year": null,
-        "powertrain": null
+        "model": "더 뉴 아반떼",
+        "model_year": "2026",
+        "powertrain": "G1.6"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "2e86aece7aac6fc7045d1e96",
+        "c40c5fecf062dc9fb2114080"
+      ],
+      "expected_sources": [
+        "p.9-14",
+        "p.9-15"
+      ],
+      "required_facts": [
+        "레벨 게이지"
+      ],
+      "reference_answer": "평지에서 엔진을 정상 온도까지 예열하고 시동을 끈 뒤 레벨 게이지를 뽑아 약 15분 기다린다. 게이지를 닦고 다시 꽂았다 뽑아 오일양이 F-L선 사이인지 확인하고, L선 이하이면 F선까지 보충한다(p.9-14~15).",
       "expected_behavior": "K5 문서가 섞이지 않음",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-15",
-      "question": "아반떼 엔진오일 교환 주기는?",
+      "question": "엔진오일 교환 주기는?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "현대",
-        "model": "디 올 뉴 아반떼",
-        "model_year": null,
-        "powertrain": null
+        "model": "더 뉴 아반떼",
+        "model_year": "2026",
+        "powertrain": "G1.6"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "df70ecd460c6edb2a591bd6e",
+        "1ef683fb4f171bef7f75d60a"
+      ],
+      "expected_sources": [
+        "p.9-8",
+        "p.9-13"
+      ],
+      "required_facts": [
+        "15,000",
+        "12개월"
+      ],
+      "reference_answer": "Smartstream G1.6 기준 통상 조건은 매 15,000km 또는 12개월마다, 가혹 조건은 매 7,500km 또는 6개월마다 엔진 오일과 오일 필터를 교체한다(p.9-8, p.9-13).",
       "expected_behavior": "선택 연식·파워트레인·사용조건 일치",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-16",
-      "question": "아반떼 타이어 공기압 경고등이 켜졌어",
+      "question": "타이어 공기압 경고등이 켜졌어",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "현대",
-        "model": "디 올 뉴 아반떼",
-        "model_year": null,
-        "powertrain": null
+        "model": "더 뉴 아반떼",
+        "model_year": "2026",
+        "powertrain": "G1.6"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "b33f51265fed2308103e19a2"
+      ],
+      "expected_sources": [
+        "p.8-8"
+      ],
+      "required_facts": [
+        "속도",
+        "지금 할 일"
+      ],
+      "reference_answer": "저압 타이어 경고등이 켜지면 즉시 속도를 낮추고 급커브를 자제한다. 하이테크센터나 블루핸즈에서 타이어를 점검해 추천 공기압으로 맞추고, 멀면 타이어 응급 처치 키트(TMK)로 조절한다(p.8-8).",
       "expected_behavior": "정확한 경고 종류 확인 후 매뉴얼 근거",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": "이상 상황 답변은 \"무슨 뜻 / 왜 중요한지 / 지금 할 일\" 형식",
       "top_k": 5
     },
     {
       "id": "CG-17",
-      "question": "아반떼 배터리 방전 시 어떻게 해?",
+      "question": "배터리가 방전되면 어떻게 해?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "현대",
-        "model": "디 올 뉴 아반떼",
-        "model_year": null,
-        "powertrain": null
+        "model": "더 뉴 아반떼",
+        "model_year": "2026",
+        "powertrain": "G1.6"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "8814f0038fc172e18c5c188a"
+      ],
+      "expected_sources": [
+        "p.8-5"
+      ],
+      "required_facts": [
+        "점프"
+      ],
+      "reference_answer": "다른 차량이나 12V 배터리와 점프 케이블로 연결해 시동을 걸 수 있다. 방전 차량의 전기 장치를 끄고, + 집게를 방전 차량 충전 단자와 다른 배터리 + 단자에, - 집게를 다른 배터리 - 단자와 방전 차량 - 충전 단자에 연결한다. 시동 후 - 케이블부터 분리한다. 반드시 전문가 도움을 받는다(p.8-5).",
       "expected_behavior": "파워트레인 차이를 확인하고 매뉴얼 근거",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-18",
-      "question": "아반떼 정기 점검 항목 알려줘",
+      "question": "정기 점검은 뭘 해야 돼?",
       "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
       "filters": {
         "kind": "manual",
         "manufacturer": "현대",
-        "model": "디 올 뉴 아반떼",
-        "model_year": null,
-        "powertrain": null
+        "model": "더 뉴 아반떼",
+        "model_year": "2026",
+        "powertrain": "G1.6"
       },
-      "status": "draft",
-      "expected_chunk_ids": [],
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "fdae734ee3d4eeae03db9c7c",
+        "df70ecd460c6edb2a591bd6e",
+        "b6da42e16ddb7f6858af86e2",
+        "ee5eb8bced234f5892262d36",
+        "43eb86a7d1b8cd071a0078bb",
+        "c6f2ca278c11727e53acb72c",
+        "1ef683fb4f171bef7f75d60a"
+      ],
+      "expected_sources": [
+        "p.9-7",
+        "p.9-8",
+        "p.9-9",
+        "p.9-10",
+        "p.9-11",
+        "p.9-12",
+        "p.9-13"
+      ],
+      "required_facts": [],
+      "reference_answer": "통상 조건과 가혹 조건의 점검 주기가 다르며, 주행거리와 기간 중 먼저 도래하는 시점에 점검·교체한다. 예: 엔진 오일 및 필터 매 15,000km 또는 12개월(통상). 표의 단위(km, 개월)를 그대로 유지한다.",
       "expected_behavior": "점검표의 기간·거리 단위 보존",
-      "reference_answer": null,
-      "reviewer": null,
+      "note": "범위가 넓어 정기 점검표(p.9-7~9-13) 어느 쪽을 인용해도 통과. G1.6 차량에 LPI 항목을 섞으면 실패",
       "top_k": 5
     },
     {
       "id": "CG-19",
       "question": "내 차 엔진오일 언제 갈아?",
       "category": "vehicle_record",
-      "filters": {},
       "status": "draft",
-      "expected_chunk_ids": [],
-      "expected_behavior": "차량 정보와 마지막 정비 기록 요청; 개인 기록을 문서에서 추측 금지",
-      "reference_answer": null,
       "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "tool_result"
+      ],
+      "expected_action": {
+        "type": "open_my_car",
+        "vehicle_id": 3,
+        "item": "engine_oil"
+      },
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "확정 명세의 \"질문 종류별 action\" 표대로 정비 이력 패널을 연다. 개인 기록을 문서에서 추측하지 않음",
+      "note": "\"언제 갈아?\"는 교환 주기 질문으로도 읽힘. 명세 표 기준으로 open_my_car를 정답으로 둠",
       "top_k": 5
     },
     {
       "id": "CG-20",
       "question": "가까운 주차장 찾아줘",
-      "category": "map_tool",
-      "filters": {},
+      "category": "out_of_scope",
       "status": "draft",
-      "expected_chunk_ids": [],
-      "expected_behavior": "위치 기반 도구로 전달; RAG가 장소·거리 생성 금지",
-      "reference_answer": null,
       "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": {
+          "lat": 35.5384,
+          "lng": 129.3114
+        },
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "out_of_scope"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "길 안내·주변 장소 찾기는 서비스 범위에서 제외(2026-10-23 팀 결정). 내비게이션 앱 안내",
+      "note": "지도 기능 제외 결정으로 기대 결과를 tool_result에서 out_of_scope로 변경",
       "top_k": 5
     },
     {
       "id": "CG-21",
-      "question": "가는 길에 주유소 들러줘",
-      "category": "map_tool",
-      "filters": {},
+      "question": "타이어 마지막으로 언제 바꿨지?",
+      "category": "vehicle_record",
       "status": "draft",
-      "expected_chunk_ids": [],
-      "expected_behavior": "경로·위치 정보 및 변경 확인은 백엔드 계약에 연결",
-      "reference_answer": null,
       "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "tool_result"
+      ],
+      "expected_action": {
+        "type": "open_my_car",
+        "vehicle_id": 3,
+        "item": "tire"
+      },
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "내 차의 실제 교체 기록 질문은 정비 이력 패널을 연다",
+      "note": "지도 기능 제외로 기존 경유지 문항을 정비 기록 문항으로 교체",
       "top_k": 5
     },
     {
       "id": "CG-22",
       "question": "그럼 가혹조건은 뭐야?",
       "category": "conversation",
-      "filters": {},
       "status": "draft",
-      "expected_chunk_ids": [],
-      "expected_behavior": "직전 차량·설명서 맥락 유지; 현재 CLI는 단일 질문만 지원",
-      "reference_answer": null,
       "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [
+          {
+            "role": "user",
+            "content": "내 차 엔진오일 교환 기준 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "차량 설명서의 일반조건과 가혹조건 기준을 구분해서 확인해야 해요."
+          }
+        ],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "c899db930ecd587d2911f2c1"
+      ],
+      "expected_sources": [
+        "정기 점검 > 정기 점검"
+      ],
+      "required_facts": [
+        "짧은 거리"
+      ],
+      "reference_answer": "짧은 거리 반복 주행, 모래·먼지가 많은 지역, 과다한 공회전, 교통 체증, 잦은 험로, 산길·오르막·내리막, 경찰차·택시 등 사용, 잦은 고속 주행과 급가감속, 잦은 정지·출발, 소금·한랭 지역, 견인·캠핑·루프 짐칸, 추천하지 않은 엔진 오일 사용. 이 경우 G2.0 엔진오일은 매 7,500km 또는 6개월마다 교체한다.",
+      "expected_behavior": "직전 차량·설명서 맥락 유지; 현재 CLI는 단일 질문만 지원",
+      "note": "이전 대화(history) 반영 전. 지금은 질문만으로도 검색될 수 있어 통과해도 history 처리 검증은 아님",
       "top_k": 5
     },
     {
       "id": "CG-23",
       "question": "지금 여기 주차해도 돼?",
       "category": "clarification",
-      "filters": {},
       "status": "draft",
-      "expected_chunk_ids": [],
-      "expected_behavior": "현장 상황을 모른 채 허용 단정 금지",
-      "reference_answer": null,
       "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": {
+          "lat": 35.5384,
+          "lng": 129.3114
+        },
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "out_of_scope"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "현장 상황을 모른 채 허용 단정 금지",
+      "note": null,
       "top_k": 5
     },
     {
       "id": "CG-24",
       "question": "옆 차선으로 지금 바꿔도 돼?",
       "category": "out_of_scope",
-      "filters": {},
       "status": "draft",
-      "expected_chunk_ids": [],
-      "expected_behavior": "실시간 주행 판단을 하지 않음",
-      "reference_answer": null,
       "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "out_of_scope"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "실시간 주행 판단을 하지 않음",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-25",
+      "question": "전기차 충전구역에 주차하면 과태료 얼마야?",
+      "category": "no_evidence",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "not_found"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "등록 문서(도로교통법 3종, 별표 2·6)에 근거가 없으므로 거부. 다른 과태료 금액을 끌어오지 않음",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-26",
+      "question": "비보호 좌회전 표지는 어떻게 생겼어?",
+      "category": "no_evidence",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "not_found"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "별표 6의 표지 그림은 추출되지 않았으므로 모양을 설명하지 않음",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-27",
+      "question": "이 차에 자율주행 레벨3 기능 있어?",
+      "category": "no_evidence",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "not_found"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "설명서에 없는 기능을 있다고 답하지 않음",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-28",
+      "question": "엔진오일 교체 주기가 어떻게 돼?",
+      "category": "no_evidence",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 5,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2024",
+          "powertrain": "가솔린 1.6T",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "not_found"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "등록되지 않은 연식·엔진은 다른 설명서로 답하지 않고 \"설명서가 아직 없다\"고 안내",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-29",
+      "question": "타이어 공기압 경고등이 켜졌어. 어떻게 해야 해?",
+      "category": "need_info",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "need_vehicle"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "차량이 없으면 설명서 검색 전에 차량 선택을 요청 (missing_fields: [\"vehicle\"])",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-30",
+      "question": "황색 신호가 깜빡이면 어떻게 해?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "4bcb7e5ecb8198c8c099b144"
+      ],
+      "expected_sources": [
+        "별표 2 (차량신호등 황색등화의점멸)"
+      ],
+      "required_facts": [
+        "주의"
+      ],
+      "reference_answer": "차마는 다른 교통 또는 안전표지의 표시에 주의하면서 진행할 수 있다(시행규칙 별표 2 차량신호등 황색 등화의 점멸).",
+      "expected_behavior": null,
+      "note": "황색 등화(정지)와 황색 점멸(주의 진행)을 혼동하는지 확인하는 회귀 문항",
+      "top_k": 5
+    },
+    {
+      "id": "CG-31",
+      "question": "지금 계기판에 빨간 불 들어왔어",
+      "category": "warning_light",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "어떤 경고등인지 특정할 수 없으므로 추측하지 않고 모양을 되묻는다 (missing_fields: [\"warning_light\"])",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-32",
+      "question": "계기판에 빨간색 경고등이 켜졌는데 뭐야?",
+      "category": "warning_light",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "현대",
+        "model": "더 뉴 아반떼",
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "색만으로는 경고등을 특정할 수 없으므로 되묻는다. 하나를 골라 답하지 않음",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-33",
+      "question": "계기판에 주전자 모양 빨간 불이 켜졌어",
+      "category": "warning_light",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "a566e677210fd16fdc4ea467"
+      ],
+      "expected_sources": [
+        "편의 장치 > 클러스터 > 경고등 및 표시등"
+      ],
+      "required_facts": [
+        "엔진 오일",
+        "지금 할 일"
+      ],
+      "reference_answer": "주전자 모양은 엔진 오일 압력 경고등이다. 엔진 오일이 부족해 유압이 낮아지면 켜진다. 주행 중 켜지면 안전한 곳에 정차해 엔진 오일양을 점검하고 부족하면 보충한다. 보충 후에도 꺼지지 않으면 서비스센터에서 점검받는다.",
+      "expected_behavior": null,
+      "note": "이상 상황 답변은 \"무슨 뜻 / 왜 중요한지 / 지금 할 일\" 형식",
+      "top_k": 5
+    },
+    {
+      "id": "CG-34",
+      "question": "배터리 모양 빨간 불이 켜졌어",
+      "category": "warning_light",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "현대",
+        "model": "더 뉴 아반떼",
+        "model_year": "2026",
+        "powertrain": "G1.6"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "799d3832a0aaf7abe3db7418"
+      ],
+      "expected_sources": [
+        "p.4-11"
+      ],
+      "required_facts": [
+        "지금 할 일",
+        "충전"
+      ],
+      "reference_answer": "배터리 모양은 충전 경고등이다. 드라이브 벨트가 끊어졌거나 충전 장치에 이상이 있을 때 켜진다. 배터리 충전 상태와 드라이브 벨트·충전 계통을 점검하고, 꺼지지 않으면 하이테크센터나 블루핸즈에서 점검받는다(p.4-11).",
+      "expected_behavior": null,
+      "note": "아반떼 변환본에는 아이콘이 없어 모양 → 이름 대응은 K5 아이콘표 기준(팀 확인: 두 차종 모양 동일) 이상 상황 답변은 \"무슨 뜻 / 왜 중요한지 / 지금 할 일\" 형식",
+      "top_k": 5
+    },
+    {
+      "id": "CG-35",
+      "question": "에어필터 교체 기록 보여줘",
+      "category": "vehicle_record",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 4,
+          "manufacturer": "현대",
+          "model": "더 뉴 아반떼",
+          "model_year": "2026",
+          "powertrain": "G1.6",
+          "mileage_km": null
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "tool_result"
+      ],
+      "expected_action": {
+        "type": "open_my_car",
+        "vehicle_id": 4,
+        "item": "air_filter"
+      },
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-36",
+      "question": "엔진오일 마지막으로 언제 갈았지?",
+      "category": "vehicle_record",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "need_vehicle"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "차량이 없으면 정비 이력을 열 수 없으므로 차량 선택 요청 (missing_fields: [\"vehicle\"])",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-37",
+      "question": "고속도로 최저속도는 얼마야?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "33f2a892a9e753209c245fe9"
+      ],
+      "expected_sources": [
+        "제19조"
+      ],
+      "required_facts": [
+        "50"
+      ],
+      "reference_answer": "편도 1차로 고속도로와 편도 2차로 이상 고속도로 모두 최저속도는 매시 50킬로미터다. 최고속도는 각각 80, 100킬로미터로 다르다(시행규칙 제19조).",
+      "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-38",
+      "question": "앞차와 거리는 얼마나 둬야 돼?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "6f62f44ae30ac00e7e67bdaa"
+      ],
+      "expected_sources": [
+        "제19조"
+      ],
+      "required_facts": [
+        "충돌"
+      ],
+      "reference_answer": "같은 방향으로 가는 앞차를 따를 때는 앞차가 갑자기 정지해도 충돌을 피할 수 있는 필요한 거리를 확보해야 한다(제19조①). 법에는 몇 미터라는 수치가 없으므로 숫자를 만들어 답하지 않는다.",
+      "expected_behavior": null,
+      "note": "\"몇 미터\"를 지어내지 않는지 확인",
+      "top_k": 5
+    },
+    {
+      "id": "CG-39",
+      "question": "유턴하면 안 되는 경우가 있어?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "d692341279037dcbc163fca2"
+      ],
+      "expected_sources": [
+        "제18조"
+      ],
+      "required_facts": [
+        "방해"
+      ],
+      "reference_answer": "보행자나 다른 차마의 정상적인 통행을 방해할 우려가 있으면 유턴해서는 안 된다(제18조①). 시·도경찰청장이 유턴을 금지한 구간에서도 할 수 없다(제18조②).",
+      "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-40",
+      "question": "회전교차로 들어갈 때 누가 먼저야?",
+      "category": "rag",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": null,
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {
+        "kind": "law"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "e22e4f2e0e8daef0064c34ef"
+      ],
+      "expected_sources": [
+        "제25조의2"
+      ],
+      "required_facts": [
+        "양보"
+      ],
+      "reference_answer": "회전교차로에 진입하려면 서행하거나 일시정지해야 하고, 이미 진행하고 있는 다른 차가 있으면 그 차에 진로를 양보해야 한다(제25조의2②). 회전교차로 안에서는 반시계방향으로 통행한다(①).",
+      "expected_behavior": null,
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-41",
+      "question": "빨간 불 들어왔어",
+      "category": "warning_light",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "색만으로는 경고등을 알 수 없으므로 예시 없이 모양을 묻는다 (missing_fields: [\"warning_light\"])",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-42",
+      "question": "노란불인것같아",
+      "category": "conversation",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [
+          {
+            "role": "user",
+            "content": "이상해 무슨불이켜졌어"
+          },
+          {
+            "role": "assistant",
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요."
+          }
+        ],
+        "destination": null
+      },
+      "filters": {},
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "모양을 물었는데 색만 답하면 다시 모양을 묻는다. 색으로 단정하지 않음",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-43",
+      "question": "엔진 모양이야",
+      "category": "conversation",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [
+          {
+            "role": "user",
+            "content": "이상해 무슨불이켜졌어"
+          },
+          {
+            "role": "assistant",
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요."
+          }
+        ],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "need_clarification"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [],
+      "expected_sources": [],
+      "required_facts": [],
+      "reference_answer": null,
+      "expected_behavior": "모양을 알려 주면 다음으로 색을 묻는다 (missing_fields: [\"warning_light_color\"])",
+      "note": null,
+      "top_k": 5
+    },
+    {
+      "id": "CG-44",
+      "question": "노란색이야",
+      "category": "conversation",
+      "status": "draft",
+      "reviewer": null,
+      "request": {
+        "vehicle": {
+          "id": 3,
+          "manufacturer": "기아",
+          "model": "K5",
+          "model_year": "2026",
+          "powertrain": "G2.0",
+          "mileage_km": 36200
+        },
+        "location": null,
+        "history": [
+          {
+            "role": "user",
+            "content": "이상해 무슨불이켜졌어"
+          },
+          {
+            "role": "assistant",
+            "content": "어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요."
+          },
+          {
+            "role": "user",
+            "content": "엔진 모양이야"
+          },
+          {
+            "role": "assistant",
+            "content": "어떤 색으로 켜져 있나요? 잘 모르겠으면 모르겠다고 해 주세요."
+          }
+        ],
+        "destination": null
+      },
+      "filters": {
+        "kind": "manual",
+        "manufacturer": "기아",
+        "model": "K5",
+        "model_year": "2026",
+        "powertrain": "G2.0"
+      },
+      "expected_status": [
+        "answered"
+      ],
+      "expected_action": null,
+      "expected_chunk_ids": [
+        "ebf48e4f679a5c065765b24a"
+      ],
+      "expected_sources": [
+        "편의 장치 > 클러스터 > 경고등 및 표시등"
+      ],
+      "required_facts": [
+        "지금 할 일",
+        "정비"
+      ],
+      "reference_answer": "무슨 뜻: 엔진 전자제어 장치나 배기가스 제어 센서 이상, 연료 공급장치 누유 시 켜진다. 왜 중요한지: 켜진 채 계속 주행하면 배기 제어 계통이 손상될 수 있다. 지금 할 일: 가능한 빨리 서비스센터에 정비를 의뢰하고, 시동이 걸리지 않으면 견인한다.",
+      "expected_behavior": "모양(엔진)과 색(노란색)까지 들은 뒤 엔진 경고등의 뜻·중요성·지금 할 일을 답한다",
+      "note": null,
       "top_k": 5
     }
   ]
