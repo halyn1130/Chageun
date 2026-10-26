@@ -41,14 +41,12 @@ const props = defineProps({
   entry: Object,
   message: Object,
   asking: Boolean,
-  canGoPrevious: Boolean,
   voiceState: Object,
   vehicles: Array,
   intro: Boolean,
 })
 const emit = defineEmits([
   'consult',
-  'previous',
   'home',
   'reply',
   'voice',
@@ -251,12 +249,9 @@ function restoreCareScroll() {
   if (workspace.value) workspace.value.scrollTop = isCareOverview.value ? overviewScroll : 0
 }
 function returnToQuestion() {
-  emit('stop')
-  const original = message.value?.originalQuestion || item.value?.question || ''
   messageFloor.value = props.message?.id || 0
-  emit('reset')
-  typed.value = original
-  keyboard.value = true
+  typed.value = ''
+  showOverview()
 }
 function viewRecord(record) {
   const value = maintenanceCatalog.find((item) => item.recordId === record.item)
@@ -677,7 +672,6 @@ watch(
         </div>
       </Transition>
       <footer v-if="isConclusion" class="conclusion-actions">
-        <button v-if="canGoPrevious" @click="keyboard = false; typed = ''; emit('previous')"><ArrowLeft :size="18" />이전 단계</button>
         <button class="conclusion-return" @click="returnToQuestion"><MessageCircle :size="18" />질문으로 돌아가기</button>
       </footer>
       <footer v-else-if="mode === 'conversation'" class="care-voice-bar">
