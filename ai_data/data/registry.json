@@ -109,6 +109,34 @@
         "LPG",
         "LPi"
       ]
+    },
+    {
+      "doc_id": "kia-k5-dl3-2026-figures",
+      "title": "기아 K5 (DL3) 2026 사용 설명서 그림 설명",
+      "kind": "manual",
+      "source_url": "https://ownersmanual.kia.com/full_webhelp/DL3/2026/ko_KR/index.html",
+      "retrieved_at": "2026-10-26",
+      "revision": "그림 설명 v1 (원본 문서 ID D202507030002)",
+      "file": "raw/manual-kia-k5_2026_dl3_figures.pdf",
+      "usage_note": "공식 웹 매뉴얼의 그림을 팀이 보고 글로 옮긴 비공식 보충 자료. 위치는 운전석 기준, 그림으로 확인 불가한 내용은 표시함. 팀 내부 RAG 실험용, 재배포 금지",
+      "manufacturer": "기아",
+      "model": "K5",
+      "model_year": "2026",
+      "powertrain": "G2.0"
+    },
+    {
+      "doc_id": "hyundai-avante-cn7-2026-figures",
+      "title": "현대 아반떼 (CN7) 2026 취급설명서 그림 설명",
+      "kind": "manual",
+      "source_url": "https://ownersmanual.hyundai.com/full_pdf/CN7/2026/ko_KR",
+      "retrieved_at": "2026-10-26",
+      "revision": "그림 설명 v1 (원본 문서 ID D202504290008)",
+      "file": "raw/manual-hyundai-avante_2026_cn7_figures.pdf",
+      "usage_note": "공식 취급설명서 PDF의 그림을 팀이 보고 글로 옮긴 비공식 보충 자료. 위치는 운전석 기준, 그림으로 확인 불가한 내용은 표시함. 팀 내부 RAG 실험용, 재배포 금지",
+      "manufacturer": "현대",
+      "model": "더 뉴 아반떼",
+      "model_year": "2026",
+      "powertrain": "G1.6"
     }
   ]
 }
