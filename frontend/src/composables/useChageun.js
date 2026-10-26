@@ -1,3 +1,4 @@
+import { resolvePreparedGuide, keepPreparedEligibility } from '../preparedGuides.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { api, checkAuth, login, logout, signup } from '../api.js'
 import { buildRagRequest, resolveRagResponse, describeRecordAction } from '../ragConversation.js'
@@ -179,11 +180,13 @@ export function useChageun() {
   async function loadCars() {
     const revision = accountRevision
     try {
-      const [carList, carCatalog] = await Promise.all([
+      const [carList, carCatalog, profile] = await Promise.all([
         api('/vehicles'),
         api('/vehicles/catalog'),
+        api('/settings/profile').catch(() => null),
       ])
       if (revision !== accountRevision) return
+      if (profile && user.value) user.value.display_name = profile.display_name
       vehicles.value = carList || []
       catalog.value = carCatalog || []
       chatVehicleId.value =
@@ -400,7 +403,7 @@ export function useChageun() {
   async function continueOrSend(flow) {
     const revision = questionRevision
     asking.value = true
-    if (flow.vehicleId != null) await loadMaintenance(flow.vehicleId)
+    if (flow.vehicleId != null && flow.category !== 'controls') await loadMaintenance(flow.vehicleId)
     if (revision !== questionRevision) return
     const records = maintenanceCache.get(flow.vehicleId) || []
     const guideTopic = findGuideTopic(flow.topicId, flow.category)
@@ -434,6 +437,17 @@ export function useChageun() {
       return
     }
     pendingQuestion.value = null
+    const usedVehicle = vehicles.value.find(vehicle => vehicle.id === flow.vehicleId)
+    const prepared = resolvePreparedGuide(flow, usedVehicle)
+    if (prepared) {
+      conversationId.value = null
+      appendMessage({ role: 'assistant', ...prepared, originalQuestion: flow.original,
+        topicId: flow.topicId, category: flow.category,
+        vehicleLabel: usedVehicle ? vehicleLabel(usedVehicle) : null,
+        details: [...questionDetails(flow), ...prepared.details] })
+      asking.value = false
+      return
+    }
     await sendQuestion(flow)
   }
   async function replyTo(message, text) {
@@ -488,11 +502,14 @@ export function useChageun() {
       !options.newQuestion &&
       (options.followup || !isNewQuestion(clean, pending))
     ) {
-      await continueOrSend(continueQuestion(pending, clean))
+      const prompt = messages.value.find(message => message.id === activePromptId.value)
+      await continueOrSend({ ...continueQuestion(pending, clean),
+        preparedEligible: keepPreparedEligibility(pending, prompt, clean) })
     } else {
       if (pending || options.newQuestion) cancelQuestion()
       await continueOrSend({
         ...startQuestion(clean, chatVehicleId.value),
+        preparedEligible: options.preparedMenu === true,
         ...(options.category ? { category: options.category } : {}),
         ...(options.topicId ? { topicId: options.topicId } : {}),
         ...(options.recordItem ? { recordItem: options.recordItem } : {}),
@@ -534,7 +551,7 @@ export function useChageun() {
       category: flow.category,
     }
     try {
-      if (flow.vehicleId != null) await loadMaintenance(flow.vehicleId)
+      if (flow.vehicleId != null && flow.category !== 'controls') await loadMaintenance(flow.vehicleId)
       if (revision !== questionRevision) return
       const records = maintenanceCache.get(flow.vehicleId)
       const rawResult = await api('/rag-query', {
@@ -637,7 +654,7 @@ export function useChageun() {
         authForm.value.password = ''
         clearAccountData()
         await loadCars()
-        notify(`${user.value.username}님, 반가워요.`)
+        notify(`${user.value.display_name || user.value.username}님, 반가워요.`)
       }
     } catch (error) {
       authError.value = error.message
