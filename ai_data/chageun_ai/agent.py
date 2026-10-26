@@ -51,9 +51,18 @@ PROBLEM = re.compile(r'주유등|기름불|경고등|표시등|불[이도]?\s*(?
                      r'방전|펑크|과열|시동이\s?안|안\s?걸려')
 WARNING_QUESTION = re.compile(r'경고등|표시등|경고\s?불|불[이도]?\s*(?:들어|켜|깜빡|떴|떠|나왔)|(?:모양|표시)[이가]?\s*(?:들어|켜|떴|떠|나왔)')
 # Road features a driver can describe in words; a "~해도 돼?" question naming one asks for the rule for that scene.
+# Manoeuvres (우회전·좌회전·유턴) are not a scene: "지금 우회전해도 괜찮아?" says nothing about the signal, and searched
+# as it was, the answer model refused it as an on-the-spot judgement. Those questions ask for the scene first.
 RULE_SITUATION = re.compile(r'점선|실선|황색|백색|중앙선|차선|차로|노란\s?불|빨간\s?불|초록\s?불|녹색\s?불|황색\s?불|적색|신호|화살표|'
-                            r'점멸|표지|노면|횡단보도|교차로|회전교차로|터널|다리|교량|유턴|비보호|좌회전|우회전|전용차로|'
+                            r'점멸|표지|노면|횡단보도|교차로|회전교차로|터널|다리|교량|비보호|전용차로|'
                             r'보호구역|스쿨존|정지선|긴급자동차|소방차|구급차|경찰차|고속도로|갓길')
+# "지금 / 여기서 …해도 돼?" asks about the road in front of the driver, which we cannot see.
+RIGHT_HERE = re.compile(r'(?:지금|여기|현재|바로|이\s?자리).*도\s*(?:돼|되|괜찮)')
+# "빨간불" alone is a traffic signal to some drivers and a dashboard light to others; guessing answered one of them
+# wrong ("빨간불" got 제6조, "노란불 깜빡이면 어떻게 해?" got the warning-light shape question). We ask which first.
+BARE_LIGHT = re.compile(r'(?:빨간|빨강|노란|노랑|주황|초록|녹색|파란|파랑|적색|황색)\s?불')
+LIGHT_PLACE = re.compile(r'계기판|클러스터|경고|표시|모양|그림|켜졌|켜져|켜진|떴|떠\s?있|들어왔|들어와|'
+                         r'신호|교차로|횡단보도|정지선|직진|좌회전|우회전|유턴|건너|진입|출발|화살표|차선|차로|보행자')
 # Words that say nothing about which light it is: colour, place, or a question word.
 VAGUE = re.compile(r'(?:빨간|빨강|노란|노랑|주황|초록|녹색|파란|하얀|흰|적|황|청)색?|계기판|클러스터|무슨|어떤|이상한|웬|이|그|저|이런|저런')
 
@@ -126,16 +135,19 @@ MESSAGES = {
     # One question per turn, as people answer only what they are asked: the shape first, then the colour.
     'ask_shape': ('어떤 경고등인지 알 수 있게 어떤 모양인지 알려 주세요.', '어떤 모양인지 알려 주세요.'),
     'ask_color': ('어떤 색으로 켜져 있나요? 잘 모르겠으면 모르겠다고 해 주세요.', '어떤 색으로 켜져 있나요?'),
-    # Planned behaviour: the driver describes the scene in words, and 차근 answers the rule for that scene.
-    'out_of_scope': ('주변 상황은 제가 볼 수 없어요. 차선이 점선인지 실선인지, 신호가 무슨 색인지처럼 지금 보이는 상황을 '
-                     '말해 주시면 그 상황의 규칙을 알려 드릴게요.',
-                     '주변은 제가 볼 수 없어요. 차선 모양이나 신호 색처럼 보이는 상황을 말해 주세요.'),
+    # Planned behaviour: we cannot see the road, but the driver can describe it, and the rule for that scene is in
+    # the law. A scene already in the question goes straight to search_law (RULE_SITUATION).
+    'ask_situation': ('지금 상황에 맞는 규칙을 찾아볼게요. 신호나 표지, 차선이 어떤지 알려 주세요. '
+                      '예: 빨간불이에요, 신호등이 없어요, 차선이 실선이에요.', '지금 신호나 표지가 어떤지 알려 주세요.'),
+    'ask_light_kind': ('신호등 불인가요, 계기판에 켜진 불인가요?', '신호등 불인가요, 계기판 불인가요?'),
     'manual_not_found': ('설명서에서 근거를 찾지 못했어요. 정비소나 고객센터에 문의해 주세요.', '설명서에서 찾지 못했어요.'),
     'law_not_found': ('법령에서 근거를 찾지 못했어요. 공식 자료로 한 번 더 확인해 주세요.', '법령에서 찾지 못했어요.'),
     'navigation': ('차근은 길 안내와 주변 장소 찾기는 하지 않아요. 내비게이션 앱을 이용해 주세요.', '길 안내는 내비게이션 앱을 이용해 주세요.'),
     'unrelated': ('차근은 교통 법규, 내 차 설명서, 정비 기록을 도와드려요. 그와 관련된 질문을 해 주세요.', '운전과 관련된 질문을 해 주세요.'),
     'open_my_car': ('정비 이력을 열어 드릴게요.', '정비 이력을 확인해 볼게요.'),
 }
+# Said on top of a rule found for a described situation: the rule is general, the road is the driver's to check.
+SITUATION_NOTE = '실제로 진행할지는 신호와 보행자, 주변 차를 직접 확인하고 판단해 주세요.'
 # Fixed replies that carry nothing to follow up on; in the history they only taught the model to give up again.
 EMPTY_REPLIES = {MESSAGES[k][0] for k in ('navigation', 'unrelated', 'manual_not_found', 'law_not_found')}
 
@@ -225,7 +237,8 @@ def color_in(text):
 
 def clarified_turns(history):
     """The user's earlier words in a clarification exchange ("무슨 불이 켜졌어" → "주전자 모양이야"), oldest first."""
-    asks = (MESSAGES['ask_shape'][0], MESSAGES['ask_color'][0])
+    asks = (MESSAGES['ask_shape'][0], MESSAGES['ask_color'][0], MESSAGES['ask_situation'][0],
+            MESSAGES['ask_light_kind'][0])
     turns, i = [], len(history) - 1
     while (i >= 1 and len(turns) < 3 and history[i].get('role') == 'assistant'
            and history[i].get('content') in asks and history[i - 1].get('role') == 'user'):
@@ -260,8 +273,10 @@ def session_history(request):
 def respond(request_id, conversation_id, status, answer, speech, sources=(), action=None, needs_review=False,
             handoff=False):
     missing = MISSING.get(status, [])
-    if status in ('ask_shape', 'ask_color'):  # both are the contract's need_clarification
-        status, missing = 'need_clarification', ['warning_light' if status == 'ask_shape' else 'warning_light_color']
+    if status in ('ask_shape', 'ask_color', 'ask_situation', 'ask_light_kind'):  # the contract's need_clarification
+        status, missing = 'need_clarification', [{'ask_shape': 'warning_light', 'ask_color': 'warning_light_color',
+                                                  'ask_situation': 'road_situation',
+                                                  'ask_light_kind': 'light_kind'}[status]]
     return {'request_id': request_id, 'conversation_id': conversation_id, 'status': status, 'answer': answer,
             'speech_text': speech, 'sources': list(sources), 'needs_review': needs_review, 'handoff': handoff,
             'action': action, 'missing_fields': missing}
@@ -290,12 +305,26 @@ def rag_query(request, choose, retrieve, generate):
     # Replies to our own clarification ("주전자 모양이야") are read together with what they answer; that joined
     # question stands alone. Other follow-ups go to the router and the answer with the bounded history.
     earlier = clarified_turns(request.get('history') or [])
+    # The situation was described: in our history (voice) or in the frontend's "확인 질문: … 사용자 답변: …" lines.
+    last_reply = ((request.get('history') or [{}])[-1] or {}).get('content')
+    described_road = MESSAGES['ask_situation'][0] in question or bool(earlier) and last_reply == MESSAGES['ask_situation'][0]
+    # The frontend repeats our question, whose examples ("빨간불이에요") would otherwise reach the glossary and
+    # turn "차선이 실선이에요" into a search for signal rows.
+    question = question.replace(MESSAGES['ask_situation'][0], '지금 신호·표지·차선 상황은?')
+    asked_kind = MESSAGES['ask_light_kind'][0] in question or bool(earlier) and last_reply == MESSAGES['ask_light_kind'][0]
+    question = question.replace(MESSAGES['ask_light_kind'][0], '어떤 불인가요?')
     question = ' '.join([*earlier, question]) if earlier else question
     cid = request.get('conversation_id') or f'c_{uuid.uuid4().hex[:12]}'
     vehicle = request.get('vehicle')
     vehicle_id = (vehicle or {}).get('id')
     reply = lambda status, *args, **kw: respond(request.get('request_id'), cid, status,
                                                 *(args or MESSAGES[status]), **kw)
+
+    if (BARE_LIGHT.search(question) and not LIGHT_PLACE.search(question) and not asked_kind and not described_road
+            and not earlier and '확인 질문:' not in question):
+        result = reply('ask_light_kind')
+        result['suggestions'] = ['신호등이에요', '계기판 불이에요']
+        return result
 
     # Keep the selected-car hint from develop together with bounded follow-up context.
     car_note = ' '.join(str(vehicle.get(k, '')) for k in ('manufacturer', 'model')) if vehicle else ''
@@ -316,9 +345,16 @@ def rag_query(request, choose, retrieve, generate):
         name, args = 'search_manual', {}  # a lit warning light is a manual question, not a road judgement
     if name == 'decline' and args.get('kind') == 'realtime' and RULE_SITUATION.search(question):
         name, args = 'search_law', {}  # a described scene ("점선인데 바꿔도 돼?") asks for the rule, not a live judgement
+    if (name == 'search_law' and not described_road and RIGHT_HERE.search(question)
+            and not RULE_SITUATION.search(question)):
+        name, args = 'decline', {'kind': 'realtime'}  # the router searched "여기서 유턴해도 돼?" with no scene to apply
     if name == 'decline':
         kind = args.get('kind')
-        return reply('out_of_scope', *MESSAGES[kind if kind in ('navigation', 'unrelated') else 'out_of_scope'])
+        if kind in ('navigation', 'unrelated'):
+            return reply('out_of_scope', *MESSAGES[kind])
+        if not described_road:
+            return reply('ask_situation')
+        name, args = 'search_law', {}  # asked once; now look up the rule for what the driver described
     if name == 'maintenance_due' and args.get('item') in MAINTENANCE_ITEMS:
         if vehicle_id is None:
             return reply('need_vehicle')
@@ -382,6 +418,10 @@ def rag_query(request, choose, retrieve, generate):
         asked = f'{named[0]}이 {seen}켜졌어요. 무슨 뜻이고 어떻게 해야 하나요? (사용자 표현: {question})'
     else:
         asked = question + (f" (용어: {', '.join(f'{w} = {t}' for w, t in known.items())})" if known else '')
+    if described_road:
+        # The answer prompt refuses on-the-spot judgements, and "여기서 바꿔도 돼?" still reads as one after the
+        # driver described the scene (2026-10-26: answer told "실선이면 안 된다" but marked insufficient_evidence).
+        asked += ' (운전자가 설명한 상황에 적용되는 법 규정을 묻는 질문이다. 현장 판단 대신 그 상황에서 허용·금지되는 조건을 전한다.)'
     # Use the canonical light name in both generation and verification. A glossary
     # suffix alone still left the verifier treating '주유등' as an unknown target.
     if name == 'search_manual':
@@ -406,4 +446,7 @@ def rag_query(request, choose, retrieve, generate):
     if note:
         sources.append({k: LEGAL_SOURCE[k] for k in ('title', 'page', 'url')})
     answer = result['answer_text'] + (f'\n{note}' if note else '')
-    return reply('answered', answer, result['speech_text'], sources=sources)
+    speech = result['speech_text']
+    if described_road:
+        answer, speech = f'{answer}\n{SITUATION_NOTE}', f'{speech} {SITUATION_NOTE}'
+    return reply('answered', answer, speech, sources=sources)

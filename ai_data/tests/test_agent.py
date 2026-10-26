@@ -50,7 +50,7 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(answer.call_args.args[4], 'solution')
 
     def test_contract_fields_and_conversation_id(self):
-        r = self.ask(picks('decline', kind='realtime'), conversation_id='c_1')
+        r = self.ask(picks('decline', kind='unrelated'), conversation_id='c_1')
         self.assertEqual(set(r), {'request_id', 'conversation_id', 'status', 'answer', 'speech_text', 'sources',
                                   'needs_review', 'handoff', 'action', 'missing_fields'})
         self.assertEqual((r['status'], r['request_id'], r['conversation_id'], r['missing_fields']),
@@ -76,9 +76,13 @@ class AgentTests(unittest.TestCase):
         self.assertTrue(all(f == {'kind': 'law'} for f in searched))
 
     def test_scene_without_description_asks_the_driver_to_describe_it(self):
-        r = self.ask(picks('decline', kind='realtime'), question='지금 가도 돼?')
-        self.assertEqual(r['status'], 'out_of_scope')
-        self.assertIn('말해 주시면', r['answer'])
+        for question in ('지금 가도 돼?', '지금 우회전해도 괜찮아?'):  # a manoeuvre alone is not a scene
+            r = self.ask(picks('decline', kind='realtime'), question=question)
+            self.assertEqual((r['status'], r['missing_fields']), ('need_clarification', ['road_situation']), question)
+        self.assertIn('알려 주세요', r['answer'])
+        # The router may search such a question itself; with no scene there is nothing to apply the rule to.
+        r = self.ask(picks('search_law', query='유턴'), question='여기서 유턴해도 돼?')
+        self.assertEqual(r['status'], 'need_clarification')
 
     def test_everyday_law_words_reach_the_search_query_and_the_answer(self):
         from unittest.mock import patch
@@ -283,6 +287,48 @@ class AgentTests(unittest.TestCase):
                      question='우회전은 언제 할 수 있어?', history=history)
         self.assertEqual(routed[0]['history'], history[:1])  # "근거를 찾지 못했어요" carries nothing
         self.assertIsNone(answer.call_args.kwargs['history'])
+
+    def test_road_judgement_asks_the_situation_then_finds_the_rule(self):
+        from unittest.mock import patch
+        from chageun_ai.agent import MESSAGES, SITUATION_NOTE
+        realtime = picks('decline', kind='realtime')
+        r = self.ask(realtime, question='여기서 들어가도 돼?')
+        self.assertEqual((r['status'], r['answer'], r['missing_fields']),
+                         ('need_clarification', MESSAGES['ask_situation'][0], ['road_situation']))
+        seen = []
+        with patch('chageun_ai.agent.answer_from_hits', return_value={
+            'status': 'answered', 'answer_text': '보행자를 방해하지 않으면 우회전할 수 있어요.',
+            'speech_text': '우회전할 수 있어요.', 'sources': []}):
+            # The frontend sends the answer with the question; the router still calls it a road judgement.
+            frontend = self.ask(realtime, retrieve=lambda q, f: seen.append((q, f)) or [{'chunk': {'metadata': {}}, 'score': 1}],
+                                question=f"여기서 들어가도 돼?\n확인 질문: {MESSAGES['ask_situation'][0]}\n사용자 답변: 빨간불이에요")
+            voice = self.ask(realtime, retrieve=lambda q, f: seen.append((q, f)) or [{'chunk': {'metadata': {}}, 'score': 1}],
+                             question='빨간불이에요', history=[{'role': 'user', 'content': '여기서 들어가도 돼?'},
+                                                           {'role': 'assistant', 'content': MESSAGES['ask_situation'][0]}])
+        for result in (frontend, voice):
+            self.assertEqual(result['status'], 'answered')
+            self.assertTrue(result['answer'].endswith(SITUATION_NOTE))
+        self.assertEqual(seen[0][1], {'kind': 'law'})
+        self.assertTrue(seen[1][0].startswith('여기서 들어가도 돼? 빨간불이에요'))
+
+    def test_a_bare_light_asks_signal_or_dashboard_before_routing(self):
+        from chageun_ai.agent import MESSAGES
+        ask = MESSAGES['ask_light_kind'][0]
+        for question in ('빨간불', '노란불 깜빡이면 어떻게 해?', '빨간불 깜빡여'):
+            r = self.ask(lambda *a: self.fail('must not route'), question=question)
+            self.assertEqual((r['status'], r['answer'], r['missing_fields']),
+                             ('need_clarification', ask, ['light_kind']), question)
+            self.assertEqual(r['suggestions'], ['신호등이에요', '계기판 불이에요'])
+        routed = []
+        choose = lambda s, q, t: routed.append(q) or ('decline', {'kind': 'unrelated'})
+        # The place is already said, or our question was answered (frontend lines, or voice history)
+        for question in ('빨간불에 직진해도 돼?', '계기판에 빨간 불이 켜졌어', '노란불일 때 교차로 진입해도 돼?',
+                         f'빨간불\n확인 질문: {ask}\n사용자 답변: 계기판 불이에요'):
+            self.assertNotEqual(self.ask(choose, question=question)['answer'], ask, question)
+        self.ask(choose, question='신호등이에요', history=[{'role': 'user', 'content': '빨간불'},
+                                                        {'role': 'assistant', 'content': ask}])
+        self.assertNotIn(ask, routed[-2])
+        self.assertEqual(routed[-1], '빨간불 신호등이에요')
 
     def test_session_history_cannot_supply_a_citation_or_override_selected_vehicle(self):
         history = [{'role': 'assistant', 'content': '예전 답변의 내용은 근거가 아니다.'}]
