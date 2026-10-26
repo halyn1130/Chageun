@@ -322,3 +322,14 @@
   .care-sort > span { display: none; }
   [data-theme='light'] .care-section-bar { background: #f5f7fb; }
 }
+
+@media (max-width: 700px) {
+  .chat-message.vehicle-prompt .chat-content > h2,
+  .chat-message.vehicle-prompt .chat-content > .answer-content,
+  .chat-message.vehicle-prompt .chat-content > .vehicle-options,
+  .chat-message.vehicle-prompt .chat-content > .vehicle-skip-options { display: block; }
+  .chat-message.vehicle-prompt .chat-content > .mobile-chat-reply { display: none; }
+  .chat-message.vehicle-prompt .chat-content > .vehicle-options { display: grid; }
+  .vehicle-prompt .chat-content h2 { font-size: 22px; }
+  .vehicle-prompt .vehicle-register-primary { width: 100%; }
+}

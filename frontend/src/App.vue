@@ -127,7 +127,7 @@ const voiceState = ref({
   transcript: '',
   error: '',
 })
-const composerVisible = computed(() => keyboardOpen.value || (hasConversation.value && (isMobile.value || !voiceState.value.active)))
+const composerVisible = computed(() => !hasConversation.value || keyboardOpen.value || (hasConversation.value && (isMobile.value || !voiceState.value.active)))
 const voice = createVoiceSession({
   platform: window,
   remoteSpeech: import.meta.env.VITE_TTS_PROVIDER === 'typecast'
@@ -174,6 +174,14 @@ async function replyTo(message, text) {
   voice.stop()
   await continueReply(message, text)
 }
+async function applyPersonalSettings(saved) {
+  user.value.display_name = saved.display_name
+  vehicles.value = saved.vehicles.map(car => ({...car, is_primary: car.id === saved.vehicle_id}))
+  if (chatVehicleId.value !== saved.vehicle_id) goHome()
+  chatVehicleId.value = saved.vehicle_id
+  if (saved.vehicle_id) await selectVehicle(saved.vehicle_id)
+}
+
 function goHome() {
   voice.stop()
   keyboardOpen.value = false
@@ -230,6 +238,7 @@ async function beginConsultation(item) {
   cancelQuestion()
   chatVehicleId.value = selectedVehicleId.value
   await ask(item.question, {
+    preparedMenu: true,
     newQuestion: true,
     surface: isMobile.value ? 'assistant' : undefined,
     category: item.category,
@@ -315,18 +324,10 @@ function switchAuthMode() {
 
 <template>
   <div class="chageun" :data-theme="theme">
-    <VoiceSettings v-if="settingsOpen" @close="settingsOpen = false" />
+    <VoiceSettings v-if="settingsOpen" @close="settingsOpen = false" @saved="applyPersonalSettings" @logout="settingsOpen = false; signOut()" @register="settingsOpen = false; carFormOpen = true" />
     <header class="app-header">
       <button class="brand-home" type="button" aria-label="차근 홈으로 돌아가기" @click="goHome"><BrandLogo /></button>
       <div class="header-actions">
-        <button class="icon-button" aria-label="개인 설정" @click="user ? settingsOpen = true : authOpen = true"><Settings :size="20" /></button>
-        <button
-          class="vehicle-button"
-          :disabled="asking"
-          @click="panel = 'vehicles'"
-        >
-          <CarFront :size="19" /><span>{{ headerVehicle ? headerVehicle.nickname || headerVehicle.model : '차량 선택' }}</span><ChevronDown :size="14" />
-        </button>
         <button
           class="icon-button theme-button"
           :aria-label="
@@ -336,6 +337,14 @@ function switchAuthMode() {
         >
           <Sun v-if="theme === 'dark'" :size="21" /><Moon v-else :size="20" />
         </button>
+        <button
+          class="vehicle-button"
+          :disabled="asking"
+          @click="panel = 'vehicles'"
+        >
+          <CarFront :size="19" /><span>{{ headerVehicle ? headerVehicle.nickname || headerVehicle.model : '차량 선택' }}</span><ChevronDown :size="14" />
+        </button>
+        <button class="icon-button" aria-label="개인 설정" @click="user ? settingsOpen = true : authOpen = true"><Settings :size="20" /></button>
       </div>
     </header>
 
@@ -375,7 +384,7 @@ function switchAuthMode() {
               )"
               :key="message.id"
               class="chat-message"
-              :class="message.role"
+              :class="[message.role, { 'vehicle-prompt': message.status === 'need_vehicle' }]"
             >
               <span class="chat-speaker">{{
                 message.role === 'user' ? '나' : '차근'
@@ -420,9 +429,10 @@ function switchAuthMode() {
                       </button>
                       <button
                         v-if="!vehicles.length"
+                        class="vehicle-register-primary"
                         @click="carFormOpen = true"
                       >
-                        <Plus :size="20" /> 차량 등록
+                        <Plus :size="20" /><span>차량 등록하기</span>
                       </button>
                     </div>
                     <div
@@ -430,6 +440,7 @@ function switchAuthMode() {
                       class="answer-options"
                       :class="{
                         'single-option': message.suggestions.length === 1,
+                        'vehicle-skip-options': message.status === 'need_vehicle',
                       }"
                     >
                       <button
@@ -590,6 +601,7 @@ function switchAuthMode() {
       @retry="retryQuestion"
       @speak="playSpeech"
       @reset="resetGuidance"
+      @home="goHome"
       @previous="voice.stop(); returnToPreviousStep()"
       @mode="diagnosticMode = $event"
     />
@@ -648,7 +660,7 @@ function switchAuthMode() {
         </button>
       </div>
       <div class="vehicle-settings-account">
-        <span>{{ user ? `${user.username}님` : '내 차 계정' }}</span>
+        <span>{{ user ? `${user.display_name || user.username}님` : '내 차 계정' }}</span>
         <button v-if="user" class="text-button" @click="signOut">
           <LogOut :size="16" />로그아웃
         </button>

@@ -1637,3 +1637,81 @@
 .answer-step-text { white-space: pre-line; word-break: keep-all; overflow-wrap: anywhere; }
 .answer-bullets { margin: 0; padding-left: 20px; display: grid; gap: 7px; }
 .answer-bullets li { white-space: pre-line; }
+
+/* Vehicle clarification: one aligned column with a primary and secondary action. */
+.chat-message.vehicle-prompt { flex-direction: column; gap: 6px; }
+.vehicle-prompt .chat-speaker { flex: none; line-height: 1.5; font-weight: 400; }
+.vehicle-prompt .chat-content { width: 100%; max-width: 560px; flex: none; }
+.vehicle-prompt .chat-content h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.4; }
+.vehicle-prompt .answer-prose { color: var(--secondary); font-size: 15px; }
+.vehicle-prompt .vehicle-options { grid-template-columns: 1fr; margin-top: 22px; }
+.vehicle-prompt .vehicle-register-primary { width: min(320px, 100%); min-height: 52px; justify-content: center; gap: 10px; border-radius: 12px; border-color: #91b4ff70; background: color-mix(in srgb, var(--accent) 20%, var(--surface)); }
+.vehicle-prompt .vehicle-register-primary > span { flex: none; }
+.vehicle-prompt .vehicle-skip-options { display: flex; margin-top: 12px; }
+.vehicle-prompt .vehicle-skip-options button { justify-content: flex-start; min-height: 44px; padding: 8px 0; gap: 10px; border: 0; border-radius: 6px; background: transparent; color: var(--secondary); }
+.vehicle-prompt .vehicle-skip-options button:hover { color: var(--text); text-decoration: underline; text-underline-offset: 4px; }
+.vehicle-prompt button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* Home keeps the microphone centered, with a persistent text composer below. */
+@media (min-width: 701px) {
+  .voice-workspace:not(.is-conversation) { padding-bottom: 19px; grid-template-rows: minmax(0, 1fr); }
+  .voice-workspace:not(.is-conversation) .voice-control {
+    position: relative;
+    padding: 0 18px;
+  }
+  .voice-workspace:not(.is-conversation) .voice-orbit {
+    position: absolute;
+    top: calc(50% - 32px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 158px;
+  }
+  .voice-workspace:not(.is-conversation) .voice-primary { width: 98px; height: 98px; }
+  .voice-workspace:not(.is-conversation) .voice-control h1 {
+    position: absolute;
+    top: calc(50% + 44px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.3;
+  }
+  .voice-workspace:not(.is-conversation) .voice-prompt {
+    position: absolute;
+    top: calc(50% + 74px);
+    left: 12px;
+    right: 12px;
+    max-width: none;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+@media (max-width: 700px) {
+  .voice-workspace:not(.is-conversation) .voice-control h1 {font-size:22px;}
+  .voice-workspace:not(.is-conversation) .voice-prompt {font-size:13px;}
+}
+
+@media (min-width: 701px) {
+  .voice-workspace:not(.is-conversation) .voice-text-composer {
+    left: 50px;
+    right: 752px;
+    bottom: 19px;
+    padding: 2px 5px 2px 16px;
+    border-radius: 10px;
+  }
+  .voice-workspace:not(.is-conversation) .voice-text-composer textarea {
+    height: 24px;
+    line-height: 24px;
+    font-size: 14px;
+  }
+  .voice-workspace:not(.is-conversation) .voice-text-composer .submit-question {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (min-width: 701px) {
+  .voice-workspace:not(.is-conversation) .voice-control[data-phase='idle'] .voice-prompt {
+    top: calc(50% + 62px);
+  }
+}
